@@ -1,0 +1,16 @@
+{
+  "name": "stat",
+  "version": "0.1.1",
+  "main": "./lib/node-monitor.js",
+  "description": "Runtime statistics for node.js applications",
+  "homepage": "http://openforbiz.org/node-stat",
+  "author": "Loren West<loren.west@openforbiz.org>",
+  "directories": {"lib": "./lib", "test": "./test"},
+  "dependencies": {
+    "vows" : ">=0.5.1"
+  },
+  "engines": {"node": ">=0.1.103"},
+  "scripts": {
+    "test" : "vows test/*.js --spec"
+  }
+}

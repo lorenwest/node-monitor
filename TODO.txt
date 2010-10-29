@@ -1,0 +1,6 @@
+Monitor project:
+
+* Build the basic monitor class API
+* Create the basic monitor class
+* Build the monitor test
+* Build the node-monitor module entry point
