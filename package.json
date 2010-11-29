@@ -20,7 +20,7 @@
     log4js: ">=0.1.0",
     connect: ">=0.2.5",
     couchdb: ">=0.1.0",
-    sprintf: ">=0.1.1"
+    sprintf: ">=0.1.1",
     vows: ">=0.5.1"
   },
   engines: {"node": ">=0.2.4"},
