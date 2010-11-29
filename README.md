@@ -1,163 +1,446 @@
 node-monitor
 ============
 
-Monitor runtime statistics for node.js applications
+Runtime monitoring for node.js applications
 
 Introduction
 ------------
 
-node-monitor maintains vital statistics about your running application.
+node-monitor records and gives you access to vital statistics about your 
+running node.js application.
 
-As a developer, node-monitor is a repository to place information about your
-application as it occurs.  Track hit counts, execution times, error states, 
-or business activities such as promotion activity or discounts applied.
+As a developer, node-monitor gives you an easy way of exposing both
+business events and error conditions in code. 
 
-When running applications, node-monitor lets you specify the statistics you
-care to monitor, and gives you different ways to access and report them 
-at runtime.  
+This lets you apply a consistent pattern for handling try/catch exceptions 
+as well as error conditions and callbacks in asynchronous methods.
 
-Triggers allow you to define boundaries for monitoring unusual activity.
+During configuration and deployment, node-monitor lets you configure 
+standard output logging, or customized logging and alerts.  Logging and
+alerts can be defined application-wide, module-wide, or for a specific 
+event or error condition.
 
-Synopsis
---------
+At runtime node-monitor logs individual events, and maintains statistics
+about each event and error condition.  Easily discover active monitors, and
+trigger custom notifications and exposures of monitored activity.
 
-    // Dependencies
-    var monitor = require('monitor')('Customers', {options});
-    
-    ...
-    monitor('CustomerBalance');
-    monitor('CustomerBalance', balance);
-
-Configurations are defined at the top of a module. The following example
-is for a *Customers* module:
-
-    // Configuration parameters and default values
-    var config = require('config')('Customers', {
-      dbHost: 'localhost',
-      dbPort: 5984,
-      dbName: 'customers',
-      syncFrequency: 60       // Minutes between synchronizations
-    });
-
-This gives you a *config* variable for your module, along with default values 
-to use during development.
-
-Use the *config* object anywhere in your module:
-
-    // Connect to the database
-    var dbConn = db.connect(config.dbHost, config.dbPort);
-
-When running the application, you can specify module configuration overrides
-on the command line, or in a configuration file.
-
-For example, the above *dbHost* value of the *Customers* module can be 
-overridden on the command line, or in a config file.
-
-    Parameters specified on the command line:
-    $ node billing.js -Customers.dbHost smokin-db
-
-    Parameters specified in a configuration file:
-    $ node billing.js -config smokeTest.js
-
-Any number of command line parameters and/or config files can be specified when
-running the application.
 
 Installation & Testing
 ----------------------
 
-Use *npm* to install and test node-config:
- 
-    $ npm install config
-    $ npm test config
-    
-    
-How It Works
-------------
+Use *npm* to install and test node-monitor:
 
-When developing a module, use the following pattern for defining parameters
-and default values:
+    $ npm install monitor
+    $ npm test monitor
 
-    // Customers.js - Customer management utilities
 
-    // Configuration parameters and default values
-    var config = require('config')('Customers', {
-      dbHost: 'localhost',
-      dbPort: 5984,
-      dbName: 'customers',
-      syncFrequency: 60       // Minutes between synchronizations
+Event Monitoring
+----------------
+
+Start by defining the monitor at the top of your module. Subsequent examples 
+use this *monitor* variable.
+
+    var monitor = require('monitor')('Customers');
+
+Whenever you wish to record an event, call *monitor.event()*:
+
+    monitor.event('Customer purchase', invoice.amount);
+
+If you pass a Date object to the monitor, it assumes it's a start of an
+interval, and records the number of milliseconds from that time.  Example:
+
+    var beforeDbSave = new Date();
+    db.save(customer, function() {
+
+      // Monitor the DB save time
+      monitor.event('Customer save time, ms.', beforeDbSave);
+
     });
 
-When the application runs, node-config extends these default values with 
-overrides from configuration files, followed by command line overrides,
-in the order they're specified on the command line.
+In the above example, customer database save times are monitored.  Logging
+can be turned on or off at configuration time or at runtime.  First, last,
+maximum, minimum, average, count, and total execution times are maintained for
+the *Customer save time, ms.* monitor.
 
-Configuration Files
--------------------
+Error Monitoring
+----------------
 
-Configuration files let you define application deployment configurations in 
-one place.
+Node-monitor lets you keep track of the health of your running node.js
+application by giving you a consistent pattern for trapping program errors
+and exceptions.
 
-A configuration file is a JavaScript module that exports a single configuration
-object containing the modules, parameters, and values you want to override for
-your application.
+Errors are conditions preventing your function from producing the intended 
+results.  Here's an example using the try/catch pattern:
 
-The format of the object is best described by example *smokeTest.js*:
-
-    // Configuration overrides for smoke testing
-    module.exports = {
-      'mod-sync': {
-        remoteHost: 'smokin-sync',
-        remotePort: 5984
-      },
-      Customers: {
-        dbHost: 'smokin-db',
-        syncFrequency: 1
-      }
-    };
-
-When running the app, you can specify this config file and additional
-parameters at the same time:
-
-    $ node billing.js -config smokeTest.js -Customers.dbPort 5985
-
-This results in a *config* object in the *Customer* module with these values:
-
-    {
-      dbHost: 'smokin-db',
-      dbPort: 5985,
-      dbName: 'customers',
-      syncFrequency: 1
+    try {
+      ... do something
+    } catch (e) {
+      monitor.error('Customer insertion failure', e);
+      ...
     }
 
-Advanced Usage
---------------
+In the above example, if an exception is thrown between the try and catch
+block, the *Customer insertion failure* monitor will log the error, and keep
+track of failure statistics.  
 
-**Programmatic configuration**  If you'd rather specify configuration files 
-and parameter overrides in your application, just add the command line 
-arguments programatically before the module is loaded.
+Using the asynchronous callback pattern, you can monitor errors that occur
+in asynchronous functions, easily trapping and forwarding these errors to the
+callback function.  
 
-    // Always use port 5994 for the Customers service
-    process.argv.push('-Customers.dbPort', 5994);
-    require('Customers');
+Long form example:
 
-**Configuration discovery**  You can retrieve the current configuration for
-any module by omitting the second parameter, or all configurations by 
-omitting all parameters to config.
+    function saveCustomer(customer, callback) {
+      ...
+      db.save(customer.id, function(err, dbObject) {
+      
+        // Forward database errors to our callback
+        if (err) {
+          monitor.error('Customer db.save error', err);
+          if (callback) {
+            callback(err);
+          }
+          return;
+        }
+        ...
+      });
+    }
 
-    // Load the Customer module parameters
-    var custConfig = require('config')('Customers');
+Same, only using the short form:
 
-    // Load all application parameters
-    var allConfigs = require('config')();
+    function saveCustomer(customer, callback) {
+      ...
+      db.save(customer.id, function(err, dbObject) {
+      
+        // Forward database errors to our callback
+        err && return monitor.error('Customer db.save error', err, callback);
+        ...
+      });
+    }
 
-**Complex command line variables**  Variable names and values passed on through 
-the command line can be strings, objects, or arrays.
+In these examples, the *Customer db.save error* monitor will log and track the
+error, and if a callback is specified, it is called with the error object as
+the first (and only) argument.
 
-    $ node billing.js -Customers.custTemplate.region North
-    $ node billing.js -Customers.mailings[1] WelcomeMailing
-    $ node billing.js -Customers.mailingsSent [3,4,6]
-    $ node billing.js -Customers.homeOffice '{street:"4778 S. Main"}'
+Logging & Alerts
+----------------
+
+Monitor loggers are separated into two categories - eventLoggers and 
+errorLoggers.  These loggers can be configured application-wide, module-wide,
+or for individual event and error types.
+
+The default event logger is *require('sys').log*, and the default error logger 
+is *require('sys').debug*.  Changing these defaults and writing your own loggers
+are done at configuration time (see _Configuration_ below)
+
+External alerts are written with loggers, and can be as simple or as complex
+as you desire. For example, you could write a logger which sends an email
+when the error occurs.  
+
+Email logger example:
+
+    // Email logger
+    var fs = require('fs');
+    var exec = require('child_process').exec;
+    var mail_cmd = "mail -s 'Program Error' john.doe@example.com";
+    var errorLogger = function(message, value, err, monitor) {
+
+      // Write the error message to a temp file
+      var tmpfile = "/tmp/" + Math.random() + ".out";
+      fs.writeFile(tmpfile, message, function (err) {
+        if (err) throw err;
+        
+        // Mail the message
+        exec(mail_cmd + " < " + tmpfile, function(err) {
+          if (err) throw err;
+        
+          // Remove the temporary file
+          fs.unlink(tmpfile, function(err){
+            if (err) throw err;
+          });
+        });
+      });
+    }
     
+See the _Configuration_ section below for attaching loggers to various monitors
+within your application.
+
+Configuration
+-------------
+
+node-monitor uses the config package for configuration.  This allows you to
+specify configurations in a file or on the command line.  See the node-config
+package for more information about specifying configuration options for your
+different application deployments.
+
+The following configuration parameters are recognized:
+
+    * enabled - (boolean) Should the monitor be enabled? (default: true)
+    * eventLogger - Logger[s] to use for events (default: sys.log)
+                    Can be a single logger, or an array of loggers.
+    * errorLogger - Logger[s] to use for errors (default: sys.debug)
+                    Can be a single logger, or an array of loggers.
+    * maxLogSize - Limit the log output to this size (default: 10k)
+
+These configuration parameters can be specified globally, or as defaults
+for all monitors in a particular module, or on a monitor by monitor basis
+within a module.
+
+_Global_ - specify them as parameters for the 'monitor' module.  Example:
+
+    // production.js - Configurations for the production deployment
+    module.exports = {
+      monitor: {
+        errorLogger: require('monitor/emailLogger'),
+        maxLogSize: 4196
+      },
+      ...
+    }
+    
+The above configuration defines global defaults for the errorLogger and 
+maxLogSize parameters.
+
+_Module Defaults_ - specify them as the 'default' monitor for your module.
+Example:
+
+    // production.js - Configurations for the production deployment
+    module.exports = {
+      'Customer': {
+        'monitors': {
+          'default': {
+            errorLogger: require('monitor/emailLogger'),
+            maxLogSize: 4196
+          }
+        }
+      }
+    }
+
+    // Customer.js - Customer module
+    var config = require('config')('Customer'); 
+    var monitor = require('monitor')('Customer', config.monitors);
+    
+The above configuration defines module-level monitor defaults for *Customer*
+
+_Per Monitor_ - specify per-monitor configurations like per-module (above),
+only use the monitor name instead of 'default'.  Example:
+
+    // production.js - Configurations for the production deployment
+    module.exports = {
+      'Customer': {
+        'monitors': {
+          'default': {
+            errorLogger: null
+          },
+          'Customer insertion failure': {
+            errorLogger: require('monitor/emailLogger')
+          },
+          'Customer save time, ms.': {
+            enabled: false
+          }
+        }
+      }
+    }
+
+    // Customer.js - Customer module
+    var config = require('config')('Customer'); 
+    var monitor = require('monitor')('Customer', config.monitors);
+
+The above configuration defaults error logging off for monitors within the
+*Customer* module.  The the *Customer insertion failure* monitor overrides this
+default, and the *Customer save time, ms.* monitor is disabled.
+
+API
+---
+
+When you run require('monitor')('my-module', config), an instance of a 
+ModuleMonitor class is returned.  Module monitors contain individual monitors
+for your module, and methods for easily adding to the monitors.  
+
+node-monitor
+
+require('monitor')(moduleName, configuration) - This returns a Module monitor
+object for the specified moduleName, creating it if necessary.
+
+  moduleName - The name of your module
+  configuration - An object containing these elements:
+    enabled - (boolean) Should the monitor be enabled? (default: true)
+    eventLogger - Logger[s] to use for events (default: util.log)
+                  Can be a single logger, or an array of loggers.
+    errorLogger - Logger[s] to use for errors (default: util.debug)
+                  Can be a single logger, or an array of loggers.
+    maxLogSize - Limit individual log output to this size (default: 10k)
+
+require('monitor').getAllMonitors() - This returns an object containing
+named ModuleMonitor objects for each module.
+
+ModuleMonitor
+
+Instances of this class contain a dictionary of Monitor objects for each
+named monitor in your module.  Convenience methods exist for easily adding to 
+individual named monitors.
+
+new ModuleMonitor(moduleName, configs) - Constructor
+
+  Inputs:
+    moduleName - Name of your module
+    configs - A dictionary of monitor configurations for this module
+      key: monitorName, or 'default' for the module level defaults
+      value: A configuration object for the monitor, possibly including:
+        enabled - (boolean) Should the monitor be enabled? (default: true)
+        eventLogger - Logger[s] to use for events (default: util.log)
+                      Can be a single logger, or an array of loggers.
+        errorLogger - Logger[s] to use for errors (default: util.debug)
+                      Can be a single logger, or an array of loggers.
+        maxLogSize - Limit individual log output to this size (default: 10k)
+  Output:
+    A new ModuleMonitor class instance
+
+ModuleMonitor.get(monitorName) - Get a named Monitor object.  If the Monitor
+object exists it will be returned, otherwise it will be created.
+
+  Inputs:
+    monitorName - Name of the monitor
+  Output:
+    An instance of the Monitor class for the specified monitorName
+
+ModuleMonitor.getMonitors() - Get the list of Monitor objects for the module.
+
+  Inputs: (none)
+  Output:
+    An object containing all monitor objects for the module, by name.
+
+ModuleMonitor.event(name, value, data) - Monitor an event.  This adds an amount 
+to the specified monitor, and logs the event.
+
+  Inputs:
+    name - The event (monitor) name.
+    value - A numeric value to add to the monitor.  Default = 1.  If this is a
+            Date object, the number of milliseconds between the Date object and
+            Date.now() is added to the monitor.
+    data - An optional object to pass on to the event logger
+
+  Output:
+    The named monitor object (for chaining)
+
+ModuleMonitor.error(name, value) - Monitor an error that shouldn't be occurring.
+This monitors and logs the specified error.  It can be used for exception 
+processing as well as asynchronous error processing.  
+
+  Input
+    name - The error monitor name
+    error - An object representing the error
+    callback - An optional method to call (passing the error) after logging.
+    
+  Output:
+    monitor - This monitor (for chaining)
+
+Monitor
+
+new Monitor(name, moduleName, config, moduleConfig) - Constructor.
+
+  Inputs:
+    name: This monitor name
+    moduleName: Name of the containing module
+    config: Specific configurations for this monitor:
+      enabled - (boolean) Should the monitor be enabled? (default: true)
+      eventLogger - Logger[s] to use for events (default: console.log)
+                    Can be a single logger, or an array of loggers.
+      errorLogger - Logger[s] to use for errors (default: console.debug)
+                    Can be a single logger, or an array of loggers.
+      maxLogSize - Limit the log output to this size (default: 10k)
+    moduleConfig: Default monitor configurations for the module
+      enabled - (boolean) Should the monitor be enabled? (default: true)
+      eventLogger - Logger[s] to use for events (default: console.log)
+                    Can be a single logger, or an array of loggers.
+      errorLogger - Logger[s] to use for errors (default: console.debug)
+                    Can be a single logger, or an array of loggers.
+      maxLogSize - Limit the log output to this size (default: 10k)
+  Output:
+    A new Monitor object
+
+Monitor.getHits() - Return the number of hits this monitor has recorded.  Hits
+are the total number of logEvent() and logError() calls.
+
+Monitor.getTotal() - Return the total values this monitor has accumulated.
+Values are specified on logEvent() calls.  logError() calls accumulate a value 
+of one (1) for each call.
+
+Monitor.getAvg() - Return the overall average for the monitor.  The average is
+the total amount as reported by getTotal() divided by the number of hits as
+reported by getHits().
+
+Monitor.getMin() - Return the smallest value added via the logEvent() or 
+logError() methods.
+
+Monitor.getMax() - Return the larges value added via the logEvent() or 
+logError() methods.
+
+Monitor.getFirst() - Return the first value added via the logEvent() or 
+logError() methods.
+
+Monitor.getLoggers() - Return an object containing loggers added using 
+addLogger().  The keys are the logger IDs, and values are the logger functions.
+
+Monitor.getLast() - Return the last value added via the logEvent() or 
+logError() methods.
+
+Monitor.getConfig() - Return the actual configuration used for this monitor.
+This is a mixin of the program defaults, module defaults, and monitor configs
+passed in to the constructor.
+
+Monitor.getName() - Return the name of this monitor.
+
+Monitor.getModuleName() - Return the module name this monitor was created under.
+
+Monitor.isEnabled() - Returns true if the monitor is enabled, false if disabled.
+
+Monitor.enable(enabled) - This enables or disables the monitor.  Disabling 
+prevents the monitor from accumulating values and logging messages.
+
+  Input:
+    enabled - (boolean) Enable or disable the monitor
+
+Monitor.reset() - Reset the monitor accumulators to their original state.
+
+Monitor.addLogger(loggerFunction) - Attach a logger function at runtime.
+  
+  Loggers added using addLogger() will be called for all error and event logging
+  called on this monitor.
+  
+  Input:
+    loggerFunction(message, value, data, monitor) - A function to run when
+      an event or error is logged.  The function accepts:
+        message - A formatted message for logging
+        value - The numeric value of the event
+        data - The data object associated with the event
+        monitor - A reference to this monitor object for accessing monitor data
+
+  Output:
+    loggerId - An ID associated with this logger so it can be retrieved using
+      getLogger(), and removed using removeLogger().
+      
+Monitor.removeLogger(loggerId) - Remove a logger that was added using 
+  addLogger().  This removes a logger by the ID assigned using addLogger().
+
+  Input:
+    loggerId - The ID returned by the addLogger function when adding the logger.
+
+Monitor.logEvent(value, data) - Log and accumulate an event.
+
+  Input:
+    value - An optional numeric value to add to the monitor.  Default = 1.  
+            If this is a Date object, the number of milliseconds between the 
+            Date object and Date.now() is added to the monitor.
+    data - An optional object to pass on to the event logger
+  Output:
+    monitor - This monitor (for chaining)
+
+Monitor.logError() - Monitor an error that shouldn't be occurring.
+
+  Input
+    error - An object representing the error
+    callback - An optional method to call (passing the err) after logging.
+  Output:
+    monitor - This monitor (for chaining)
 
 License
 -------
