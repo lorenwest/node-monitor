@@ -316,7 +316,9 @@ to the specified monitor, and logs the event.
     value - A numeric value to add to the monitor.  Default = 1.  If this is a
             Date object, the number of milliseconds between the Date object and
             Date.now() is added to the monitor.
-    data - An optional object to pass on to the event logger
+    data - An optional object to pass on to the event logger.  May be specified
+           as the second argument in place of value (in which case value will
+           default to 1).
 
   Output:
     The named monitor object (for chaining)
