@@ -9,26 +9,29 @@ Introduction
 node-monitor records and gives you access to vital statistics about your 
 running node.js application.
 
-As a developer, node-monitor gives you an easy way of exposing both
-business events and error conditions in code. 
-
-This lets you apply a consistent pattern for handling try/catch exceptions 
-as well as error conditions and callbacks in asynchronous methods.
+As a developer, node-monitor gives you a consistent pattern for exposing 
+business events, monitoring exceptions, and managing errors and callbacks
+in your asynchronous code.
 
 During configuration and deployment, node-monitor lets you configure 
 standard output logging, or customized logging and alerts.  Logging and
 alerts can be defined application-wide, module-wide, or for a specific 
 event or error condition.
 
-At runtime node-monitor logs individual events, and maintains statistics
-about each event and error condition.  Easily discover active monitors, and
-trigger custom notifications and exposures of monitored activity.
+The provided loggers let you log to files, to a CouchDB database, to an email
+distribution list, an SMS gateway, an internal event, or an external program.
+
+When your application exits, node-monitor produces an activity report listing
+activity for each monitor that fired throughout the lifetime of the application.
 
 
 Installation & Testing
 ----------------------
 
-Use *npm* to install and test node-monitor:
+Node-monitor installs with *npm* and comes with an extensive suite of tests to 
+make sure it performs well in your deployment environment.
+
+To install and test node-monitor:
 
     $ npm install monitor
     $ npm test monitor
