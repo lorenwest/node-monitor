@@ -115,7 +115,7 @@ Same, only using the short form:
       db.save(customer.id, function(err, dbObject) {
       
         // Forward database errors to our callback
-        err && return monitor.error('Customer db.save error', err, callback);
+        if (err) return monitor.error('Customer db.save error', err, callback);
         ...
       });
     }
