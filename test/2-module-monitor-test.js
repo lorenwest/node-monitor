@@ -4,10 +4,11 @@
 */
 
 // Dependencies
+var deps = require('../deps');
+var _ = deps._;
 var config = {'default':{eventLogger:null, errorLogger:null}};
 var modMonitorClass = require('../lib/module-monitor');
 var monitor = new modMonitorClass('monitor-test',config);
-var deps = require('../deps');
 var vows = deps.vows;
 var assert = deps.assert;
 

@@ -6,6 +6,7 @@
 // Dependencies
 var deps = require('../deps');
 var exec = require('child_process').exec;
+var _ = deps._;
 
 /******************************************************************************* 
 * OSCmdLogger

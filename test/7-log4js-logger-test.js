@@ -4,12 +4,13 @@
 */
 
 // Dependencies
+var deps = require('../deps');
+var _ = deps._;
 var config = {'default':{eventLogger:null, errorLogger:null}};
 var Monitor = require('../lib/monitor');
 var nodeMonitor = require('../lib/node-monitor');
 var moduleMonitor = nodeMonitor('monitor-test',config);
 var loggerModule = require('../logger/log4js-logger');
-var deps = require('../deps');
 
 var vows = deps.vows;
 var assert = deps.assert;

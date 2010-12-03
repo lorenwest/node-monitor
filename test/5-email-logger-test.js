@@ -4,12 +4,13 @@
 */
 
 // Dependencies
+var deps = require('../deps');
+var _ = deps._;
 var config = {'default':{eventLogger:null, errorLogger:null}};
 var Monitor = require('../lib/monitor');
 var nodeMonitor = require('../lib/node-monitor');
 var moduleMonitor = nodeMonitor('monitor-test',config);
 var loggerModule = require('../logger/email-logger');
-var deps = require('../deps');
 var vows = deps.vows;
 var assert = deps.assert;
 var fs = require('fs');
@@ -40,7 +41,7 @@ exports.EmailLoggerTest = vows.describe('Tests for the Email logger')
   'Logger tests': {
     topic: function() {
         // Send a message to stdout, and to a file.
-        var logger1 = loggerModule({to:'abc@example.com', mailcmd:'echo -n'},
+        var logger1 = loggerModule({to:'abc@example.com', mailcmd:'echo'},
     	  this.callback);
         logger1('Hello World', 10, {value:20}, new Monitor('TestMonitor','TestModule'));
       },
@@ -51,7 +52,7 @@ exports.EmailLoggerTest = vows.describe('Tests for the Email logger')
         assert.isString(stdout);
       },
       'And the correct OS command was run': function(err, stdout, stderr) {
-        assert.equal(stdout, "-s TestMonitor abc@example.com");
+        assert.equal(stdout, "-s TestMonitor abc@example.com\n");
       }
     }
   });

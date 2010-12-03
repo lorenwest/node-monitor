@@ -5,6 +5,7 @@
 
 // Dependencies
 var deps = require('../deps');
+var _ = deps._;
 var monitorClass = require('../lib/monitor');
 var monitor = new monitorClass('testMonitor', 'testModule', 
   {eventLogger:null, errorLogger:null});

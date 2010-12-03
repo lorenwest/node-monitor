@@ -5,6 +5,7 @@
 
 // Dependencies
 var deps = require('../deps');
+var _ = deps._;
 var couchdb = require('couchdb');
 var config = deps.config('couchdb-logger', {
   defaultOpts: {

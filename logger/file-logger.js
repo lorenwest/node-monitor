@@ -5,6 +5,7 @@
 
 // Dependencies
 var deps = require('../deps');
+var _ = deps._;
 var fs = require('fs');
 
 /******************************************************************************* 

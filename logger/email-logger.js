@@ -5,6 +5,7 @@
 
 // Dependencies
 var deps = require('../deps');
+var _ = deps._;
 var exec = require('child_process').exec;
 var fs = require('fs');
 var config = deps.config('email-logger', {

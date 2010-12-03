@@ -3,15 +3,14 @@
 ********************************************************************************
 */
 
-// Tested with these dependencies
-// Make sure to keep these versions in sync with the package.json file
 var deps = module.exports = {
-  "config": require('config'),
-  "log4js": require('log4js'),
-  "vows": require('vows'),
-  "sprintf": require('sprintf').sprintf,
-  "sys": require('sys'),
-  "assert": require('assert')
+  '_': require('underscore'),
+  'config': require('config'),
+  'log4js': require('log4js'),
+  'vows': require('vows'),
+  'sprintf': require('sprintf').sprintf,
+  'sys': require('sys'),
+  'assert': require('assert')
 };
 
 // Node 0.3.0 has util vs. sys
