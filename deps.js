@@ -22,6 +22,19 @@ try {
 
 // Default module configuration
 deps.monitorConfig = deps.config('monitor', {
+	
+  // Configurations for the monitor REST service
+  remote: {
+    port: 4200,
+    monitor: {}
+  },
+
+  // Configurations for the monitor webapp
+  // npm run monitor
+  webapp: {
+    port: 4201,
+    monitor: {}
+  },
 
   // These are defaults for all monitors, and can be overridden
   // either globally or when creating an individual monitor

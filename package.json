@@ -1,11 +1,13 @@
 {
   name: "monitor",
-  version: "0.2.9",
+  version: "0.3.0",
   main: "./lib/node-monitor.js",
   description: "Runtime monitoring for node.js applications",
   author: "Loren West<open_source@lorenwest.com>",
   directories: {lib: "./lib", test: "./test"},
   modules: { 
+    "stdout-logger": "./logger/stdout-logger",
+    "stderr-logger": "./logger/stderr-logger",
     "console-logger": "./logger/console-logger",
     "file-logger": "./logger/file-logger",
     "log4js-logger": "./logger/log4js-logger",
@@ -15,6 +17,8 @@
     },
   dependencies: {
     "config": ">=0.2.8",
+    "connect": ">=0.2.5",
+    "express": ">=1.0.0",
     "sprintf": ">=0.1.1",
     "vows": ">=0.5.6",
     "log4js": ">=0.2.3",
