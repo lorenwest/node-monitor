@@ -15,9 +15,9 @@ var deps = module.exports = {
 
 // Node 0.3.0 has util vs. sys
 try {
-  var out = require('util');
+  deps.out = require('util');
 } catch (e) {
-  out = require('sys');
+  deps.out = require('sys');
 }
 
 // Default module configuration
@@ -25,8 +25,10 @@ deps.monitorConfig = deps.config('monitor', {
 
   // These are defaults for all monitors, and can be overridden
   // either globally or when creating an individual monitor
-  enabled: true,
-  eventLogger: out.log,
-  errorLogger: out.debug,
-  maxLogSize: 10240
+  defaults: {
+    enabled: true,
+    eventLogger: require('./logger/stdout-logger'),
+    errorLogger: require('./logger/stderr-logger'),
+    maxLogSize: 10240
+  }
 });

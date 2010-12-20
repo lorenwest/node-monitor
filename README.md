@@ -188,28 +188,30 @@ These configuration parameters can be specified globally, or as defaults
 for all monitors in a particular module, or on a monitor by monitor basis
 within a module.
 
-_Global_ - specify them as parameters for the 'monitor' module.  Example:
+_Global_ - specify them as defaults for the 'monitor' module.  Example:
 
     // production.js - Configurations for the production deployment
     module.exports = {
       monitor: {
-        errorLogger: require('monitor/emailLogger'),
-        maxLogSize: 4196
+        defaults: {
+          eventLogger: null,
+          maxLogSize: 4196
+        }
       },
       ...
     }
     
-The above configuration defines global defaults for the errorLogger and 
-maxLogSize parameters.
+The above configuration turns off logging for the event logger, and sets the
+maxLogSize parameter for all monitors (unless overridden).
 
-_Module Defaults_ - specify them as the 'default' monitor for your module.
+_Module Defaults_ - specify them as the 'defaults' monitor for your module.
 Example:
 
     // production.js - Configurations for the production deployment
     module.exports = {
-      'Customer': {
-        'monitors': {
-          'default': {
+      Customer: {
+        monitor: {
+          defaults: {
             errorLogger: require('monitor/emailLogger'),
             maxLogSize: 4196
           }
@@ -219,7 +221,7 @@ Example:
 
     // Customer.js - Customer module
     var config = require('config')('Customer'); 
-    var monitor = require('monitor')('Customer', config.monitors);
+    var monitor = require('monitor')('Customer', config.monitor);
     
 The above configuration defines module-level monitor defaults for *Customer*
 
@@ -228,9 +230,9 @@ only use the monitor name instead of 'default'.  Example:
 
     // production.js - Configurations for the production deployment
     module.exports = {
-      'Customer': {
-        'monitors': {
-          'default': {
+      Customer: {
+        monitor: {
+          default: {
             errorLogger: null
           },
           'Customer insertion failure': {
@@ -245,7 +247,7 @@ only use the monitor name instead of 'default'.  Example:
 
     // Customer.js - Customer module
     var config = require('config')('Customer'); 
-    var monitor = require('monitor')('Customer', config.monitors);
+    var monitor = require('monitor')('Customer', config.monitor);
 
 The above configuration defaults error logging off for monitors within the
 *Customer* module.  The the *Customer insertion failure* monitor overrides this
@@ -286,7 +288,7 @@ new ModuleMonitor(moduleName, configs) - Constructor
   Inputs:
     moduleName - Name of your module
     configs - A dictionary of monitor configurations for this module
-      key: monitorName, or 'default' for the module level defaults
+      key: monitorName, or 'defaults' for the module level defaults
       value: A configuration object for the monitor, possibly including:
         enabled - (boolean) Should the monitor be enabled? (default: true)
         eventLogger - Logger[s] to use for events (default: util.log)
