@@ -11,5 +11,5 @@ var express = require('express');
 
 // Create the middleware
 var server = module.exports = express.createServer();
-server.use('/')
+// server.use('/')
 // monitor.event('Monitor webapp bootstrap');
