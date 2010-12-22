@@ -1,6 +1,6 @@
 {
   name: "monitor",
-  version: "0.2.5",
+  version: "0.2.6",
   main: "./lib/node-monitor.js",
   description: "Runtime monitoring for node.js applications",
   author: "Loren West<open_source@lorenwest.com>",
@@ -12,8 +12,6 @@
     "os-cmd-logger": "./logger/os-cmd-logger",
     "email-logger": "./logger/email-logger",
     "couchdb-logger": "./logger/couchdb-logger"
-//    "rest-connector": "./connector/rest-connector",
-//    "web-connector": "./connector/web-connector"
     },
   dependencies: {
     config: ">=0.2.4",
