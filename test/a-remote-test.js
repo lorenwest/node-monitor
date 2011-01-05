@@ -1,46 +1,41 @@
 /*******************************************************************************
-* remote-test.js - Test for the remote REST server
+* ping-test.js - Test the ping API
 ********************************************************************************
 */
-
-// This has to be set before the first require
-process.argv.push('-monitor.remote.enabled', true);
 
 // Dependencies
 var deps = require('../deps');
 var _ = deps._;
-var remote = require('../lib/remote');
-var request = require('request');
-var urlStart = 'http://localhost:4200/';
-
-// require('monitor/remote');
-// npm run monitor
+var vows = deps.vows;
+var assert = deps.assert;
+var ping = require('../service/ping');
 
 /*******************************************************************************
-* RemoteTest
+* PingTest
 ********************************************************************************
 */
-exports.RemoteTest = vows.describe('Tests for the REST interface')
+exports.PingTest = vows.describe('Tests for the ping API')
 
   .addBatch({
     'Library initialization': {
-      'The remote class is available': function() {
-        assert.isObject(remote);
+      'The service and API are available': function() {
+        assert.isFunction(ping);
+        assert.isFunction(ping.api);
       }
     }
   })
   
   .addBatch({
     'Ping test': {
-      topic: {
-        request(urlStart + "ping", this.callback);
+      topic: function(){
+        ping.api(this.callback);
       },
       'The ping comes back without an error': function(err, pingObj) {
         assert.isNull(err);
       },
-      'And within 1 second of the request': function(err, pingObj) {
+      'And responds with a <pong>': function(err, pingObj) {
         assert.isNotNull(pingObj);
-        assert.isTrue(pingObj.responseMs < 1000);
+        assert.equal(pingObj.ping, 'pong');
       }
     }
   })

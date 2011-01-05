@@ -11,7 +11,6 @@
 *   none (except the log message sent to stdout)
 */
 var deps = require('../deps');
-deps._.out("stdout");
 module.exports = function(message, value, data, monitor) {
 
   // Output just the message

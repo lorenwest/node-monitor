@@ -24,15 +24,8 @@ try {
 deps.monitorConfig = deps.config('monitor', {
 	
   // Configurations for the monitor REST service
-  remote: {
+  service: {
     port: 4200,
-    monitor: {}
-  },
-
-  // Configurations for the monitor webapp
-  // npm run monitor
-  webapp: {
-    port: 4201,
     monitor: {}
   },
 
