@@ -1,6 +1,6 @@
 {
   name: "monitor",
-  version: "0.2.7",
+  version: "0.2.8",
   main: "./lib/node-monitor.js",
   description: "Runtime monitoring for node.js applications",
   author: "Loren West<open_source@lorenwest.com>",
@@ -15,8 +15,6 @@
     },
   dependencies: {
     config: ">=0.2.4",
-    log4js: ">=0.1.0",
-    couchdb: ">=0.1.0",
     sprintf: ">=0.1.1",
     vows: ">=0.5.2"
   },
