@@ -1,4 +1,30 @@
+/* Page CSS */
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+/* MonitorPage CSS */
+.header {
+  height:40px;
+}
+.page-layout {
+  padding-left:300px;
+  padding-right:0px;
+}
+.browser-container {
+  width:300px;
+  margin-left:-300px;
+}
+.desktop-container {
+  width:100%;
+}
+.help-container {
+  width:0px;
+  margin-right:-0px;
+  background-color:blue;
+}
+
+/* Desktop CSS */
+.yui3-desktop {
+  min-width:560px;
 }

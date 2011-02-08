@@ -1,11 +1,11 @@
 {
-  name: "monitor",
-  version: "0.3.0",
-  main: "./lib/node-monitor.js",
-  description: "Runtime monitoring for node.js applications",
-  author: "Loren West<open_source@lorenwest.com>",
-  directories: {lib: "./lib", test: "./test"},
-  modules: { 
+  "name": "monitor",
+  "version": "0.3.0",
+  "main": "./lib/node-monitor.js",
+  "description": "Runtime monitoring for node.js applications",
+  "author": "Loren West<open_source@lorenwest.com>",
+  "directories": {"lib": "./lib", "test": "./test"},
+  "modules": { 
     "stdout-logger": "./logger/stdout-logger",
     "stderr-logger": "./logger/stderr-logger",
     "console-logger": "./logger/console-logger",
@@ -19,13 +19,12 @@
     "config": ">=0.2.8",
     "connect": ">=0.2.5",
     "express": ">=1.0.0",
+    "socket.io": "0.5.3",
     "sprintf": ">=0.1.1",
     "vows": ">=0.5.6",
     "log4js": ">=0.2.3",
     "couch-client": ">=0.0.3"
   },
-  engines: {"node": ">=0.2.4"},
-  scripts: {
-    test: "vows test/*.js --spec"
-  }
+  "engines": {"node": ">=0.2.4"},
+  "scripts": {"test": "vows test/*.js --spec"}
 }

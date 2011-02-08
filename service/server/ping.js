@@ -4,10 +4,9 @@
 */
 
 // Dependencies
-var deps = require('../deps');
+var deps = require('../../deps');
 var _ = deps._;
 var config = deps.monitorConfig.remote;
-var connect = deps.connect;
 var monitor = deps.serverMonitor;
 
 /*****************************************************************************
