@@ -48,7 +48,7 @@ var _ = deps._;
 * Then the following call will output an ERROR log to the log4j logger.
 *   
 *   monitor.error('Customer save error', {error:err, customer:customer});
-* 
+*
 * Input:
 *   logger: (required) The log4js logger to use.
 *
@@ -60,12 +60,15 @@ var Log4jsLogger = module.exports = function(logger) {
   // Build the logger function
   var loggerFunction = function(message, value, data, monitor) {
 
+    // Strip the date off the message
+    message = message.substr(24);
+
     // Log the error or event info
-	if (monitor.getLast().isError) {
-	  logger.error(message);
-	} else {
-	  logger.info(message);
-	}
+    if (monitor.getLast().isError) {
+      logger.error(message);
+    } else {
+      logger.info(message);
+    }
   };
 
   // Return the logger function

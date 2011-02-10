@@ -17,7 +17,7 @@ var assert = deps.assert;
 var fs = require('fs');
 
 // Define a couple log4js loggers
-var log4js = deps.log4js;
+var log4js = deps.log4js();
 var tmpfile1 = '/tmp/file.' + Math.floor(Math.random() * 10000) + '.log';
 var tmpfile2 = '/tmp/file.' + Math.floor(Math.random() * 10000) + '.log';
 log4js.addAppender(log4js.fileAppender(tmpfile1), 'logger1');

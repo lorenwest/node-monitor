@@ -1,6 +1,6 @@
 {
   name: "monitor",
-  version: "0.2.8",
+  version: "0.2.9",
   main: "./lib/node-monitor.js",
   description: "Runtime monitoring for node.js applications",
   author: "Loren West<open_source@lorenwest.com>",
@@ -14,9 +14,11 @@
     "couchdb-logger": "./logger/couchdb-logger"
     },
   dependencies: {
-    config: ">=0.2.4",
-    sprintf: ">=0.1.1",
-    vows: ">=0.5.2"
+    "config": ">=0.2.8",
+    "sprintf": ">=0.1.1",
+    "vows": ">=0.5.6",
+    "log4js": ">=0.2.3",
+    "couch-client": ">=0.0.3"
   },
   engines: {"node": ">=0.2.4"},
   scripts: {

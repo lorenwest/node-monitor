@@ -6,7 +6,7 @@
 // Dependencies
 var deps = require('../deps');
 var _ = deps._;
-var couchdb = require('couchdb');
+var couchdb = require('couch-client');
 var config = deps.config('couchdb-logger', {
   defaultOpts: {
     dbHost: "localhost",
@@ -72,7 +72,7 @@ var config = deps.config('couchdb-logger', {
 *   data: (the data object passed - if any)
 * }
 *   
-* 
+*
 * Input:
 *   options - An optional options object, with the following elements:
 *     dbHost: Database host name (default: "localhost")
@@ -94,17 +94,17 @@ var CouchdbLogger = module.exports = function(options, callback) {
   var opts = _.extendDeep({}, config.defaultOpts, options);
 
   // Get a database connection
-  var client = couchdb.createClient(opts.dbPort, opts.dbHost);
-  var db = client.db(opts.dbName);
+  var couchUrl = "http://" + opts.dbHost + ":" + opts.dbPort + "/" + opts.dbName;
+  var db = couchdb(couchUrl);
 
   // Build a new couchdb insert function
   var loggerFunction = function(message, value, data, monitor) {
 
-	// Build the ID if there's a template
-	var id = null;
-	if (opts.id) {
+    // Build the ID if there's a template
+    var id = null;
+    if (opts.id) {
 
-	  // Build the object to pass to the template engine
+      // Build the object to pass to the template engine
       var obj = {message:message, value:value, data:data, monitor:monitor};
 
       // Apply the template to the options, using mustache style delimiters
@@ -114,16 +114,18 @@ var CouchdbLogger = module.exports = function(options, callback) {
       };
       var id = _.template(opts.id, obj);
       _.templateSettings = origSettings;
-	}
+    }
 
     // Build the document to insert
     var thisEvent = monitor.getLast();
     var doc = _.extendDeep({
+      _id: id,
       moduleName: monitor.getModuleName(),
       monitorName: monitor.getName(),
       date: new Date(thisEvent.timestamp).toFormattedString(),
       timestamp: thisEvent.timestamp
     }, config.dbDoc);
+
     if (thisEvent.isError) {
       doc.isError = true;
       doc.error = data;
@@ -132,29 +134,17 @@ var CouchdbLogger = module.exports = function(options, callback) {
       doc.value = value;
       doc.error = data;
     }
-    
+
     // If mock is requested, return the document now
     if (opts.mock) {
-      doc._id = id;
       doc._rev = "1";
       callback && callback(null, doc);
       return;
     }
 
     // Insert the document
-    if (id) {
-      db.saveDoc(id, doc, function(err, dbObj){
-    	doc._id = err ? "error" : dbObj.id;
-    	doc._rev = err ? "error" : dbObj.rev;
-        callback && callback(err, doc);
-      });
-    } else {
-      db.saveDoc(doc, function(err, dbObj){
-    	doc._id = err ? "error" : dbObj.id;
-    	doc._rev = err ? "error" : dbObj.rev;
-        callback && callback(err, doc);
-      });
-    }
+    db.save(doc, callback);
+
   };
 
   // Return the logger function

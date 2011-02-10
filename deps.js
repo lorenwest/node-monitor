@@ -6,9 +6,9 @@
 var deps = module.exports = {
   '_': require('underscore'),
   'config': require('config'),
-  'log4js': require('log4js'),
   'vows': require('vows'),
   'sprintf': require('sprintf').sprintf,
+  'log4js': require('log4js'), // This is here for Date.toFormattedString()
   'sys': require('sys'),
   'assert': require('assert')
 };
