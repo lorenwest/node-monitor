@@ -7,20 +7,25 @@ YUI.add("processbrowser", function(Y) {
 
   // Constructor
   function ProcessBrowser(params) {
+    this.p = params;
     ProcessBrowser.superclass.constructor.apply(this, arguments);
   }
 
   // Statics
   ProcessBrowser.NAME = "processBrowser";
   ProcessBrowser.ATTRS = {
-    pageState : {
-    	value: "A"
-    }
+    processes : [
+      {
+        display:"Local Process",
+        host:"localhost",
+        port:4200
+      }
+    ]
   };
   ProcessBrowser.HTML_PARSER = {};
   ProcessBrowser.HTML = [
     '<div class="', ProcessBrowser.NAME, '">',
-      'PROCESS BROWSER',
+      'Loading...',
     '</div>',
   ''].join('\n');
 
@@ -34,23 +39,9 @@ YUI.add("processbrowser", function(Y) {
       var t=this, cb=t.get("contentBox");
       cb.set("innerHTML", ProcessBrowser.HTML);
       
-      /*
-      var tree2 = new Y.TreeViewDD({
-        boundingBox: t.get('contentBox'),
-    	io: {
-    	  url: 'assets/content.html'
-    	},
-    	children: [
-    	  { label: 'Folder 1', children: [ { label: 'file' }, { label: 'file' }, { label: 'file' } ] },
-    	  { label: 'Folder 2', expanded: true, children: [ { label: 'file' }, { label: 'file' } ] },
-    	  { label: 'Folder 3', children: [ { label: 'file' } ] },
-    	  { label: 'Folder 4', expanded: true, children: [ { label: 'Folder 4-1', expanded: true, children: [ { label: 'file' } ] } ] },
-    	  { label: 'Folder 5', type: 'io', expanded: false }
-    	],
-    	type: 'file',
-    	width: 200
-      }).render();
-      */
+      // Fetch module information for each host
+      p.rpc.xx();
+      
     },
     
     bindUI : function() {

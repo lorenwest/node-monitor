@@ -7,6 +7,7 @@ YUI.add("monitorpage", function(Y) {
 
   // Constructor
   function MonitorPage(params) {
+	this.p = params;
     MonitorPage.superclass.constructor.apply(this, arguments);
   }
 
@@ -35,20 +36,21 @@ YUI.add("monitorpage", function(Y) {
     
     renderUI : function() {
       // Replace content with this instance
-      var t=this, cb=t.get("contentBox");
+      var t=this, p=t.p, cb=t.get("contentBox");
       cb.set('innerHTML', MonitorPage.HTML);
       t.headerContainer = cb.one(".header-container");
       t.browserContainer = cb.one(".browser-container");
       t.desktopContainer = cb.one(".desktop-container");
       t.helpContainer = cb.one(".help-container").hide();
+      var params = {rpc:p.rpc};
       Y.use("header", function(Y) {
-        t.header = new Y.Monitor.Header({}).render(t.headerContainer);
+        t.header = new Y.Monitor.Header(params).render(t.headerContainer);
       });
       Y.use("processbrowser", function(Y) {
-        t.browser = new Y.Monitor.ProcessBrowser({}).render(t.browserContainer);
+        t.browser = new Y.Monitor.ProcessBrowser(params).render(t.browserContainer);
       });
       Y.use("desktop", function(Y) {
-        t.desktop = new Y.Monitor.Desktop({}).render(t.desktopContainer);
+        t.desktop = new Y.Monitor.Desktop(params).render(t.desktopContainer);
       });
     },
     
