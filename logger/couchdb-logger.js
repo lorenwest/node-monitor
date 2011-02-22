@@ -122,7 +122,7 @@ var CouchdbLogger = module.exports = function(options, callback) {
       _id: id,
       moduleName: monitor.getModuleName(),
       monitorName: monitor.getName(),
-      date: new Date(thisEvent.timestamp).toFormattedString(),
+      date: new Date(thisEvent.timestamp).toUTCString(),
       timestamp: thisEvent.timestamp
     }, config.dbDoc);
 
