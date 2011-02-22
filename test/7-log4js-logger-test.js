@@ -53,7 +53,7 @@ exports.Log4jsLoggerTest = vows.describe('Tests for the log4js logger')
         // No callbacks, so we'll log a message and wait a while
         var logger1 = loggerModule(log4jsLogger1);
         var monitor = new Monitor('TestMonitor','TestModule',{errorLogger:logger1});
-        monitor.logError({errorText:"Test error"});
+        monitor.logError({errorText:"Successful error log test"});
         setTimeout(this.callback,100);
       },
       'The callback was fired': function() {
@@ -61,7 +61,7 @@ exports.Log4jsLoggerTest = vows.describe('Tests for the log4js logger')
       },
       'And the correct contents were written to the file': function() {
         var contents = fs.readFileSync(tmpfile1, "utf-8");
-        assert.isTrue(contents.indexOf("Test error") > 0);
+        assert.isTrue(contents.indexOf("Successful error log test") > 0);
       },
       'Cleanup': function() {
         fs.unlinkSync(tmpfile1);
