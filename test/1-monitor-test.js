@@ -21,7 +21,8 @@ var logger2_id = null;
 * MonitorTest
 ********************************************************************************
 */
-exports.MonitorTest = vows.describe('Tests for the monitor class').addBatch({
+exports.MonitorTest = vows.describe('Tests for the monitor class')
+.addBatch({
   'Library initialization': {
     'The monitor class is available': function() {
       assert.isObject(monitor);
@@ -46,8 +47,11 @@ exports.MonitorTest = vows.describe('Tests for the monitor class').addBatch({
       assert.isFunction(monitor.reset);
       assert.isFunction(monitor.enable);
     }
-  }})
-  .addBatch({
+  }
+})
+
+
+.addBatch({
   'Module tests': {
     'Configuration hierarchy works': function() {
       var monConfig = {logFn:null};
@@ -90,7 +94,12 @@ exports.MonitorTest = vows.describe('Tests for the monitor class').addBatch({
       assert.equal(monitor.getHits(), 4);
       assert.equal(monitor.getTotal(), 51);
       monitor.enable(true);
-    },
+    }
+  }
+})
+
+.addBatch({
+  'Continuted tests': {
     'The reset() function works': function() {
       monitor.reset();
       assert.equal(monitor.getAvg(), 0);
@@ -139,38 +148,39 @@ exports.MonitorTest = vows.describe('Tests for the monitor class').addBatch({
       monitor.logEvent(10);
       assert.isNull(testStr);
     }
-   }
-  })
-  .addBatch({
-    'Adding additional loggers at runtime': {
-      'The addLogger() function adds additional loggers': function() {
-        logger1_id = monitor.addLogger(logger1);
-        logger2_id = monitor.addLogger(logger2);
-        assert.isNotNull(logger1_id);
-        assert.isNotNull(logger2_id);
-        assert.notEqual(logger1_id, logger2_id);
-      },
-      'The getLogger() function gets the correct logger': function() {
-        assert.strictEqual(logger1, monitor.getLogger(logger1_id));
-        assert.strictEqual(logger2, monitor.getLogger(logger2_id));
-      },
-      'The removeLogger() correctly removes loggers': function() {
-        monitor.removeLogger(logger1_id);
-        monitor.removeLogger(logger2_id);
-        assert.isUndefined(monitor.getLogger(logger1_id));
-        assert.isUndefined(monitor.getLogger(logger2_id));
-      },
-      topic: function() {
-        var customLogger =
-          require('../logger/os-cmd-logger')('echo "{{message}}"', this.callback);
-        monitor.addLogger(customLogger);
-    	monitor.logEvent(20,{customerId:"CustomerID"});
-      },
-      'A custom logger callback is called': function(err, stdout, stderr) {
-        assert.isNotNull(stdout);
-      },
-      'And the custom logger performs as expected': function(err, stdout, stderr) {
-        assert.isTrue(stdout.indexOf("CustomerID") > 0);
-      }
+  }
+})
+
+.addBatch({
+  'Adding additional loggers at runtime': {
+    'The addLogger() function adds additional loggers': function() {
+      logger1_id = monitor.addLogger(logger1);
+      logger2_id = monitor.addLogger(logger2);
+      assert.isNotNull(logger1_id);
+      assert.isNotNull(logger2_id);
+      assert.notEqual(logger1_id, logger2_id);
+    },
+    'The getLogger() function gets the correct logger': function() {
+      assert.strictEqual(logger1, monitor.getLogger(logger1_id));
+      assert.strictEqual(logger2, monitor.getLogger(logger2_id));
+    },
+    'The removeLogger() correctly removes loggers': function() {
+      monitor.removeLogger(logger1_id);
+      monitor.removeLogger(logger2_id);
+      assert.isUndefined(monitor.getLogger(logger1_id));
+      assert.isUndefined(monitor.getLogger(logger2_id));
+    },
+    topic: function() {
+      var customLogger =
+        require('../logger/os-cmd-logger')('echo "{{message}}"', this.callback);
+      monitor.addLogger(customLogger);
+      monitor.logEvent(20,{customerId:"CustomerID"});
+    },
+    'A custom logger callback is called': function(err, stdout, stderr) {
+      assert.isNotNull(stdout);
+    },
+    'And the custom logger performs as expected': function(err, stdout, stderr) {
+      assert.isTrue(stdout.indexOf("CustomerID") > 0);
     }
+  }
 });

@@ -8,7 +8,6 @@ var deps = module.exports = {
   'config': require('config'),
   'vows': require('vows'),
   'sprintf': require('sprintf').sprintf,
-  'log4js': require('log4js'), // This is here for Date.toFormattedString()
   'sys': require('sys'),
   'assert': require('assert')
 };

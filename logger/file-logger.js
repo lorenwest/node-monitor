@@ -32,11 +32,11 @@ var fs = require('fs');
 *       }
 *     }
 *   }
-*   
+*
 * Then the following will log the 'new customer' event to /tmp/customer.log:
-*   
+*
 *   monitor.event('new customer', {id: customerId});
-* 
+*
 * Input:
 *   filename - The logfile name to append to (default: './monitor.log').
 *   callback(err, written) - An optional function to call once the 
@@ -48,11 +48,10 @@ var fs = require('fs');
 var FileLogger = module.exports = function(filename, callback) {
 
   // Initialize
-  filename = filename || "./monitor.log";	
+  filename = filename || "./monitor.log";
 
   // Make sure the file is open before we start writing (using sync)
-  var fd = fs.openSync(filename, 
-		  process.O_APPEND | process.O_WRONLY | process.O_CREAT, 0644);    
+  var fd = fs.openSync(filename, 'a', 0644);    
 
   // Cleanup on exit
   process.addListener("exit", function() { fs.close(fd); });

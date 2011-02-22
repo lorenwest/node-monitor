@@ -15,8 +15,8 @@ var vows = deps.vows;
 var assert = deps.assert;
 var fs = require('fs');
 
-var tmpfile1 = '/tmp/file.' + Math.floor(Math.random() * 10000) + '.log';
-var tmpfile2 = '/tmp/file.' + Math.floor(Math.random() * 10000) + '.log';
+var tmpfile1 = '/tmp/file_' + Math.floor(Math.random() * 10000) + '.log';
+var tmpfile2 = '/tmp/file_' + Math.floor(Math.random() * 10000) + '.log';
 
 /*******************************************************************************
 * FileLoggerTest
