@@ -1,0 +1,46 @@
+/* JSON Viewer */
+.nm-jv {
+  margin:0;
+  padding:0;
+  cursor: default;
+  box-sizing:border-box;
+}
+
+.nm-jv * {
+  font-size:12px;
+  font-family: Menlo, monospace !important;
+  white-space: pre;
+}
+
+.nm-jv .heading {
+  font-size: 13px;
+  color: rgba(200, 183, 155, .6);
+}
+
+.nm-jv .open-close:hover .head,
+.nm-jv .open-close:hover .head * {
+  color: rgba(200, 183, 155, .8);
+}
+.nm-jv .head i {
+  margin-right:3px;
+}
+.nm-jv .head i.icon-caret-right {
+  margin:0 4px 0 2px;
+}
+
+.nm-jv .head {
+  color: rgba(200, 183, 155, 1);
+}
+.nm-jv .data {
+  padding-left:8px;
+  color: forestgreen;
+}
+.nm-jv .inner {
+  padding-left:10px;
+}
+.nm-jv .closed {
+  display:none;
+}
+.nm-jv .end-inner {
+  color: forestgreen;
+}

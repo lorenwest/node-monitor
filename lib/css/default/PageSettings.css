@@ -1,0 +1,163 @@
+#nm-pv-settings .modal-body {
+}
+
+.nm-ps-form {
+  margin: 0;
+}
+
+.nm-ps-id {
+  float: right;
+  margin-bottom: -20px;
+}
+
+.nm-ps-form h4 {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
+  clear:both;
+}
+
+.nm-ps-form h4:hover {
+  color: #333;
+  cursor: default;
+}
+
+.nm-ps-form h4+div  {
+  clear:both;
+  overflow: hidden;
+  width: 520px;
+  margin-left: 10px;
+}
+
+.nm-ps-form h4.closed+div {
+  height:0px;
+}
+
+/* Change margins to account for different width icons */
+.nm-ps-form h4 i {
+  margin: -2px;
+}
+.nm-ps-form h4.closed i {
+  margin: 0px;
+}
+
+.nm-ps-form h4+div textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 60px;
+}
+
+.nm-ps-form label {
+  margin: 0;
+  color: #555;
+}
+
+.nm-ps-form input[type="text"] {
+  padding: 3px 4px;
+}
+
+.nm-ps-title {
+}
+
+.nm-ps-description {
+  width: 100%;
+}
+
+.nm-ps-notes {
+  width: 100%;
+}
+
+.nm-ps-css {
+  width: 100%;
+}
+
+.nm-ps-oninit {
+  width: 100%;
+}
+
+.nm-ps-view-source,
+.nm-ps-copy {
+  margin: 8px 10px 0 0;
+  float: left;
+  color: #333;
+}
+
+.nm-ps-source-view,
+.nm-ps-source-edit {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.nm-ps-source-edit,
+.nm-ps-cancel,
+.nm-ps-save {
+  display:none;
+}
+
+.edit-source .nm-ps-source-edit,
+.edit-source .nm-ps-cancel,
+.edit-source .nm-ps-save {
+  display:block;
+}
+
+.edit-source .nm-ps-source-view,
+.edit-source .nm-ps-edit {
+  display:none;
+}
+
+#nm-pv-settings .back > button {
+  float:right;
+  margin: -10px 0 3px 8px;
+}
+#nm-pv-settings .back > button i {
+  margin-right: 4px;
+}
+
+#nm-pv-settings .modal-body {
+  position: relative;
+  padding: 15px 20px 0px 10px;
+  font-size: 14px;
+  height: 300px;
+
+  perspective: 1000px;
+  -o-perspective: 1000px;
+  -moz-perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+#nm-pv-settings .card {
+  transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+
+  transition: all .5s linear;
+  -o-transition: all .5s linear;
+  -moz-transition: all .5s linear;
+  -webkit-transition: all .5s linear;
+}
+
+.view-source .card {
+  transform: rotateY(-180deg);
+  -o-transform: rotateY(-180deg);
+  -moz-transform: rotateY(-180deg);
+  -webkit-transform: rotateY(-180deg);
+}
+
+#nm-pv-settings .face {
+  position: absolute;
+  width: 100%;
+  height: 280px;
+  backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+#nm-pv-settings .back {
+  transform: rotateY(-180deg);
+  -o-transform: rotateY(-180deg);
+  -moz-transform: rotateY(-180deg);
+  -webkit-transform: rotateY(-180deg);
+}

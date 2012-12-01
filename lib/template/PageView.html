@@ -1,0 +1,29 @@
+<div class="nm-pv {{isClosed}}">
+  <div id="canvas" class="nm-pv-canvas"></div>
+  <div class="navbar nm-pv-topbar">
+    <div class="nm-pv-logo nm-pv-tt no-select" title="Toggle Heading">
+      <span class="nm-pv-hot">node</span>monitor
+    </div>
+    <div class="nm-pv-menu">
+      <ul class="nav">
+        <li>
+          <a class="nm-pv-menu-icons nm-pv-tt" data-toggle="dropdown" title="Menu">
+            <i class="icon-list-ul"></i><i class="icon-caret-down"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="nm-pvm-settings"><i class="icon-cogs"></i> Page Settings</a></li>
+            <li><a class="nm-pvm-add-component"><i class="icon-bar-chart"></i> Add a Component</a></li>
+            <li><a class="nm-pvm-arrange"><i class=""></i> <span class='nm-pvm-lock'></span></a></li>
+            <li class="divider"></li>
+            <li><a class="nm-pvm-questions" href="https://github.com/lorenwest/node_monitor/wiki/FAQ" target="_blank"><i class="icon-question-sign"></i> Questions? <i class="icon-external-link"></i></a></li>
+            <li><a class="nm-pvm-comments" href="https://twitter.com/intent/tweet?source=webclient&text=Hey%20%23nodemonitor%20community%2C%20" target="_blank"><i class="icon-bullhorn"></i> Comments <i class="icon-external-link"></i><i class="icon-twitter"></i></a></li>
+            <li><a class="nm-pvm-about"><i class="icon-qrcode"></i> About &amp; Credits</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <img class="nm-pv-pulse" {{{source}}}="{{{logo}}}"/>
+    <div class="nm-pv-dirty nm-pv-tt" title="Save Changes">*</div>
+    <div class="nm-pv-title nm-pv-tt" name="title" title="{{description}}"></div>
+  </div>
+</div>

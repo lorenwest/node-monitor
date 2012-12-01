@@ -1,0 +1,33 @@
+#nm-nc {
+  max-height: 440px;
+}
+#nm-nc h4 {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
+  clear:both;
+}
+
+.nm-nc-icon {
+  margin: 20px 30px 0px 18px;
+  float: left;
+}
+.nm-nc-icon * {
+  cursor: pointer;
+}
+
+.nm-nc-icon-img {
+  height: 64px;
+  width: 64px;
+  margin-left: 10px;
+  border: 1px solid rgba(0,0,0,0.5);
+  border-radius: 10px;
+  background-size:100% 100%;
+}
+
+.nm-nc-icon label {
+  padding-top: 4px;
+  width: 84px;
+  text-align: center;
+  overflow: hidden;
+}

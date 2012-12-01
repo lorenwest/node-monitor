@@ -1,0 +1,163 @@
+#nm-cv-settings .modal-body {
+}
+
+.nm-cs-className {
+  float: right;
+  margin-bottom: -20px;
+}
+
+.nm-cs-form h4 {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
+  clear:both;
+}
+
+.nm-cs-form h4:hover {
+  color: #333;
+  cursor: default;
+}
+
+.nm-cs-form h4+div  {
+  clear:both;
+  overflow: hidden;
+  width: 520px;
+  margin-left: 10px;
+}
+
+.nm-cs-form h4.closed+div {
+  height:0px;
+}
+
+/* Change margins to account for different width icons */
+.nm-cs-form h4 i {
+  margin: -2px;
+}
+.nm-cs-form h4.closed i {
+  margin: 0px;
+}
+
+.nm-cs-form h4+div textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 60px;
+}
+
+.nm-cs-form label {
+  margin: 0;
+  color: #555;
+}
+
+.nm-cs-form input[type="text"] {
+  padding: 3px 4px;
+}
+
+.nm-cs-notes {
+  width: 100%;
+}
+
+.nm-cs-css {
+  width: 100%;
+}
+
+.nm-cs-oninit {
+  width: 100%;
+}
+
+.nm-cs-view-source,
+.nm-cs-copy {
+  margin: 8px 10px 0 0;
+  float: left;
+  color: #333;
+}
+
+.nm-cs-source-view,
+.nm-cs-source-edit {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.nm-cs-source-edit,
+.nm-cs-cancel,
+.nm-cs-save {
+  display:none;
+}
+
+.edit-source .nm-cs-source-edit,
+.edit-source .nm-cs-cancel,
+.edit-source .nm-cs-save {
+  display:block;
+}
+
+.edit-source .nm-cs-source-view,
+.edit-source .nm-cs-edit {
+  display:none;
+}
+
+#nm-cv-settings .back > button {
+  float:right;
+  margin: -20px 0 3px 8px;
+}
+#nm-cv-settings .back > button i {
+  margin-right: 4px;
+}
+
+#nm-cv-settings .modal-body {
+  position: relative;
+  padding-bottom: 0px;
+  font-size: 14px;
+  height: 400px;
+  max-height: 400px;
+
+  perspective: 1000px;
+  -o-perspective: 1000px;
+  -moz-perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+#nm-cv-settings .card {
+  height: 100%;
+  transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+
+  transition: all .5s linear;
+  -o-transition: all .5s linear;
+  -moz-transition: all .5s linear;
+  -webkit-transition: all .5s linear;
+}
+
+.view-source .card {
+  transform: rotateY(-180deg);
+  -o-transform: rotateY(-180deg);
+  -moz-transform: rotateY(-180deg);
+  -webkit-transform: rotateY(-180deg);
+}
+
+#nm-cv-settings .face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+#nm-cv-settings .back {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 10px 0 10px 0;
+  transform: rotateY(-180deg);
+  -o-transform: rotateY(-180deg);
+  -moz-transform: rotateY(-180deg);
+  -webkit-transform: rotateY(-180deg);
+}
+
+.nm-csv-tbp span {
+  margin: 0 5px 0 30px;
+  font-size: 13px;
+  color: #555;
+}

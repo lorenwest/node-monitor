@@ -1,0 +1,44 @@
+{
+  "id": "/404",
+  "title": "New Page",
+  "components": [
+    {
+      "id": "c1",
+      "viewClass": "base.Html",
+      "viewOptions": {
+        "htmlValue": "Page not found.<br>Create a monitor page at this location?"
+      },
+      "monitor": {},
+      "css": {
+        ".nm-cv": "top:60px; left:0px; z-index:1;",
+        ".nm-cv-viewport": "font-size:20px; line-height:34px; height:78px; width:367px;"
+      }
+    },
+    {
+      "id": "c2",
+      "viewClass": "base.Button",
+      "viewOptions": {
+        "label": "Create Page",
+        "icon": "icon-magic",
+        "onPress": "pageView.newPage();"
+      },
+      "monitor": {},
+      "css": {
+        ".nm-cv": "top:170px; left:120px; z-index:2;"
+      }
+    },
+    {
+      "id": "c3",
+      "viewClass": "base.Button",
+      "viewOptions": {
+        "label": "Back",
+        "icon": "icon-arrow-left",
+        "onPress": "window.history.back();"
+      },
+      "monitor": {},
+      "css": {
+        ".nm-cv": "top:170px; left:0px; z-index:3;"
+      }
+    }
+  ]
+}
