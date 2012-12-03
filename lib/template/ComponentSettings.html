@@ -1,0 +1,48 @@
+<div class="modal fade" id="nm-cv-settings" style="display:none;">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">&times;</button>
+    <h3><i class="icon-cogs"></i> Component Settings</h3>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="nm-cs-form face front">
+        <p class="nm-cs-className"></p>
+        <h4><i class="icon-caret-down"></i> Component</h4>
+        <div class="nm-cs-view-settings"></div>
+        <!--
+        <h4 class="closed"><i class="icon-caret-right"></i> Custom CSS</h4>
+        <div>
+          <textarea name="css" class="nm-cs-css monospace-font"></textarea>
+        </div>
+        -->
+        <h4 class="closed"><i class="icon-caret-right"></i> JavaScript onInit</h4>
+        <div>
+          <textarea name="onInit" class="nm-cs-oninit monospace-font"></textarea>
+        </div>
+        <h4><i class="icon-caret-down"></i> Notes</h4>
+        <div>
+          <textarea name="notes" class="nm-cs-notes"></textarea>
+        </div>
+      </div>
+      <div class="face back">
+        <button class="nm-cs-cancel btn-mini">
+          <i class="icon-remove"></i>Cancel
+        </button>
+        <button class="nm-cs-save btn-mini">
+          <i class="icon-ok"></i>Ok
+        </button>
+        <button class="nm-cs-edit btn-mini">
+          <i class="icon-edit"></i>Edit
+        </button>
+        <textarea class="nm-cs-source-edit monospace-font"></textarea>
+        <div class="nm-cs-source-view"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="nm-cs-view-source btn-mini">View Source</button>
+    <button class="nm-cs-copy btn-mini">Copy Component</button>
+    <button class="btn btn-cancel">Cancel</button>
+    <button class="btn btn-primary">Save</button>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+.nm-ddm {
+  position:absolute;
+  display: block;
+  top:0;
+  left:0;
+}
+.nm-ddm-menu {
+  display: block;
+  overflow: auto;
+  max-height: 125px;
+}
+.nm-ddm-menu li > a {
+  padding: 0  20px 0 15px;
+}
+
+/* Override from bootstrap.css */
+.dropdown {
+  position: inherit;
+}
+.dropdown .caret {
+  margin-left: 5px;
+  opacity: 1; /* This allows the caret to be on the back-side */
+  border-top-color: #888;
+}
+.dropdown:hover .caret {
+  border-top-color: #000;
+}

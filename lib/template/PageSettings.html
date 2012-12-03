@@ -1,0 +1,53 @@
+<div class="modal fade" id="nm-pv-settings" style="display:none;">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">&times;</button>
+    <h3><i class="icon-cogs"></i> Page Settings</h3>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="nm-ps-form face front">
+        <p name="id" class="nm-ps-id"></p>
+        <h4><i class="icon-caret-down"></i> Page</h4>
+        <div class="nm-ps-page">
+          <label>Title</label>
+          <input name="title" class="nm-ps-title" type="text" placeholder="Page title..." value=""/>
+          <label>Description</label>
+          <input name="description" class="nm-ps-description" type="text" placeholder="One liner..." value=""/>
+        </div>
+        <!--
+        <h4 class="closed"><i class="icon-caret-right"></i> Custom CSS</h4>
+        <div>
+          <textarea name="css" class="nm-ps-css monospace-font"></textarea>
+        </div>
+        -->
+        <h4 class="closed"><i class="icon-caret-right"></i> JavaScript onInit</h4>
+        <div>
+          <textarea name="onInit" class="nm-ps-oninit monospace-font"></textarea>
+        </div>
+        <h4><i class="icon-caret-down"></i> Notes</h4>
+        <div>
+          <textarea name="notes" class="nm-ps-notes"></textarea>
+        </div>
+      </div>
+      <div class="face back">
+        <button class="nm-ps-cancel btn-mini">
+          <i class="icon-remove"></i>Cancel
+        </button>
+        <button class="nm-ps-save btn-mini">
+          <i class="icon-ok"></i>Ok
+        </button>
+        <button class="nm-ps-edit btn-mini">
+          <i class="icon-edit"></i>Edit
+        </button>
+        <textarea class="nm-ps-source-edit monospace-font"></textarea>
+        <div class="nm-ps-source-view"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="nm-ps-view-source btn-mini">View Source</button>
+    <button class="nm-ps-copy btn-mini">Copy Page</button>
+    <button class="btn btn-cancel">Cancel</button>
+    <button class="btn btn-primary">Save Changes</button>
+  </div>
+</div>

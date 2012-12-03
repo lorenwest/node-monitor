@@ -1,0 +1,72 @@
+This release
+------------
+
+Currently:
+  * Go straight into edit mode in view/source
+
+  * Node Monitor
+  * Keep node-monitor name and github repo,
+    npm run node_monitor
+  * Make a lorenwest/node_monitor repository
+  * Link to lorenwest/node_monitor from lorenwest/node-monitor
+  * Make the NPM package node_monitor
+  * Keep the global UI
+
+  * Figure out why probes aren't getting shut down on window.relaod
+
+Home Page - First Impression
+
+  node monitor
+  * Overview
+  * Building a Page
+  * Writing a Probe
+
+  * Generate a first impression Home page
+  * Get docs in order
+    * - Generate a README
+    * - Generate a gh-pages template
+  * Github publish
+  * npm publish
+
+Social
+------
+* Get involved: pre-setup app modules:
+  * Views:
+    * Native D3 charts
+    * Twitter Bootstrap form elements
+    * Google charts
+    * Highcharts
+  * Probes:
+    * Tailfile probe / Supergrep view
+    * Loggers for nodejs logs
+    * Express middleware
+    * Statsd / Graphite
+
+
+Must Have
+---------
+* Intro to Node Monitor app (for the product & the session)
+* Social: Twitter page, FAQ wiki, show off your dashboard
+* Bugs:
+  * Probes should instantiate (with a message) if not enough init params
+  * Why aren't probes from browser monitors being destroyed when page is refreshed?
+  * Validate it works on other browsers
+
+Push to later release(s)
+------------------------------------------------------------------------
+
+* Better icon picker for ButtonView
+* App development app
+* Tailfile probe & supergrep view
+* Some D3 view (graph)
+* Monitor-Sync - Make a separate project
+  * Create a project with grunt, doc, test
+  * Create a github project with a gh_pages
+  * Add it to the backbone addons page (like backbone-callbacks)
+  * Integrate into node_monitor as a package vs. builtin
+
+* backbone-deep-model - Make a separate project
+  * Create a project with grunt, doc, test
+  * Create a github project with a gh_pages
+  * Add it to the backbone addons page (like backbone-callbacks)
+  * Integrate into node_monitor as a package vs. builtin
