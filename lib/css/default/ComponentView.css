@@ -73,6 +73,9 @@
 }
 
 .background .nm-cv-viewport {
+  overflow: hidden;
+}
+.background .nm-cv-viewport:hover {
   overflow: auto;
 }
 

@@ -4,9 +4,25 @@
   overflow: auto;
 }
 
-.nm-pv-topbar {
+.nm-pv-sidebar {
   position: absolute;
   z-index: 1000;
+  padding-top:42px;
+  left:0;
+  width: 120px;
+  height:100%;
+  background: transparent;
+  box-sizing: border-box;
+
+  -moz-transition: padding-top .2s linear;
+  -khtml-transition: padding-top .2s linear;
+  -webkit-transition: padding-top .2s linear;
+  transition: padding-top .2s linear;
+}
+
+.nm-pv-topbar {
+  position: absolute;
+  z-index: 1001;
   top: 0px;
   color:rgba(200,183,155,1);
   height: 40px;
@@ -78,10 +94,13 @@
 
 /* Closed header */
 .nm-pv.closed .nm-pv-topbar {
-   top: -42px;
+  top: -42px;
+}
+.nm-pv.closed .nm-pv-sidebar {
+  padding-top: 0px;
 }
 .nm-pv.closed .nm-pv-logo {
-   top: 28px;
+  top: 28px;
 }
 
 /* Tooltips */

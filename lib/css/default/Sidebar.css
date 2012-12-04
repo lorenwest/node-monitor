@@ -1,0 +1,22 @@
+/* Sidebar Navigator */
+.nm-sb {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 100%;
+  box-sizing: border-box;
+}
+.nm-sb:hover {
+  overflow-y: auto;
+}
+
+.nm-sb-pages {
+  height:300px;
+}
+
+.nm-sb-tours {
+  height:300px;
+}
+
+.nm-sb-current-tour {
+  height:300px;
+}

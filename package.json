@@ -1,9 +1,9 @@
 {
   "name": "node_monitor",
-  "description": "Real Time Monitor Dashboards for Node.js",
+  "description": "Remote Monitoring and Control Panels for Node.js",
   "version": "0.1.1",
   "main": "./lib/index.js",
-  "keywords": ["monitor", "node-monitor", "realtime", "monitoring", "real time", "dashboard", "control"],
+  "keywords": ["monitor", "node-monitor", "remote control", "monitoring", "control", "realtime", "dashboard", "control panels"],
   "author": {
     "name": "Loren West",
     "email": "open_source@lorenwest.com",
@@ -39,7 +39,7 @@
   "engines": { "node": ">= 0.6.0" },
   "scripts": {
     "test": "grunt test",
-    "install": "npm install ./base-app",
+    "install": "npm install ./nm-base",
     "start": "node monitor"
   }
 }

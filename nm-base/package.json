@@ -1,0 +1,6 @@
+{
+  "name": "nm-base",
+  "description": "Base Node Monitor Components",
+  "version": "0.1.0",
+  "keywords": ["node_monitor"]
+}

@@ -3,7 +3,7 @@ Node Monitor
 
 [![Build Status](https://secure.travis-ci.org/lorenwest/node_monitor.png?branch=master)](https://travis-ci.org/lorenwest/node_monitor)
 
-Real Time Monitor Dashboards for Node.js
+Remote Monitoring and Control Panels for Node.js
 
 Introduction
 ------------
