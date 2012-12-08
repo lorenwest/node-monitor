@@ -1,0 +1,79 @@
+/* Page Tour View */
+.nm-tv {
+  min-width: 200px;
+  cursor: default;
+}
+.nm-tv-title {
+  text-align: center;
+  padding-top: 2px;
+}
+.nm-tv-controls {
+  width: 100%;
+  padding-top: 2px;
+  box-sizing: border-box;
+}
+.nm-tv-controls i {
+  cursor: pointer;
+  padding: 0 10px 0 10px;
+}
+.nm-tv-controls-center {
+  margin: 0 auto 0 auto;
+  width: 64px;
+}
+.nm-tv-prev {
+  float: left;
+}
+.nm-tv-play {
+  display:none;
+}
+.nm-tv-stop {
+}
+.nm-tv-next {
+  float: right;
+}
+.nm-tv-bottom {
+  width: 100%;
+  padding: 0 8px 0 8px;
+  box-sizing: border-box;
+}
+.nm-tv-progress-shadow {
+  width:100%;
+  height: 10px;
+  border-radius: 4px;
+  background: rgba(200, 183, 155, .15);
+}
+.nm-tv-progress {
+  width: 40%;
+  height: 10px;
+  background: rgba(200, 183, 155, .35);
+  border-radius: 4px;
+  margin-top: -10px;
+}
+.nm-tv-pages {
+  clear: both;
+  height: 10px;
+  width: 132px;
+  margin: -12px auto 8px auto;
+}
+.nm-tv-page {
+  padding: 3px 7px 1px 7px;
+  float:left;
+}
+.nm-tv-page div {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background-image: -moz-radial-gradient(40% 40%, cover, rgba(200,183,155, .6), rgba(200,183,155, .1) 100%);
+  background-image: -webkit-radial-gradient(40% 40%, cover, rgba(200,183,155, .6), rgba(200,183,155, .1) 100%);
+  background-image: -o-radial-gradient(40% 40%, cover, rgba(200,183,155, .6), rgba(200,183,155, .1) 100%);
+  background-image: -ms-radial-gradient(40% 40%, cover, rgba(200,183,155, .6), rgba(200,183,155, .1) 100%);
+  background-image: radial-gradient(40% 40%, cover, rgba(200,183,155, .6), rgba(200,183,155, .1) 100%);
+}
+.nm-tv-page:hover div,
+.nm-tv-page.current div {
+  background-image: -moz-radial-gradient(40% 40%, cover, rgba(200,183,155, 1), rgba(200,183,155, .6) 100%);
+  background-image: -webkit-radial-gradient(40% 40%, cover, rgba(200,183,155, 1), rgba(200,183,155, .6) 100%);
+  background-image: -o-radial-gradient(40% 40%, cover, rgba(200,183,155, 1), rgba(200,183,155, .6) 100%);
+  background-image: -ms-radial-gradient(40% 40%, cover, rgba(200,183,155, 1), rgba(200,183,155, .6) 100%);
+  background-image: radial-gradient(40% 40%, cover, rgba(200,183,155, 1), rgba(200,183,155, .6) 100%);
+}

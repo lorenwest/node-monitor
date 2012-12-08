@@ -4,22 +4,6 @@
   overflow: auto;
 }
 
-.nm-pv-sidebar {
-  position: absolute;
-  z-index: 1000;
-  padding-top:42px;
-  left:0;
-  width: 120px;
-  height:100%;
-  background: transparent;
-  box-sizing: border-box;
-
-  -moz-transition: padding-top .2s linear;
-  -khtml-transition: padding-top .2s linear;
-  -webkit-transition: padding-top .2s linear;
-  transition: padding-top .2s linear;
-}
-
 .nm-pv-topbar {
   position: absolute;
   z-index: 1001;
@@ -31,12 +15,39 @@
   border-bottom:1px solid rgba(235,122,109, 0.6);
 }
 
+.nm-pv-sidebar {
+  position: absolute;
+  z-index: 1000;
+  padding-top:42px;
+  left:0;
+  width: 120px;
+  height:100%;
+  background: transparent;
+  box-sizing: border-box;
+  -moz-transition: padding-top .2s linear;
+  -khtml-transition: padding-top .2s linear;
+  -webkit-transition: padding-top .2s linear;
+  transition: padding-top .2s linear;
+}
+
+.nm-pv-tour {
+  position: absolute;
+  z-index: 1002;
+  bottom:0;
+  left:0;
+  background-color: black;
+  border:1px solid black;
+  border-radius: 8px;
+  color: rgba(200, 183, 155, .75);
+}
+
 .nm-pv-topbar, .nm-pv-logo {
   -moz-transition: all .2s linear;
   -khtml-transition: all .2s linear;
   -webkit-transition: all .2s linear;
   transition: all .2s linear;
 }
+
 .nm-cv {
   -moz-transition: margin-top .2s linear;
   -khtml-transition: margin-top .2s linear;

@@ -32,14 +32,17 @@ var MODULE_DEF = {
     "lib/js/PageSettingsView.js",
     "lib/js/PageView.js",
     "lib/js/Sidebar.js",
-    "lib/js/SidebarView.js"
+    "lib/js/SidebarView.js",
+    "lib/js/Tour.js",
+    "lib/js/TourView.js"
   ],
   templates: [
     "lib/template/MonitorUI.html",
     "lib/template/PageView.html",
     "lib/template/PageSettings.html",
     "lib/template/PageCopy.html",
-    "lib/template/Sidebar.html",
+    "lib/template/SidebarView.html",
+    "lib/template/TourView.html",
     "lib/template/ComponentView.html",
     "lib/template/ComponentSettings.html",
     "lib/template/NewComponentView.html",
@@ -57,7 +60,8 @@ var MODULE_DEF = {
     "lib/css/default/DropDownMenu.css",
     "lib/css/default/PageView.css",
     "lib/css/default/PageSettings.css",
-    "lib/css/default/Sidebar.css",
+    "lib/css/default/SidebarView.css",
+    "lib/css/default/TourView.css",
     "lib/css/default/JsonView.css",
     "lib/ext/jquery.miniColors.css"
   ],

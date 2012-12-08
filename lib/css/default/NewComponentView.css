@@ -8,9 +8,10 @@
   clear:both;
 }
 
-.nm-nc-icon {
+.nm-nc-canvas > div {
   margin: 20px 30px 0px 18px;
   float: left;
+  height: 100px;
 }
 .nm-nc-icon * {
   cursor: pointer;
