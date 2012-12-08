@@ -107,10 +107,11 @@
       var t = this;
       t.options = options;
       t.viewOptions = t.options.component.get('viewOptions');
-      t.modelBinder = new Backbone.ModelBinder();
     },
 
     events: {
+      // Don't be so aggressive on keydown
+      'keydown .nm-base-wv-url': function(e){e.stopPropagation()},
       'mousedown .nm-base-wv-example-mask': 'startDrag'
     },
 
@@ -118,11 +119,10 @@
       var t = this;
       t.monitor = t.options.monitor;
       t.$el.html('' +
-        '<div class="title"></div>' +
         '<div class="nm-base-wv-input">' +
           '<label>Page URL</label>' +
-          '<input name="siteUrl" class="nm-base-wv-url" type="text" placeholder="http://..." />' +
-          '<span>Scrollbars: </span><input name="scrollBars" type="checkbox"/>' +
+          '<input data-view-option="siteUrl" class="nm-base-wv-url" type="text" placeholder="http://..." />' +
+          '<span>Scrollbars: </span><input data-view-option="scrollBars" type="checkbox"/>' +
         '</div>' +
         '<label>Drag to position</label>' +
         '<div class="nm-base-wv-example-group">' +
@@ -130,15 +130,6 @@
           '<div class="nm-base-wv-example-mask"></div>' +
         '</div>'
       );
-
-      // Bind the form to the data model
-      t.modelBinder.bind(t.model, t.$el);
-
-      // Append a title/background picker
-      new UI.ComponentSettingsView.TitleBackgroundPicker({
-        component: t.options.component,
-        el: t.$el.find('.title'),
-      });
 
       // Append another web view as an example
       var example = new WebView({

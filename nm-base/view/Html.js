@@ -132,12 +132,6 @@
       // Create tooltips for all items that have a title
       UI.tooltip(t.$('#nm-base-html-toolbar [title]'));
 
-      // Append a title/background picker
-      new UI.ComponentSettingsView.TitleBackgroundPicker({
-        el: t.$el.find('.title'),
-        component: t.options.component
-      });
-
       // Update the component when the textarea is being edited
       t.textarea
         .val(t.model.get('htmlValue'))

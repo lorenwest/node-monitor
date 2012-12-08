@@ -73,6 +73,14 @@
   padding: 14px 10px 0;
 }
 
+/* Turn the save menu item on/off based on a dirty page */
+.nm-pvmli-save {
+  display: none;
+}
+.dirty .nm-pvmli-save {
+  display: block;
+}
+
 /* Heading */
 .nm-pv-pulse {width:90px; height:40px; float:left;}
 .nm-pv-dirty,

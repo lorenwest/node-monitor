@@ -87,34 +87,20 @@
   // Custom settings form
   Inspector.SettingsView = Backbone.View.extend({
 
-    initialize: function(options) {
-      var t = this;
-    },
-
-    events: {
-    },
-
     render: function() {
       var t = this;
       t.monitor = t.options.monitor;
       t.$el.html('' +
-        '<div class="title"></div>' +
         '<div class="nm-base-inspector-input">' +
           '<label>Server</label>' +
           '<div class="server nm-base-probe-sel"></div>' +
           '<label>Expression</label>' +
-          '<input class="nm-base-inspector-expression monospace-font" title="Enter a variable name or expression" type="text"/>' +
+          '<input data-monitor-param="key" class="nm-base-inspector-expression monospace-font" title="Enter a variable name or expression" type="text"/>' +
         '</div>' +
         '<div class="nm-base-inspector-depthblock">' +
           '<label>JSON Depth</label>' +
-          '<input class="nm-base-inspector-depth" type="text"/>' +
+          '<input data-monitor-param="depth" class="nm-base-inspector-depth" type="text"/>' +
         '</div>');
-
-      // Append a title/background picker
-      new UI.ComponentSettingsView.TitleBackgroundPicker({
-        el: t.$el.find('.title'),
-        component: t.options.component
-      });
 
       // Append a server picker
       t.serverPicker = new UI.MonitorPicker.ServerView({
@@ -123,6 +109,7 @@
       });
       t.serverPicker.render();
 
+/*
       // Bind the expression to the model
       var expression = t.$el.find('.nm-base-inspector-expression');
       expression.val(t.monitor.get('initParams').key);
@@ -146,6 +133,7 @@
         }
         t.monitor.set('initParams', initParams);
       });
+*/
 
     },
 

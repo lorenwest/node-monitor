@@ -63,7 +63,11 @@
           getMonitor = function(id) {return pageView.getMonitor(id);},
           onPress = t.viewOptions.get('onPress');
       if (onPress) {
-        eval(onPress);
+        try {
+          eval(onPress);
+        } catch (e) {
+          alert("Button press error: '" + e.message + "'");
+        }
       }
     },
 
@@ -81,29 +85,15 @@
 
     initialize: function(options) {
       var t = this;
-      t.modelBinder = new Backbone.ModelBinder();
       $.styleSheet(Button.css, 'nm-base-bs-css');
-    },
-
-    events: {
-      'keydown': 'hotChanges'
     },
 
     render: function() {
       var t = this;
       t.$el.html(Button.template);
       new UI.IconChooser({el:t.$('select')});
-      t.modelBinder.bind(t.model, t.$el);
       t.model.on('change:icon', t.changeIcon, t);
       t.changeIcon();
-    },
-
-    // Make changes immediately
-    hotChanges: function(e) {
-      var t = this;
-      setTimeout(function(){
-        t.modelBinder._onElChanged(e);
-      }, 0);
     },
 
     changeIcon: function() {
@@ -114,9 +104,7 @@
     // Overridden to unbind form elements
     remove: function() {
       var t = this;
-      t.undelegateEvents();
       t.model.off('change:icon', t.changeIcon, t);
-      t.modelBinder.unbind();
       return Backbone.View.prototype.remove.apply(t, arguments);
     }
 
@@ -129,14 +117,14 @@
   Button.template =
     '<div class="nm-base-bs">' +
       '<label>Button Label</label>' +
-      '<input name="label" type="text"/>' +
+      '<input data-view-option="label" type="text"/>' +
       '<label>Icon</label>' +
-      '<select name="icon" data-placeholder="Choose an Icon...">' +
+      '<select data-view-option="icon" data-placeholder="Choose an Icon...">' +
         '<option value="">(no icon)</option>' +
       '</select>' +
-      '<i class="icon-music"></i>' +
+      '<i></i>' +
       '<label>On Button Press</label>' +
-      '<textarea name="onPress" class="monospace-font"></textarea>' +
+      '<textarea data-view-option="onPress" class="monospace-font"></textarea>' +
     '</div>'
   ;
 

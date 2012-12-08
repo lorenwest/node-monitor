@@ -703,17 +703,10 @@
       var t = this;
       t.monitor = t.options.monitor;
       t.$el.html('' +
-        '<div class="title"></div>' +
         '<div class="nm-base-probe-input">' +
           '<label>Server</label>' +
           '<div class="server nm-base-probe-sel"></div>' +
         '</div>');
-
-      // Append a title/background picker
-      new UI.ComponentSettingsView.TitleBackgroundPicker({
-        el: t.$el.find('.title'),
-        component: t.options.component
-      });
 
       // Append a server picker
       t.serverPicker = new UI.MonitorPicker.ServerView({

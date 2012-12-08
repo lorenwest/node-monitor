@@ -118,13 +118,13 @@
   border-radius:2px;
 }
 
-.unlocked .nm-cv .nm-cv-mask {
+.edit-mode .nm-cv .nm-cv-mask {
   display: block;
   background-color:rgba(200,183,155, .1);
   cursor: move;
 }
 
-.unlocked .nm-cv:hover .nm-cv-mask {
+.edit-mode .nm-cv:hover .nm-cv-mask {
   background-color:rgba(200,183,155, .5);
 }
 
@@ -134,10 +134,10 @@
   position: absolute;
   border-radius:2px;
 }
-.unlocked .nm-cv:hover .nm-cv-mask i {
+.edit-mode .nm-cv:hover .nm-cv-mask i {
   color:rgba(200,183,155,1);
 }
-.unlocked .nm-cv:hover .nm-cv-settings {
+.edit-mode .nm-cv:hover .nm-cv-settings {
   background-color: rgba(0,0,0, .75);
 }
 
