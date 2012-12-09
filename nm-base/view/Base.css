@@ -173,7 +173,7 @@ input[type="text"].nm-base-me-desc {
 }
 
 .nm-base-wv-input span {
-  margin: 0 5px 0 30px;
+  margin: 0 5px 0 34px;
   font-size: 13px;
   color: #555;
 }
@@ -183,6 +183,7 @@ input[type="text"].nm-base-me-desc {
   height: 200px;
   width: 100%;
   border: 1px solid #333;
+  box-sizing: border-box;
 }
 
 .view-source .nm-base-wv-example-group {

@@ -108,33 +108,6 @@
         model: t.monitor
       });
       t.serverPicker.render();
-
-/*
-      // Bind the expression to the model
-      var expression = t.$el.find('.nm-base-inspector-expression');
-      expression.val(t.monitor.get('initParams').key);
-      expression.on('change', function() {
-        var value = expression.val();
-        var initParams = _.extend({}, t.monitor.get('initParams'), {key:value});
-        if (!value) {
-          delete initParams.key;
-        }
-        t.monitor.set('initParams', initParams);
-      });
-
-      // Bind the depth to the model
-      var depth = t.$el.find('.nm-base-inspector-depth');
-      depth.val(t.monitor.get('initParams').depth);
-      depth.on('change', function() {
-        var value = depth.val();
-        var initParams = _.extend({}, t.monitor.get('initParams'), {depth:value});
-        if (!value) {
-          delete initParams.depth;
-        }
-        t.monitor.set('initParams', initParams);
-      });
-*/
-
     },
 
   });
