@@ -120,6 +120,13 @@
       t.$el.html(template.get('text'));
       t.textarea = t.$el.find('textarea');
 
+      // Attach the monitor picker
+      t.monitorPicker = new UI.MonitorPicker({
+        el: t.$('.nm-base-html-monitor'),
+        model: t.options.monitor
+      });
+      t.monitorPicker.render();
+
       // Attach the color picker
       t.$('.color-picker').miniColors({
         opacity:true,
@@ -216,6 +223,7 @@
 
     remove: function() {
       var t = this;
+      t.monitorPicker.remove();
       t.$el.html('');
       return Backbone.View.prototype.remove.apply(t, arguments);
     }

@@ -1,50 +1,21 @@
-.nm-mlv {
-  padding-bottom: 10px;
-  font-size: 13px;
+.nm-mp {
 }
 
-.nm-mlv label, .nm-mlv span {
-  display: inline;
-  float: left;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.nm-mp-input {
+  float:left;
 }
 
-.nm-mlv .col1 {
-  width: 160px;
-}
-.nm-mlv .col2 {
-  width: 160px;
-}
-.nm-mlv .col3 {
-  width: 200px;
+.nm-mp-server select {
+  width:220px;
 }
 
-.nm-mlv li span:hover {
-  cursor: default;
+.nm-mp .probe {
+  margin-left: 20px;
 }
 
-.nm-mlv .insert span {
-  border: 1px solid transparent;
-}
-.nm-mlv .insert span:hover {
-  text-decoration: none;
-  border: 1px solid #aaa;
+.nm-mp-probe select {
+  width: 140px;
 }
 
-.nm-mlv-monitors {
-  clear: both;
-  border-top: 1px solid #aaa;
-  margin: 0;
-  list-style: none;
-}
-.nm-mlv-monitors > li {
-  clear: both;
-  margin: 3px 0;
-}
-
-.nm-mlv input,
-.nm-mlv select {
-  margin:0;
+.nm-mp-dropdown {
 }

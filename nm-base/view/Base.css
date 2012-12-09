@@ -4,21 +4,6 @@
   overflow: auto;
 }
 
-.nm-base-probe-sel {
-  width: 210px;
-  border: 1px solid #ccc;
-  padding: 2px 4px;
-  margin-bottom: 10px;
-  font-size: 13px;
-  border-radius: 3px;
-  background-color: white;
-}
-
-.nm-base-probe-input {
-  width: 250px;
-  float:left;
-}
-
 #nm-base-html-textarea {
   height: 225px;
 }

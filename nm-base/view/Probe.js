@@ -74,29 +74,13 @@
     render: function() {
       var t = this;
       t.monitor = t.options.monitor;
-      t.$el.html('' +
-        '<div class="nm-base-probe-input">' +
-          '<label>Server</label>' +
-          '<div class="server nm-base-probe-sel"></div>' +
-        '</div>' +
-        '<div class="nm-base-probe-input">' +
-          '<label>Probe</label>' +
-          '<div class="probe nm-base-probe-sel"></div>' +
-        '</div>');
 
-      // Append a server picker
-      t.serverPicker = new UI.MonitorPicker.ServerView({
-        el: t.$el.find('.server'),
+      // Append a monitor picker
+      t.monitorPicker = new UI.MonitorPicker({
+        el: t.$el,
         model: t.monitor
       });
-      t.serverPicker.render();
-
-      // Append a probe picker
-      t.probePicker = new UI.MonitorPicker.ProbeView({
-        el: t.$el.find('.probe'),
-        model: t.monitor
-      });
-      t.probePicker.render();
+      t.monitorPicker.render();
     },
 
   });
