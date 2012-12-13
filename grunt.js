@@ -21,9 +21,11 @@ var MODULE_DEF = {
     "lib/js/Site.js",
     "lib/js/Component.js",
     "lib/js/Page.js",
+    "lib/js/Tree.js",
     "lib/js/IconChooser.js",
     "lib/js/DropDownMenu.js",
     "lib/js/JsonView.js",
+    "lib/js/TreeView.js",
     "lib/js/MonitorPicker.js",
     "lib/js/SettingsView.js",
     "lib/js/NewComponentView.js",
@@ -63,6 +65,7 @@ var MODULE_DEF = {
     "lib/css/default/SidebarView.css",
     "lib/css/default/TourView.css",
     "lib/css/default/JsonView.css",
+    "lib/css/default/TreeView.css",
     "lib/ext/jquery.miniColors.css"
   ],
   client_ext: [

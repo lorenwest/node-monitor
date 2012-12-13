@@ -1,5 +1,6 @@
 /* Page Tour View */
 .nm-tv {
+display:none;
   min-width: 200px;
   cursor: default;
 }

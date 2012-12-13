@@ -1,0 +1,26 @@
+/* Tree Viewer */
+.nm-tr {
+  cursor: default;
+  box-sizing:border-box;
+  list-style-type: none;
+  padding:0;
+  margin:0;
+}
+
+.nm-tr li {
+  white-space: nowrap;
+}
+
+.nm-tr li.branch {
+  margin-left: 4px;
+}
+
+.nm-tr li.leaf,
+.nm-tr li.inner {
+  margin-left: 20px;
+}
+
+.nm-tr .branch > i {
+  width: 8px;
+  margin: 0 6px 0 2px;
+}
