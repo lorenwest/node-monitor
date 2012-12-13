@@ -1,7 +1,7 @@
 {
   "name": "node_monitor",
   "description": "Remote Monitoring and Control Panels for Node.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./lib/index.js",
   "keywords": ["monitor", "node-monitor", "remote control", "monitoring", "control", "realtime", "dashboard", "control panels"],
   "author": {
