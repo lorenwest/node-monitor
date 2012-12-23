@@ -12,7 +12,9 @@ var MODULE_DEF = {
     "lib/js/SyncProbe.js",
     "lib/js/FileSync.js",
     "lib/js/SiteMap.js",
-    "lib/js/Server.js"
+    "lib/js/Server.js",
+    "lib/js/TreeProbe.js",
+    "lib/js/PagesProbe.js"
   ],
   client_js: [
     "lib/js/MonitorUI.js",
@@ -22,6 +24,7 @@ var MODULE_DEF = {
     "lib/js/Component.js",
     "lib/js/Page.js",
     "lib/js/Tree.js",
+    "lib/js/Tour.js",
     "lib/js/IconChooser.js",
     "lib/js/DropDownMenu.js",
     "lib/js/JsonView.js",
@@ -35,7 +38,6 @@ var MODULE_DEF = {
     "lib/js/PageView.js",
     "lib/js/Sidebar.js",
     "lib/js/SidebarView.js",
-    "lib/js/Tour.js",
     "lib/js/TourView.js"
   ],
   templates: [

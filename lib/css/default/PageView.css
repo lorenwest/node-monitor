@@ -16,13 +16,15 @@
 }
 
 .nm-pv-sidebar {
+display:none;
   position: absolute;
   z-index: 1000;
   padding-top:42px;
   left:0;
-  width: 120px;
+  width: 200px;
   height:100%;
   background: transparent;
+  border-right:1px solid rgba(235,122,109, 0.6);
   box-sizing: border-box;
   -moz-transition: padding-top .2s linear;
   -khtml-transition: padding-top .2s linear;

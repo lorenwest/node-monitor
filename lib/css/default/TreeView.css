@@ -1,6 +1,5 @@
 /* Tree Viewer */
 .nm-tr {
-  cursor: default;
   box-sizing:border-box;
   list-style-type: none;
   padding:0;
@@ -9,6 +8,12 @@
 
 .nm-tr li {
   white-space: nowrap;
+}
+
+.nm-tr li.branch:hover,
+.nm-tr li.leaf:hover {
+  cursor: pointer;
+  background-color: #333;
 }
 
 .nm-tr li.branch {

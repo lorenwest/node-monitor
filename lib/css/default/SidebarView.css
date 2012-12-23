@@ -1,23 +1,54 @@
 /* Navigation Sidebar */
 .nm-sb {
-display: none;
   overflow-y: hidden;
   overflow-x: hidden;
   height: 100%;
+  background: #000;
   box-sizing: border-box;
 }
 .nm-sb:hover {
   overflow-y: auto;
 }
 
+.nm-sb h4 {
+  padding: 4px 0px 6px 10px;
+  font-size: 16px;
+  text-shadow: rgba(200,183,155, .6) 1px 1px 2px;
+  font-weight: normal;
+  clear:both;
+  background: #333;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+}
+.nm-sb h4.closed {
+  border-bottom: 1px solid rgba(235,122,109, 0.3);
+}
+
+.nm-sb h4:hover {
+  background: #444;
+}
+
+.nm-sb h4+div  {
+  clear:both;
+  overflow: hidden;
+  margin-left: 4px;
+}
+.nm-sb h4+div > ol  {
+  margin: 5px 0px;
+}
+
+.nm-sb-fav {
+}
+
+.nm-sb-recent {
+}
+
 .nm-sb-pages {
-  height:300px;
 }
 
 .nm-sb-tours {
-  height:300px;
 }
 
-.nm-sb-current-tour {
+.nm-sb-tour {
   height:300px;
 }
