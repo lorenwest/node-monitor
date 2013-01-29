@@ -11,7 +11,7 @@ var MODULE_DEF = {
   server_js: [
     "lib/js/SyncProbe.js",
     "lib/js/FileSync.js",
-    "lib/js/SiteMap.js",
+    "lib/js/NetworkMap.js",
     "lib/js/Server.js",
     "lib/js/TreeProbe.js",
     "lib/js/PagesProbe.js"

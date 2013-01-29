@@ -1,13 +1,35 @@
 /* Navigation Sidebar */
 .nm-sb {
+  float:left;
   overflow-y: hidden;
   overflow-x: hidden;
   height: 100%;
+  width:200px;
   background: #000;
   box-sizing: border-box;
 }
 .nm-sb:hover {
   overflow-y: auto;
+}
+
+.nm-sb-handle {
+  float:right;
+  width: 6px;
+  height: 100%;
+  cursor: ew-resize;
+  cursor: pointer;
+  background: black;
+  border-left: 1px solid #222;
+  background: #222; /* Old browsers */
+  background: -moz-linear-gradient(left,  #333 0%, #222 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left, right, color-stop(0%,#333), color-stop(100%,#222)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left,  #333 0%,#222 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left,  #333 0%,#222 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left,  #333 0%,#222 100%); /* IE10+ */
+  background: linear-gradient(to right,  #333 0%,#222 100%); /* W3C */
+}
+.nm-sb-handle.drag {
+  background: #444;
 }
 
 .nm-sb h4 {

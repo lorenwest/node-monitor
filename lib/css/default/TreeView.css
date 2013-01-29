@@ -22,10 +22,15 @@
 
 .nm-tr li.leaf,
 .nm-tr li.inner {
-  margin-left: 20px;
+  margin-left: 16px;
+  overflow: hidden;
 }
 
 .nm-tr .branch > i {
-  width: 8px;
-  margin: 0 6px 0 2px;
+  width: 7px;
+  margin: 0 4px 0 2px;
+}
+
+.nm-tr .closed + .inner {
+  display:none;
 }
