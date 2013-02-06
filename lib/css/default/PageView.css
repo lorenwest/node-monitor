@@ -34,10 +34,20 @@
   z-index: 1002;
   bottom:0;
   left:0;
-  background-color: black;
-  border:1px solid black;
   border-radius: 8px;
+  border: 1px solid #181818;
+  -webkit-box-shadow: 0 0px 10px #181818;
+  -moz-box-shadow: 0 0px 10px #181818;
+  box-shadow: 0 0px 10px #181818;
   color: rgba(200, 183, 155, .75);
+  background: #333333; /* Old browsers */
+  background: -moz-linear-gradient(top,  #333 0%, #000 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#333333), color-stop(100%,#000)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #333 0%,#000 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #333 0%,#000 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #333 0%,#000 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #333 0%,#000 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333', endColorstr='#000',GradientType=0 ); /* IE6-9 */
 }
 
 .nm-pv-topbar, .nm-pv-logo {
@@ -81,11 +91,16 @@
 }
 
 /* Heading */
-.nm-pv-pulse {width:90px; height:40px; float:left;}
+.nm-pv-pulse {
+  width: 90px;
+  height: 40px;
+  float: left;
+  margin-right: 5px;
+}
 .nm-pv-dirty,
 .nm-pv-title {
   float:left;
-  padding:12px 0 0 10px;
+  padding:12px 5px 0 5px;
   font-size:26px;
   font-weight:normal;
   text-shadow: rgb(200,183,155) 2px 2px 5px;

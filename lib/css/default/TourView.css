@@ -1,6 +1,5 @@
 /* Page Tour View */
 .nm-tv {
-display:none;
   min-width: 200px;
   cursor: default;
 }
@@ -46,19 +45,19 @@ display:none;
 .nm-tv-progress {
   width: 40%;
   height: 10px;
-  background: rgba(200, 183, 155, .35);
+  background: rgba(200, 183, 155, .25);
   border-radius: 4px;
   margin-top: -10px;
 }
 .nm-tv-pages {
   clear: both;
   height: 10px;
-  width: 132px;
   margin: -12px auto 8px auto;
 }
 .nm-tv-page {
   padding: 3px 7px 1px 7px;
   float:left;
+  cursor: default;
 }
 .nm-tv-page div {
   width: 8px;
