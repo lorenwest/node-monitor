@@ -14,7 +14,8 @@ var MODULE_DEF = {
     "lib/js/NetworkMap.js",
     "lib/js/Server.js",
     "lib/js/TreeProbe.js",
-    "lib/js/PagesProbe.js"
+    "lib/js/PagesProbe.js",
+    "lib/js/ToursProbe.js"
   ],
   client_js: [
     "lib/js/MonitorUI.js",

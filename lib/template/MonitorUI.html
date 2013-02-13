@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}{{siteName}}</title>
     <meta name="description" content="{{{description}}}"/>
+    <style type="text/css">html,body {background-color: black}</style>
     <meta name="author" content="Open Source http://github.com/lorenwest/node_monitor">
-    <link rel="shortcut icon" href="{{{favicon}}}" type="image/x-icon"/>{{{styles}}}{{{scripts}}}
+    <link rel="shortcut icon" href="{{{favicon}}}" type="image/x-icon"/>{{{styles}}}
+  </head>
+  <body>
+    <div id="nm-page">
+    </div>
+    <div id="nm-template">{{{templates}}}
+    </div>{{{scripts}}}
     <script type="text/javascript" charset="utf-8">
     <!--
       $(function(){
@@ -23,11 +30,5 @@
       });
     -->
     </script>
-  </head>
-  <body>
-    <div id="nm-page">
-    </div>
-    <div id="nm-template">{{{templates}}}
-    </div>
   </body>
 </html>
