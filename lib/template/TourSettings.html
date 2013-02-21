@@ -1,0 +1,31 @@
+<div class="modal fade" id="nm-tsv-settings" style="display:none;">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">&times;</button>
+    <h3><i class="icon-cogs"></i> Tour Settings</h3>
+  </div>
+  <div class="modal-body">
+    <div class="nm-tsv-tours">
+      <label>Tours</label>
+      <label class="nm-tsv-add nm-tsv-add-tour" title="Add a Tour"><i class="icon-plus"></i></label>
+      <div class="nm-tsv-tree light"></div>
+    </div>
+    <div class="nm-tsv-form">
+      <input class="nm-tsv-id" value="/sandbox">
+      <label id="nm-tsv-id-label">Tour ID</label>
+      <label class="nm-tsv-title-label above">Name</label>
+      <input class="nm-tsv-title"/>
+      <label class="above">Description</label>
+      <input class="nm-tsv-description"/><br>
+      <label>Auto-Page Advance</label><input class="nm-tsv-auto-next-sec" value="0"/>seconds
+    </div>
+    <div class="nm-tsv-pages">
+      <label>Pages</label>
+      <label class="nm-tsv-add nm-tsv-add-page" title="Add a Page"><i class="icon-plus"></i></label>
+      <div class="nm-tsv-page-list"></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-cancel">Cancel</button>
+    <button class="btn btn-primary">Save</button>
+  </div>
+</div>

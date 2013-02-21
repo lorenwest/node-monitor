@@ -22,7 +22,8 @@
   border-left: 1px solid #222;
   background: #222; /* Old browsers */
   background: -moz-linear-gradient(left,  #333 0%, #222 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left, right, color-stop(0%,#333), color-stop(100%,#222)); /* Chrome,Safari4+ */
+  background: -webkit-gradient(linear, left, right,
+  color-stop(0%,#333), color-stop(100%,#222)); /* Chrome,Safari4+ */
   background: -webkit-linear-gradient(left,  #333 0%,#222 100%); /* Chrome10+,Safari5.1+ */
   background: -o-linear-gradient(left,  #333 0%,#222 100%); /* Opera 11.10+ */
   background: -ms-linear-gradient(left,  #333 0%,#222 100%); /* IE10+ */
@@ -46,8 +47,21 @@
   border-bottom: 1px solid rgba(235,122,109, 0.3);
 }
 
+.nm-sb h4 i {
+  float:right;
+  margin: 2px 10px 0 0;
+  color:transparent;
+  text-shadow:none;
+}
+
 .nm-sb h4:hover {
   background: #444;
+}
+.nm-sb h4:hover i {
+  color:rgba(200,183,155,.6);
+}
+.nm-sb h4:hover i:hover {
+  color:rgba(200,183,155,1);
 }
 
 .nm-sb h4+div  {

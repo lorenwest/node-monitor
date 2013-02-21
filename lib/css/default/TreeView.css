@@ -16,6 +16,11 @@
   background-color: #333;
 }
 
+.light li.branch:hover,
+.light li.leaf:hover {
+  background-color: #eee;
+}
+
 .nm-tr li.branch {
   margin-left: 4px;
 }
