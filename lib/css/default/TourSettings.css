@@ -6,6 +6,10 @@
   position: relative;
 }
 
+.nm-tsv-dirty {
+  display:none;
+}
+
 .nm-tsv-form {
   float:left;
   width:55%;
@@ -16,7 +20,7 @@
   top: 0;
   right: 0;
   cursor:pointer;
-  color: #666;
+  color: #888;
 }
 .nm-tsv-add:hover {
   color: black;
@@ -71,10 +75,30 @@
 }
 
 .nm-tsv-page-list {
-  width:100%;
-  height: 152px;
+  width: 506px;
+  height: 132px;
   background:white;
   border: 1px inset #eee;
+  overflow: auto;
+  padding: 10px;
+}
+
+.nm-tsv-page-list table {
+  width: 100%;
+}
+
+.nm-tsv-up,
+.nm-tsv-down,
+.nm-tsv-remove {
+  width: 28px;
+  text-align:center;
+  cursor: pointer;
+  opacity: .4;
+}
+.nm-tsv-up:hover,
+.nm-tsv-down:hover,
+.nm-tsv-remove:hover {
+  opacity: 1;
 }
 
 .nm-tsv-auto-next-sec {
