@@ -49,9 +49,10 @@
 
 .nm-sb h4 i {
   float:right;
-  margin: 2px 10px 0 0;
+  padding: 2px 16px 0 10px;
   color:transparent;
   text-shadow:none;
+  font-size: 14px;
 }
 
 .nm-sb h4:hover {

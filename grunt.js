@@ -53,6 +53,9 @@ var MODULE_DEF = {
     "lib/template/ComponentView.html",
     "lib/template/ComponentSettings.html",
     "lib/template/NewComponentView.html",
+    "lib/template/NewPage.html",
+    "lib/template/NewTour.html",
+    "lib/template/NewTourPage.html",
     "lib/template/ComponentIcon.html",
     "lib/template/About.html"
   ],
