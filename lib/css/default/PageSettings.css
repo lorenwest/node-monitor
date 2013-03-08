@@ -75,8 +75,7 @@
   width: 100%;
 }
 
-.nm-ps-view-source,
-.nm-ps-copy {
+.modal-footer .btn-mini {
   margin: 8px 10px 0 0;
   float: left;
   color: #333;

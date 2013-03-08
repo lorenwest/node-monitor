@@ -64,13 +64,6 @@
   width: 100%;
 }
 
-.nm-cs-view-source,
-.nm-cs-copy {
-  margin: 8px 10px 0 0;
-  float: left;
-  color: #333;
-}
-
 .nm-cs-source-view,
 .nm-cs-source-edit {
   box-sizing: border-box;

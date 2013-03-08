@@ -1,7 +1,7 @@
 .nm-tsv-tours {
   float:left;
   width:45%;
-  padding-right: 12px;
+  padding-right: 18px;
   box-sizing: border-box;
   position: relative;
 }
@@ -18,7 +18,7 @@
 .nm-tsv-add {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 2px;
   cursor:pointer;
   color: #888;
 }
@@ -26,7 +26,7 @@
   color: black;
 }
 .nm-tsv-add-tour {
-  right: 12px;
+  right: 18px;
 }
 
 .nm-tsv-form label {
@@ -36,29 +36,13 @@
 .nm-tsv-form label {
   display: inline;
 }
+
 .nm-tsv-form label.above {
   display: block;
-  margin: 8px 0 0;
+  margin: 8px 0 6px;
 }
-
-#nm-tsv-id-label {
-  color:transparent;
-  display:block;
-  float:right;
-}
-
-.nm-tsv-id {
-  float:right;
-  color: #555;
-  width: 140px;
-  text-align:right;
-  border:none;
-  background:none;
-  margin: -1px 4px 0 5px;
-}
-
-.nm-tsv-title-label {
-  clear:both;
+.nm-tsv-form label.above:first-child {
+  margin-top:0;
 }
 
 .nm-tsv-title {
@@ -76,7 +60,7 @@
 
 .nm-tsv-page-list {
   width: 506px;
-  height: 132px;
+  height: 130px;
   background:white;
   border: 1px inset #eee;
   overflow: auto;
@@ -102,17 +86,29 @@
 }
 
 .nm-tsv-auto-next-sec {
-  margin: 11px 4px 14px 6px;
+  margin: 0 4px 3px 6px;
   height: 17px;
   width: 30px;
   text-align: right;
   padding-right: 4px;
 }
 
-.nm-tsv-tree {
-  margin: 10px 0 0;
+.nm-tsv-tree,
+.nm-tv-page-browser {
+  margin: 6px 0 14px;
   height: 112px;
   background: white;
   border: 1px inset #eee;
   padding: 5px 0 5px 0;
+  overflow: auto;
+}
+
+#nm-tv-new-page {
+  width:300px;
+  z-index: 1150;
+}
+
+.nm-tv-page-browser {
+  margin: 10px 0 0;
+  height: 130px;
 }
