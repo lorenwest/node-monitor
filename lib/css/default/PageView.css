@@ -66,7 +66,7 @@
 
 .nm-pv-menu {
   position: absolute;
-  right: 112px;
+  right: 120px;
   top:4px;
 }
 .nm-pv-menu .dropdown-menu {
@@ -106,8 +106,8 @@
   text-shadow: rgb(200,183,155) 2px 2px 5px;
   cursor: pointer;
 }
-.nm-pv-hot {color:rgba(235,122,109,0.75); text-shadow: rgb(235,122,109) 1px 1px 4px; margin-right:1px;}
-.nm-pv-logo {position:absolute; z-index: 1002; right: 5px; top: 0px; padding-top: 17px; font-size:18px; color:rgba(200,183,155,0.8); cursor: pointer;}
+.nm-pv-hot {color:rgba(235,122,109,0.75); text-shadow: rgb(235,122,109) 1px 1px 3px; margin-right:1px;}
+.nm-pv-logo {position:absolute; z-index: 1002; right: 14px; top: 0px; padding-top: 17px; font-size:20px; color:rgba(200,183,155,0.8); cursor: pointer;}
 
 .nm-pv-dirty {
   display:none;
