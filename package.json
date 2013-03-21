@@ -1,26 +1,26 @@
 {
-  "name": "node_monitor",
+  "name": "monitor",
   "description": "Remote Monitoring and Control Panels for Node.js",
-  "version": "0.1.2",
-  "main": "./lib/index.js",
-  "keywords": ["monitor", "node-monitor", "remote control", "monitoring", "control", "realtime", "dashboard", "control panels"],
+  "version": "0.5.1",
+  "main": "monitor.js",
+  "keywords": ["monitor", "node-monitor", "remote control", "monitoring", "control", "realtime", "dashboard", "control panel"],
   "author": {
     "name": "Loren West",
     "email": "open_source@lorenwest.com",
     "url": "http://github.com/lorenwest"
   },
-  "homepage": "http://lorenwest.github.com/node_monitor/",
+  "homepage": "http://lorenwest.github.com/monitor/",
   "repository": {
     "type": "git",
-    "url": "git://github.com/lorenwest/node_monitor.git"
+    "url": "git://github.com/lorenwest/monitor.git"
   },
   "bugs": {
-    "url": "https://github.com/lorenwest/node_monitor/issues"
+    "url": "https://github.com/lorenwest/monitor/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/lorenwest/node_monitor/blob/master/LICENSE"
+      "url": "https://github.com/lorenwest/node-monitor/blob/master/LICENSE"
     }
   ],
   "dependencies": {
