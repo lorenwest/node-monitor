@@ -1,7 +1,7 @@
-// grunt.js (c) 2012 Loren West and other contributors
+// grunt.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For all details and documentation:
-// http://lorenwest.github.com/node_monitor
+// http://lorenwest.github.com/node-monitor
 
 var exec = require('child_process').exec;
 
@@ -78,7 +78,7 @@ var MODULE_DEF = {
   ],
   client_ext: [
     "lib/ext/jquery-1.8.2.min.js",
-    "lib/node_modules/monitor/dist/monitor-all.js",
+    "lib/node_modules/monitor-min/dist/monitor-all.js",
     "lib/node_modules/backbone-callbacks/backbone-callbacks.js",
     "lib/ext/Backbone.ModelBinder.min.js",
     "lib/ext/bootstrap.min.js",

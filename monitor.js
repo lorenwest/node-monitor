@@ -1,7 +1,7 @@
-// monitor.js (c) 2012 Loren West and other contributors
+// monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/node_monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Load dependencies
@@ -35,11 +35,11 @@
   var uiServer = new UIServer();
   uiServer.start(function() {
     // If the host can connect from any IP address (INADDR_ANY), display the DNS hostname
-    var connectTo = Monitor.Config.MonitorUI.allowExternalConnections ? OS.hostname() : 'localhost';
+    var connectTo = Monitor.Config.Monitor.allowExternalConnections ? OS.hostname() : 'localhost';
     console.log("Now showing at http://" + connectTo + ":" + uiServer.get('port') + "/");
 
     // Output security concerns
-    if (!Monitor.Config.MonitorUI.allowExternalConnections) {
+    if (!Monitor.Config.Monitor.allowExternalConnections) {
       console.log("");
       console.log("External connections disabled.");
       console.log("See " + process.cwd() + "/config/external.js for more information.");

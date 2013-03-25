@@ -1,7 +1,7 @@
 // ContainedModelTest.js (c) 2012 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/node_monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Dependencies

@@ -1,13 +1,13 @@
 // Default configurations
 module.exports = {
 
-  // Overrides from the default monitor package
-  Monitor: {
-    appName: 'MonitorUI',
+  // Overrides from the monitor-min package
+  MonitorMin: {
+    appName: 'NodeMonitor',
   },
 
-  // MonitorUI application configurations
-  MonitorUI: {
+  // Monitor application configurations
+  Monitor: {
 
     // The port to listen on for application traffic
     port:4200,
