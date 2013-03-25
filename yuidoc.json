@@ -1,0 +1,20 @@
+{
+  "name": "monitor-min",
+  "description": "Monitor Min",
+  "version": "0.0.0",
+  "year": "2013",
+  "url": "http://lorenwest.github.com/monitor-min",
+  "logo": "",
+  "themedir": "./config/doc",
+  "options": {
+    "external": {
+    },
+    "linkNatives": "true",
+    "attributesEmit": "true",
+    "paths": [
+      "./lib",
+      "./test"
+    ],
+    "outdir": "./doc"
+  }
+}
