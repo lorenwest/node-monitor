@@ -15,11 +15,11 @@
   */
 
   console.log("");
-  console.log("                          __________");
-  console.log("_______ ___________________(_)_  /______________");
-  console.log("__  __ `__ \\  __ \\_  __ \\_  /_  __/  __ \\_  ___/");
-  console.log("_  / / / / / /_/ /  / / /  / / /_ / /_/ /  /");
-  console.log("/_/ /_/ /_/\\____//_/ /_//_/  \\__/ \\____//_/");
+  console.log("                        __________");
+  console.log("_______ ___________________(_)_  /______________      _______ ______(_)______ ");
+  console.log("__  __ `__ \\  __ \\_  __ \\_  /_  __/  __ \\_  ___/________  __ `__ \\_  /__  __ \\");
+  console.log("_  / / / / / /_/ /  / / /  / / /_ / /_/ /  /   _/_____/  / / / / /  / _  / / /");
+  console.log("/_/ /_/ /_/\\____//_/ /_//_/  \\__/ \\____//_/           /_/ /_/ /_//_/  /_/ /_/ ");
   console.log("");
 
   // Boot the monitor server.
@@ -31,11 +31,11 @@
       return;
     }
 
-    var connectTo = Monitor.Config.Monitor.allowExternalConnections ? OS.hostname() : 'localhost';
-    console.log("Monitor service started on host: " + connectTo);
+    var connectTo = Monitor.Config.MonitorMin.allowExternalConnections ? OS.hostname() : 'localhost';
+    console.log("Headless monitor service started on host: " + connectTo);
 
     // Output security concerns
-    if (!Monitor.Config.Monitor.allowExternalConnections) {
+    if (!Monitor.Config.MonitorMin.allowExternalConnections) {
       console.log("");
       console.log("External connections disabled.");
       console.log("See " + process.cwd() + "/config/external.js for more information.");

@@ -1,9 +1,10 @@
-Monitor Min
-===========
+Headless Monitor
+================
+
+Headless (non-UI) version of [Node Monitor](https://github.com/lorenwest/node-monitor)
 
 [![Build Status](https://secure.travis-ci.org/lorenwest/monitor-min.png?branch=master)](https://travis-ci.org/lorenwest/monitor-min)
 
-Remote monitoring for Node.js applications
 
 Introduction
 ------------
@@ -75,8 +76,8 @@ See Also
 License
 -------
 
-Released under the Apache License 2.0
+May be freely distributed under the MIT license
 
 See [LICENSE](https://github.com/lorenwest/monitor/blob/master/LICENSE) file.
 
-Copyright (c) 2012 Loren West
+Copyright (c) 2010-2013 Loren West
