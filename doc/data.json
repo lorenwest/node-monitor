@@ -29,6 +29,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "lib/probes/FileSync.js": {
+            "name": "lib/probes/FileSync.js",
+            "modules": {},
+            "classes": {
+                "FileSync": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "lib/probes/Inspect.js": {
             "name": "lib/probes/Inspect.js",
             "modules": {},
@@ -65,11 +74,11 @@
             "fors": {},
             "namespaces": {}
         },
-        "lib/probes/Storage.js": {
-            "name": "lib/probes/Storage.js",
+        "lib/probes/SyncProbe.js": {
+            "name": "lib/probes/SyncProbe.js",
             "modules": {},
             "classes": {
-                "Storage": 1
+                "SyncProbe": 1
             },
             "fors": {},
             "namespaces": {}
@@ -117,6 +126,15 @@
             "modules": {},
             "classes": {
                 "Server": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/Sync.js": {
+            "name": "lib/Sync.js",
+            "modules": {},
+            "classes": {
+                "Sync": 1
             },
             "fors": {},
             "namespaces": {}
@@ -194,6 +212,15 @@
             },
             "fors": {},
             "namespaces": {}
+        },
+        "test/SyncProbeTest.js": {
+            "name": "test/SyncProbeTest.js",
+            "modules": {},
+            "classes": {
+                "SyncProbeTest": 1
+            },
+            "fors": {},
+            "namespaces": {}
         }
     },
     "modules": {
@@ -203,16 +230,17 @@
             "classes": {
                 "ConfigProbe": 1,
                 "FileProbe": 1,
+                "FileSync": 1,
                 "Inspect": 1,
                 "PollingProbe": 1,
                 "Process": 1,
                 "Repl": 1,
-                "Storage": 1
+                "SyncProbe": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "lib/probes/Storage.js",
+            "file": "lib/probes/SyncProbe.js",
             "line": 11,
             "description": "<h2>Baseline probes</h2>\n\n<p>\nThe probes in this module offer baseline functionality, and provide examples\nfor building custom probes.\n</p>"
         },
@@ -224,13 +252,14 @@
                 "Monitor": 1,
                 "Probe": 1,
                 "Router": 1,
-                "Server": 1
+                "Server": 1,
+                "Sync": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "lib/Server.js",
-            "line": 14,
+            "file": "lib/Sync.js",
+            "line": 93,
             "description": "Core monitor classes\n\nClasses in this module represent baseline monitor functionality.  They can\nbe loaded and run in a node.js container as well as within a browser."
         },
         "UnitTests": {
@@ -244,13 +273,14 @@
                 "MonitorTest": 1,
                 "ProbeTest": 1,
                 "RouterTest": 1,
-                "ServerTest": 1
+                "ServerTest": 1,
+                "SyncProbeTest": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "test/ServerTest.js",
-            "line": 11,
+            "file": "test/SyncProbeTest.js",
+            "line": 41,
             "description": "Monitor Unit Tests\n\nThis module contains unit test classes for each of the core classes, and\nsome unit tests for baseline probes."
         }
     },
@@ -336,6 +366,22 @@
                     ]
                 }
             ]
+        },
+        "FileSync": {
+            "name": "FileSync",
+            "shortname": "FileSync",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Probes",
+            "namespace": "",
+            "file": "lib/probes/FileSync.js",
+            "line": 19,
+            "description": "Probe for synchronizing a data model with a file on the O/S\n\nProbe parameters are listed under <a href=\"SyncProbe.html\">SyncProbe</a>.",
+            "extends": "Probe",
+            "is_constructor": 1
         },
         "Inspect": {
             "name": "Inspect",
@@ -680,9 +726,9 @@
                 }
             ]
         },
-        "Storage": {
-            "name": "Storage",
-            "shortname": "Storage",
+        "SyncProbe": {
+            "name": "SyncProbe",
+            "shortname": "SyncProbe",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -690,11 +736,30 @@
             "extension_for": [],
             "module": "Probes",
             "namespace": "",
-            "file": "lib/probes/Storage.js",
+            "file": "lib/probes/SyncProbe.js",
             "line": 11,
-            "description": "Backbone model synchronization with server-side storage.\n\nThis class contains client-side helpers for connecting backbone models\nwith server storage using the backbone\n<a href=\"http://documentcloud.github.com/backbone/#Sync\">```sync```</a>\nmechanism.\n\n    var Storage = Monitor.Storage;\n    var Book = Backbone.Model.extend({\n      ...\n      sync: Storage.synchronize('Book'),\n      ...\n    });\n\nThis connects the backbone model\n<a href=\"http://documentcloud.github.com/backbone/#Model-fetch\">```fetch```</a>,\n<a href=\"http://documentcloud.github.com/backbone/#Model-save\">```save```</a>, and\n<a href=\"http://documentcloud.github.com/backbone/#Model-destroy\">```destroy```</a>\nmethods to backend storage via monitor based socket.io.\n\nThe Storage class also offers *live data synchronization*, updating the data\nmodel as changes are detected on the server.  See the\n<a href=\"#method_synchronize\">```synchronize```</a> method for more information.\n\nServer-side storage probes such as <a href=\"FileStorage.html\">FileStorage</a>\nextend their implementation from this base class.",
+            "description": "Probe for exposing backbone data models from server-side persistence\n\nThis probe is used by the client-side <a href=\"Sync.html\">Sync</a> class\nto connect a local backbone model with server-side storage.\n\nIt delegates to a specialized SyncProbe defined by the server for the\nspecific data class.  For example, the server may determine that one class\ntype uses FileSync, and another class uses a different persistence\nmechanism.\n\nFor security purposes, the server must <a href=\"SyncProbe.html#property_Config\">configure</a> specific SyncProbes for\nclasses, or a default sync probe before this will operate.",
             "extends": "Probe",
-            "is_constructor": 1
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "className",
+                    "description": "Name of the class to synchronize with",
+                    "type": "String"
+                },
+                {
+                    "name": "modelId",
+                    "description": "Id of the data model for live synchronization\n  If not set, a non-live probe is set up for control access only.",
+                    "type": "String",
+                    "optional": true
+                },
+                {
+                    "name": "model",
+                    "description": "If this is a liveSync probe, this contains\n  the attributes of the current model object.",
+                    "type": "Object",
+                    "optional": true
+                }
+            ]
         },
         "Connection": {
             "name": "Connection",
@@ -948,6 +1013,22 @@
                 }
             ]
         },
+        "Sync": {
+            "name": "Sync",
+            "shortname": "Sync",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Monitor",
+            "namespace": "",
+            "file": "lib/Sync.js",
+            "line": 93,
+            "description": "The Sync class contains state about the model being synchronized",
+            "access": "private",
+            "tagname": ""
+        },
         "ConfigTest": {
             "name": "ConfigTest",
             "shortname": "ConfigTest",
@@ -1059,6 +1140,20 @@
             "file": "test/ServerTest.js",
             "line": 11,
             "description": "Unit tests for the <a href=\"Server.html\">Server</a> class."
+        },
+        "SyncProbeTest": {
+            "name": "SyncProbeTest",
+            "shortname": "SyncProbeTest",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "UnitTests",
+            "namespace": "",
+            "file": "test/SyncProbeTest.js",
+            "line": 41,
+            "description": "Unit tests for the <a href=\"SyncProbe.html\">SyncProbe</a> probe."
         }
     },
     "classitems": [
@@ -1294,6 +1389,37 @@
             "module": "Probes"
         },
         {
+            "file": "lib/probes/FileSync.js",
+            "line": 249,
+            "description": "Set the server root path for objects stored with this probe\n\nFor security purposes, this must be set before the SyncFileProbe\nwill operate.  It will not accept any changes once set.",
+            "static": 1,
+            "itemtype": "method",
+            "name": "setRootPath",
+            "params": [
+                {
+                    "name": "rootPath",
+                    "description": "A path to the root directory for model object storage",
+                    "type": "String"
+                }
+            ],
+            "class": "FileSync",
+            "module": "Probes"
+        },
+        {
+            "file": "lib/probes/FileSync.js",
+            "line": 267,
+            "description": "Get the current root path.\n\nAs a static method, this is only available on the server running the probe.\nFor security purposes, this is not exposed in the FileSync data model.",
+            "static": 1,
+            "itemtype": "method",
+            "name": "getRootPath",
+            "return": {
+                "description": "The path to the root directory for the FilePath probe",
+                "type": "String"
+            },
+            "class": "FileSync",
+            "module": "Probes"
+        },
+        {
             "file": "lib/probes/Inspect.js",
             "line": 102,
             "description": "Evaluate an expression, returning the depth-limited results",
@@ -1469,48 +1595,141 @@
             "module": "Probes"
         },
         {
-            "file": "lib/probes/Storage.js",
-            "line": 59,
-            "description": "Synchronize a Backbone data model with server storage\n\nBackbone sync functions allow data models to synchronize with the server using the\n<a href=\"http://documentcloud.github.com/backbone/#Model-fetch\">fetch</a>,\n<a href=\"http://documentcloud.github.com/backbone/#Model-save\">save</a>, and\n<a href=\"http://documentcloud.github.com/backbone/#Model-destroy\">destroy</a>\nmethods.\n\nThis method returns a sync function that performs data synchronization over\nsocket.io to a <a href=\"Storage.html\">Monitor Storage</a> probe.\nThis method can be set into Backbone models to replace the default REST\nimplementation.\n\n    var Storage = Monitor.Storage;\n    var Book = Backbone.Model.extend({\n      ...\n      sync: Storage.synchronize('Book'),\n      ...\n    });\n\nThe sync function can also be set onto a specific instance of a model.\n\n    var myBook = new Book({id:'44329'});\n    myBook.sync = Storage.synchronize('Book');\n\nIn addition to providing the standard fetch, save, and destroy functionality,\nsynchronization offers *live data synchronization*, updating the data model\nas changes are detected on the server.\n\nTo enable live synchronization with the server, call ```sync.on()```\non the instance.\n\n    // Turn on live synchronization\n    myBook.sync.on();\n\nThis refreshes the ```myBook``` instance with the contents of the Book class\nid ```44329```, persists any local changes to ```myBook```, and keeps ```myBook```\nup to date with changes detected on the server.\n\nIf the id element is not set or if the id doesn't exist on the server, it\nwill create a new object on the server, generating an id if necessary.\n\nLive data monitoring consumes resources on both the client and server.  To\nfree those resources, make sure to call the ```sync.off()``` method.\nOtherwise, resources are released when the connection is terminated.\n\n    // Turn off live synchronization\n    myBook.sync.off();\n\nSee the <a href=\"http://documentcloud.github.com/backbone/#Sync\">Backbone documentation</a>\nfor more information about the Backbone.sync functionality.",
-            "static": 1,
+            "file": "lib/probes/SyncProbe.js",
+            "line": 67,
+            "description": "Create and save a new instance of the class into storage\n\nThis probe control requests a new instance of a data model to be\npersisted onto storage.  It is invoked when a data model that has\nthe Sync probe attached calls ```save()``` on a new object.",
             "itemtype": "method",
-            "name": "synchronize",
+            "name": "create_control",
             "params": [
                 {
-                    "name": "className",
-                    "description": "The data class name, passed to the storage probe for namespacing.\n                   If not provided, it must be supplied from a className element (or function) on the model.",
-                    "type": "String",
-                    "optional": true
+                    "name": "model",
+                    "description": "Full data model to save.  This must contain\n    the id element.",
+                    "type": "Object"
                 },
                 {
-                    "name": "probeClass",
-                    "description": "Storage probe class name.  Defaults to the probe set in the <a href=\"Storage.html#property_Config\">Config.defaultProbe</a> property.",
-                    "type": "String",
-                    "optional": true
-                },
-                {
-                    "name": "probeParams",
-                    "description": "Storage probe initialization parameters.  Defaults to the parameters set in the <a href=\"Storage.html#property_Config\">Config.defaultProbeParams</a> property.",
-                    "type": "Object",
-                    "optional": true
+                    "name": "callback",
+                    "description": "Callback when complete",
+                    "type": "Function(error, result)",
+                    "props": [
+                        {
+                            "name": "error",
+                            "description": "Set if an error occurs during creation.",
+                            "type": "Mixed"
+                        },
+                        {
+                            "name": "result",
+                            "description": "An object containing any differing\n        parameters from the model sent in.  Normally a blank object.",
+                            "type": "Object"
+                        }
+                    ]
                 }
             ],
-            "return": {
-                "description": "The sync function to set into a class or instance.",
-                "type": "Function"
-            },
-            "class": "Storage",
+            "class": "SyncProbe",
             "module": "Probes"
         },
         {
-            "file": "lib/probes/Storage.js",
-            "line": 130,
-            "description": "Static Configurations\n\nThese can be set onto the Monitor.Storage class after it's loaded.\n\nExample:\n\n    var Storage = Monitor.Storage;\n    Storage.Config.defaultProbe = 'DbStorage';\n    Storage.Config.defaultProbeParams = {host:'db.mydomain.com', port:5984};",
+            "file": "lib/probes/SyncProbe.js",
+            "line": 86,
+            "description": "Read an instance from storage\n\nThis probe control reads the instance with the specified id\nfrom storage, and returns it in the callback.",
+            "itemtype": "method",
+            "name": "read_control",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "ID of the object to read",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "Callback when complete",
+                    "type": "Function(error, result)",
+                    "props": [
+                        {
+                            "name": "error",
+                            "description": "Set if an error occurs during read.\n      if error.code === 'NOTFOUND' then the requested object wasn't found.\n      if error.code === 'PARSE' then the document was poorly formatted JSON.",
+                            "type": "Mixed"
+                        },
+                        {
+                            "name": "result",
+                            "description": "The full object.",
+                            "type": "Object"
+                        }
+                    ]
+                }
+            ],
+            "class": "SyncProbe",
+            "module": "Probes"
+        },
+        {
+            "file": "lib/probes/SyncProbe.js",
+            "line": 104,
+            "description": "Update a data model in storage\n\nThis acts like a REST PUT, meaning it can create a new object, or\nupdate an existing object.\n\nBackbone has only a save() method.  If the client sets the ID\nof the object before save(), Backbone thinks the object exists and\nwill call update vs. create.",
+            "itemtype": "method",
+            "name": "update_control",
+            "params": [
+                {
+                    "name": "model",
+                    "description": "Full data model to save.  This must contain\n    the id element.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callback",
+                    "description": "Callback when complete",
+                    "type": "Function(error, result)",
+                    "props": [
+                        {
+                            "name": "error",
+                            "description": "Set if an error occurs during save.",
+                            "type": "Mixed"
+                        },
+                        {
+                            "name": "result",
+                            "description": "An object containing any differing\n        parameters from the model sent in.  Normally a blank object.",
+                            "type": "Object"
+                        }
+                    ]
+                }
+            ],
+            "class": "SyncProbe",
+            "module": "Probes"
+        },
+        {
+            "file": "lib/probes/SyncProbe.js",
+            "line": 126,
+            "description": "Delete an instance from storage\n\nThis probe control deletes the instance with the specified id\nfrom storage.",
+            "itemtype": "method",
+            "name": "delete_control",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "ID of the object to read",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "Callback when complete",
+                    "type": "Function(error)",
+                    "props": [
+                        {
+                            "name": "error",
+                            "description": "Set if an error occurs during read.",
+                            "type": "Mixed"
+                        }
+                    ]
+                }
+            ],
+            "class": "SyncProbe",
+            "module": "Probes"
+        },
+        {
+            "file": "lib/probes/SyncProbe.js",
+            "line": 143,
+            "description": "Static Configurations\n\nThese can be set onto the Monitor.SyncProbe class after it's loaded.\n\nThe SyncProbe will *not* work until the defaultProbe is defined.\n\nExample:\n\n    var syncConfig = Monitor.SyncProbe.Config;\n    syncConfig.defaultProbe = 'SyncFile';\n    syncConfig.classMap = {\n      Book: 'MongoDbSync',\n      Author: 'MongoDbSync'\n    }",
             "static": 1,
             "itemtype": "property",
             "name": "Config",
-            "type": "&lt;Object&gt;\n<ul>\n  <li><code>defaultProbe (String)</code> Name of the storage probe to use for the <a href=\"Storage.html#method_synchronize\">```Storage.synchronize```</a> method</li>\n  <li><code>defaultProbeParams (String)</code> Initialization parameters for the storage probe used for the <a href=\"Storage.html#method_synchronize\">```Storage.synchronize```</a> method</li>\n</ul>",
-            "class": "Storage",
+            "type": "&lt;Object&gt;\n<ul>\n  <li><code>defaultProbe (String)</code> Name of the sync probe to use if the class isn't listed in the classMap</li>\n  <li><code>classMap (Object)</code> Map of className to sync probe name to use instead of the default for that class</li>\n</ul>",
+            "class": "SyncProbe",
             "module": "Probes"
         },
         {
@@ -2871,6 +3090,226 @@
             "module": "Monitor"
         },
         {
+            "file": "lib/Sync.js",
+            "line": 18,
+            "description": "Probe based data synchronization with server-side storage.\n\nThis returns a function  contains client-side helpers for connecting local backbone models\nwith server storage using a specialized\n<a href=\"SyncProbe.html\">monitor probe</a>.\n\nThis method returns a function conforming to the Backbone\n<a href=\"http://documentcloud.github.com/backbone/#Sync\">Sync</a>\nAPI, offering\n<a href=\"http://documentcloud.github.com/backbone/#Model-fetch\">```fetch```</a>,\n<a href=\"http://documentcloud.github.com/backbone/#Model-save\">```save```</a>, and\n<a href=\"http://documentcloud.github.com/backbone/#Model-destroy\">```destroy```</a>\nfunctionality to any Backbone data model.\n\nThis function can be assigned to the ```sync``` element when defining the\ndata model:\n\n    var BlogEntry = Backbone.Model.extend({\n      ...\n      sync: Monitor.Sync('BlogEntry'),\n      ...\n    });\n\nThe sync function can also be assigned to any Backbone model after construction:\n\n    var myBook = new Book({id:\"44329\"});\n    myBook.sync = Monitor.Sync('Book');\n    myBook.fetch();\n\nIn addition to providing the standard ```fetch```, ```save```, and ```destroy```\nfunctionality, Sync offers *live data synchronization*, updating the data model\nas changes are detected on the server.\n\n    // Turn on live data synchronization\n    myBook.fetch({liveSync:true});\n\nThis fetches the ```myBook``` instance with the contents of the Book class\nid ```44329```, persists local changes to ```myBook```, and keeps ```myBook```\nup to date with changes detected on the server.\n\nLive data synchronization consumes resources on both the client and server.\nTo release those resources, make sure to call the ```clear()``` method on\nthe data model. Otherwise, resources are released when the server connection\nis terminated.\n\n    // Clear the object, turning off live synchronization\n    myBook.clear();\n\nSee the <a href=\"http://documentcloud.github.com/backbone/#Sync\">Backbone documentation</a>\nfor more information about the Backbone.sync functionality.",
+            "static": 1,
+            "itemtype": "method",
+            "name": "Sync",
+            "params": [
+                {
+                    "name": "className",
+                    "description": "Name of the class to synchronize with",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "Additional sync options",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "hostName",
+                            "description": "Host name to use for the Sync probe.\n      If not specified, the closest server hosting Sync probe will be\n      determined (this server, or the default gateway)",
+                            "type": "String"
+                        },
+                        {
+                            "name": "appName",
+                            "description": "Server appName (see Monitor.appName)",
+                            "type": "String"
+                        },
+                        {
+                            "name": "appInstance",
+                            "description": "Application instance (see Monitor.appInstance)",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "A sync method to assign to a Backbone class or instance.",
+                "type": "Sync"
+            },
+            "class": "Sync",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Sync.js",
+            "line": 105,
+            "description": "Provide the sync API to a backbone data model\n\nSee the <a href=\"http://documentcloud.github.com/backbone/#Sync\">Backbone documentation</a>\nfor more information on this method.",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_sync",
+            "params": [
+                {
+                    "name": "method",
+                    "description": "A CRUD enumeration of \"create\", \"read\", \"update\", or \"delete\"",
+                    "type": "String"
+                },
+                {
+                    "name": "model",
+                    "description": "The model or collection to act upon",
+                    "type": "Backbone.Model or Backbone.Collection"
+                },
+                {
+                    "name": "options",
+                    "description": "Success and error callbacks, and additional options to\n  pass on to the sync implementation.",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "liveSync",
+                            "description": "- Turn on the live update functionality",
+                            "optional": true
+                        },
+                        {
+                            "name": "success",
+                            "description": "- The method to call on method success",
+                            "optional": true
+                        },
+                        {
+                            "name": "error",
+                            "description": "- The method to call on method error",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "class": "Sync",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Sync.js",
+            "line": 180,
+            "description": "Connect and send the control message to a Sync probe for this class.\n\nThis creates a monitor to a Sync probe with the specified className.\nThe monitor is used to send CRUD control messages for any ID within\nthe class.\n\nOnce connected, it sends the specified control message to the probe.\n\nThis monitor is used for non-liveSync interactions.",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_connectClassMonitor",
+            "params": [
+                {
+                    "name": "method",
+                    "description": "The requested CRUD method",
+                    "type": "String"
+                },
+                {
+                    "name": "model",
+                    "description": "The data model to perform the operation on",
+                    "type": "Backbone.Model"
+                },
+                {
+                    "name": "callback",
+                    "description": "- Called when connected",
+                    "type": "Function(error, params)",
+                    "props": [
+                        {
+                            "name": "error",
+                            "description": "- Set if it couldn't connect",
+                            "type": "Mixed"
+                        },
+                        {
+                            "name": "params",
+                            "description": "- Updated data model parameters",
+                            "type": "Object"
+                        }
+                    ]
+                }
+            ],
+            "class": "Sync",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Sync.js",
+            "line": 217,
+            "description": "Connect and send the control message to a liveSync monitor for the model\n\nThis creates a monitor to a Sync probe for the model instance, and\nattaches event listeners onto the monitor and the data model.\n\nOnce connected, it sends the specified control message to the probe.\n\nChanges on the server are automatically propagated to the local\ndata model, and local changes to the data model are automatically\npropagated to the server.",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_connectInstanceMonitor",
+            "params": [
+                {
+                    "name": "method",
+                    "description": "The requested CRUD method",
+                    "type": "String"
+                },
+                {
+                    "name": "model",
+                    "description": "The data model to perform the operation on",
+                    "type": "Backbone.Model"
+                },
+                {
+                    "name": "callback",
+                    "description": "- Called when connected",
+                    "type": "Function(error, params)",
+                    "props": [
+                        {
+                            "name": "error",
+                            "description": "- Set if it couldn't connect",
+                            "type": "Mixed"
+                        },
+                        {
+                            "name": "params",
+                            "description": "- Updated data model parameters",
+                            "type": "Object"
+                        }
+                    ]
+                }
+            ],
+            "class": "Sync",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Sync.js",
+            "line": 333,
+            "description": "Prepare the control options\n\nThis prepares the control options to include the ID element\non a fetch or delete, and the entire model on a create or\nupdate.",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_getOpts",
+            "params": [
+                {
+                    "name": "method",
+                    "description": "One of the CRUD methods",
+                    "type": "Enum"
+                },
+                {
+                    "name": "model",
+                    "description": "The model to prepare the opts from",
+                    "type": "Backbone.Model"
+                }
+            ],
+            "return": {
+                "description": "The options object to pass to the probe",
+                "type": "Object"
+            },
+            "class": "Sync",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Sync.js",
+            "line": 361,
+            "description": "Prepare the init parameters for a monitor to a Sync probe\n\nThe monitor init params for the class monitor and the liveSync\nmodel monitor only differ in the modelId, so this method was\nbroken out to reduce code duplication.",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_getMonitorParams",
+            "params": [
+                {
+                    "name": "modelId",
+                    "description": "Id to the data model.  If set, then params\n  will be built for liveSync to a data model with that id.\n  params for the class.",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The monitor parameters",
+                "type": "Object"
+            },
+            "class": "Sync",
+            "module": "Monitor"
+        },
+        {
             "file": "test/ConfigProbeTest.js",
             "line": 27,
             "description": "Test group for baseline Config probe functionality",
@@ -3527,6 +3966,168 @@
             "itemtype": "method",
             "name": "Server-MultipleStartStop",
             "class": "ServerTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 46,
+            "description": "Test group for baseline SyncProbe functionality",
+            "itemtype": "method",
+            "name": "SyncProbe",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 53,
+            "description": "Tests that classes are in correct",
+            "itemtype": "method",
+            "name": "SyncProbe-Classes",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 63,
+            "description": "The server decides what specific type of SyncProbe to instantiate\nfor classes of data models.  When a SyncProbe is requested, the\nSyncProbe instance becomes an instance of a specific type.  This\ntests that this coersion is made.",
+            "itemtype": "method",
+            "name": "SyncProbe-Coerce",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 80,
+            "description": "Test group for base Sync (non LiveSync) probe usage",
+            "itemtype": "method",
+            "name": "BaseSync",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 87,
+            "description": "One time setup for BaseSync tests",
+            "itemtype": "method",
+            "name": "BaseSync-SetUp",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 101,
+            "description": "Tests that a new object without an ID gets an ID assigned",
+            "itemtype": "method",
+            "name": "BaseSync-CreateWitoutId",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 115,
+            "description": "Tests that a new object with an ID gets saved",
+            "itemtype": "method",
+            "name": "BaseSync-CreateWithId",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 129,
+            "description": "Tests that a fetch by ID works",
+            "itemtype": "method",
+            "name": "BaseSync-FetchById",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 152,
+            "description": "Tests the model.destroy functionality",
+            "itemtype": "method",
+            "name": "BaseSync-DestroyById",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 188,
+            "description": "One time teardown up for BaseSync tests",
+            "itemtype": "method",
+            "name": "BaseSync-TearDown",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 200,
+            "description": "Test group for Live model synchronization",
+            "itemtype": "method",
+            "name": "LiveSync",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 207,
+            "description": "One time setup for LiveSync tests",
+            "itemtype": "method",
+            "name": "LiveSync-SetUp",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 226,
+            "description": "Tests LiveSync connection",
+            "itemtype": "method",
+            "name": "LiveSync-Connect",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 240,
+            "description": "Tests LiveSync disconnect",
+            "itemtype": "method",
+            "name": "LiveSync-Disconnect",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 255,
+            "description": "Tests that a client change in the data model persists to the server",
+            "itemtype": "method",
+            "name": "LiveSync-ClientChange",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 277,
+            "description": "Tests that a server change propagates the data to the client with a change event",
+            "itemtype": "method",
+            "name": "LiveSync-ServerChange",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 305,
+            "description": "Tests that a backend deletion is detected",
+            "itemtype": "method",
+            "name": "LiveSync-ServerDelete",
+            "class": "SyncProbeTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/SyncProbeTest.js",
+            "line": 330,
+            "description": "One time teardown up for BaseSync tests",
+            "itemtype": "method",
+            "name": "LiveSync-TearDown",
+            "class": "SyncProbeTest",
             "module": "UnitTests"
         }
     ]

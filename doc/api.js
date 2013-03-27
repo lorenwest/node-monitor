@@ -7,6 +7,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "ConnectionTest",
         "FileProbe",
         "FileProbeTest",
+        "FileSync",
         "Inspect",
         "InspectTest",
         "Monitor",
@@ -20,7 +21,9 @@ YUI.add("yuidoc-meta", function(Y) {
         "RouterTest",
         "Server",
         "ServerTest",
-        "Storage"
+        "Sync",
+        "SyncProbe",
+        "SyncProbeTest"
     ],
     "modules": [
         "Monitor",
