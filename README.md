@@ -26,7 +26,7 @@ See Also
 License
 -------
 
-Released under the Apache License 2.0
+May be freely distributed under the MIT license
 
 See [LICENSE](https://github.com/lorenwest/node-monitor/blob/master/LICENSE) file.
 

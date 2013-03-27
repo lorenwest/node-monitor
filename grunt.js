@@ -9,8 +9,6 @@ var exec = require('child_process').exec;
 // when running in dev mode to serve individual files for debugging.
 var MODULE_DEF = {
   server_js: [
-    "lib/js/SyncProbe.js",
-    "lib/js/FileSync.js",
     "lib/js/NetworkMap.js",
     "lib/js/Server.js",
     "lib/js/TreeProbe.js",
@@ -20,7 +18,6 @@ var MODULE_DEF = {
   client_js: [
     "lib/js/MonitorUI.js",
     "lib/js/Template.js",
-    "lib/js/Sync.js",
     "lib/js/Site.js",
     "lib/js/Component.js",
     "lib/js/Page.js",
@@ -79,7 +76,6 @@ var MODULE_DEF = {
   client_ext: [
     "lib/ext/jquery-1.8.2.min.js",
     "lib/node_modules/monitor-min/dist/monitor-all.js",
-    "lib/node_modules/backbone-callbacks/backbone-callbacks.js",
     "lib/ext/Backbone.ModelBinder.min.js",
     "lib/ext/bootstrap.min.js",
     "lib/ext/bootstrap-tooltip.js",
