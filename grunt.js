@@ -14,19 +14,23 @@ var MODULE_DEF = {
     "lib/Connection.js",
     "lib/Server.js",
     "lib/Router.js",
+    "lib/Sync.js",
     "lib/probes/PollingProbe.js",
     "lib/probes/Inspect.js"
   ],
   ext: [
     "node_modules/underscore/underscore.js",
     "node_modules/backbone/backbone.js",
+    "node_modules/backbone-callbacks/backbone-callbacks.js",
     "node_modules/socket.io-client/dist/socket.io.js"
   ],
   probes: [
     "lib/probes/ConfigProbe.js",
     "lib/probes/FileProbe.js",
     "lib/probes/Repl.js",
-    "lib/probes/Process.js"
+    "lib/probes/Process.js",
+    "lib/probes/SyncProbe.js",
+    "lib/probes/FileSync.js"
   ]
 };
 

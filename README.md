@@ -1,7 +1,7 @@
 Headless Monitor
 ================
 
-Headless (non-UI) version of [Node Monitor](https://github.com/lorenwest/node-monitor)
+Headless (non-UI) version of the [Node Monitor](https://github.com/lorenwest/node-monitor) app
 
 [![Build Status](https://secure.travis-ci.org/lorenwest/monitor-min.png?branch=master)](https://travis-ci.org/lorenwest/monitor-min)
 
