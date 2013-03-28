@@ -2,7 +2,7 @@
     "project": {
         "name": "monitor-min",
         "description": "Monitor Min",
-        "version": "0.1.1",
+        "version": "0.5.1",
         "year": "2013",
         "url": "http://lorenwest.github.com/monitor-min",
         "logo": "",
@@ -259,7 +259,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "lib/Sync.js",
-            "line": 93,
+            "line": 89,
             "description": "Core monitor classes\n\nClasses in this module represent baseline monitor functionality.  They can\nbe loaded and run in a node.js container as well as within a browser."
         },
         "UnitTests": {
@@ -297,7 +297,7 @@
             "namespace": "",
             "file": "lib/probes/ConfigProbe.js",
             "line": 26,
-            "description": "Remote exposure and control of configuration parameters.\n\nThis probe can monitor the state of, and changes to local configuration\nparameters.  The probe can be configured to monitor a specific top-level\nconfiguration parameter, or all process configuration parameters.",
+            "description": "Remote exposure and control of configuration parameters.\n\nThis probe can monitor the state of, and make changes to local configuration\nparameters.  The probe can be configured to monitor a specific top-level\nconfiguration parameter, or all process configuration parameters.",
             "extends": "Probe",
             "is_constructor": 1,
             "params": [
@@ -941,7 +941,7 @@
             "namespace": "",
             "file": "lib/Probe.js",
             "line": 11,
-            "description": "A software device used to expose real-time data to monitors\n\nThis is the base class from which all probe implementations extend.\n\nIn order to send probe data to monitors, probe implementations simply set\ndata into their data model using ```set()```.  Those changes are propagated into\nall monitors of this probe, firing their change events.\n\nIn order to allow remote probe control, probes need only provide a method\ncalled ```{name}_control()```.  See the ```ping_control()``` method as an example,\nand the ```Probe.onControl()``` method for more information.",
+            "description": "A software device used to expose real time data to monitors\n\nThis is the base class from which all probe implementations extend.\n\nIn order to send probe data to monitors, probe implementations simply set\ntheir model data using ```set()```.  Those changes are detected and propagated\nto all monitors of this probe, firing their change events.\n\nIn order to allow remote probe control, probes need only provide a method\ncalled ```{name}_control()```.  See the ```ping_control()``` method as an example,\nand the ```Probe.onControl()``` method for more information.",
             "extends": "Backbone.Model",
             "is_constructor": 1,
             "params": [
@@ -1024,8 +1024,8 @@
             "module": "Monitor",
             "namespace": "",
             "file": "lib/Sync.js",
-            "line": 93,
-            "description": "The Sync class contains state about the model being synchronized",
+            "line": 89,
+            "description": "Live data model synchronization.\n\nThis class can be attached to Backbone models to synchronize backend data using the\n<a href=\"http://documentcloud.github.com/backbone/#Model-fetch\">```fetch```</a>,\n<a href=\"http://documentcloud.github.com/backbone/#Model-save\">```save```</a>, and\n<a href=\"http://documentcloud.github.com/backbone/#Model-destroy\">```destroy```</a>\nBackbone API methods.\n\nIt also provides two-way change based synchronization, updating data on the server as\nchanges are made to the model, and updating the model as changes are detected on the\nserver.\n\nCommunication is <a href=\"Probe.html\">Probe</a> based, leveraging the built-in\nconnection, routing, and socket-io functionality.  The <a href=\"FileSync.html\">FileSync</a>\nprobe is provided for file-based model persistence, and others can be written to\nimplement alternate persistence mechanisms.",
             "access": "private",
             "tagname": ""
         },
@@ -3092,7 +3092,7 @@
         {
             "file": "lib/Sync.js",
             "line": 18,
-            "description": "Probe based data synchronization with server-side storage.\n\nThis returns a function  contains client-side helpers for connecting local backbone models\nwith server storage using a specialized\n<a href=\"SyncProbe.html\">monitor probe</a>.\n\nThis method returns a function conforming to the Backbone\n<a href=\"http://documentcloud.github.com/backbone/#Sync\">Sync</a>\nAPI, offering\n<a href=\"http://documentcloud.github.com/backbone/#Model-fetch\">```fetch```</a>,\n<a href=\"http://documentcloud.github.com/backbone/#Model-save\">```save```</a>, and\n<a href=\"http://documentcloud.github.com/backbone/#Model-destroy\">```destroy```</a>\nfunctionality to any Backbone data model.\n\nThis function can be assigned to the ```sync``` element when defining the\ndata model:\n\n    var BlogEntry = Backbone.Model.extend({\n      ...\n      sync: Monitor.Sync('BlogEntry'),\n      ...\n    });\n\nThe sync function can also be assigned to any Backbone model after construction:\n\n    var myBook = new Book({id:\"44329\"});\n    myBook.sync = Monitor.Sync('Book');\n    myBook.fetch();\n\nIn addition to providing the standard ```fetch```, ```save```, and ```destroy```\nfunctionality, Sync offers *live data synchronization*, updating the data model\nas changes are detected on the server.\n\n    // Turn on live data synchronization\n    myBook.fetch({liveSync:true});\n\nThis fetches the ```myBook``` instance with the contents of the Book class\nid ```44329```, persists local changes to ```myBook```, and keeps ```myBook```\nup to date with changes detected on the server.\n\nLive data synchronization consumes resources on both the client and server.\nTo release those resources, make sure to call the ```clear()``` method on\nthe data model. Otherwise, resources are released when the server connection\nis terminated.\n\n    // Clear the object, turning off live synchronization\n    myBook.clear();\n\nSee the <a href=\"http://documentcloud.github.com/backbone/#Sync\">Backbone documentation</a>\nfor more information about the Backbone.sync functionality.",
+            "description": "Probe based data synchronization with server-side storage.\n\nThis method returns a function conforming to the Backbone\n<a href=\"http://documentcloud.github.com/backbone/#Sync\">Sync</a>\nAPI, offering\n<a href=\"http://documentcloud.github.com/backbone/#Model-fetch\">```fetch```</a>,\n<a href=\"http://documentcloud.github.com/backbone/#Model-save\">```save```</a>, and\n<a href=\"http://documentcloud.github.com/backbone/#Model-destroy\">```destroy```</a>\nfunctionality to any Backbone data model.\n\nThe returned function can be assigned to the ```sync``` element when defining the\ndata model:\n\n    var BlogEntry = Backbone.Model.extend({\n      ...\n      sync: Monitor.Sync('BlogEntry'),\n      ...\n    });\n\nThe sync function can also be assigned to any Backbone model after construction:\n\n    var myBook = new Book({id:\"44329\"});\n    myBook.sync = Monitor.Sync('Book');\n    myBook.fetch();\n\nIn addition to providing the standard ```fetch```, ```save```, and ```destroy```\nfunctionality, Sync offers *live data synchronization*, updating the data model\nas changes are detected on the server.\n\n    // Turn on live data synchronization\n    myBook.fetch({liveSync:true});\n\nThis fetches the ```myBook``` instance with the contents of the Book class\nid ```44329```, persists local changes to ```myBook```, and keeps ```myBook```\nup to date with changes detected on the server.\n\nLive data synchronization consumes resources on both the client and server.\nTo release those resources, make sure to call the ```clear()``` method on\nthe data model. Otherwise, resources are released when the server connection\nis terminated.\n\n    // Clear the object, turning off live synchronization\n    myBook.clear();\n\nSee the <a href=\"http://documentcloud.github.com/backbone/#Sync\">Backbone documentation</a>\nfor more information about the Backbone.sync functionality.",
             "static": 1,
             "itemtype": "method",
             "name": "Sync",
@@ -3135,7 +3135,7 @@
         },
         {
             "file": "lib/Sync.js",
-            "line": 105,
+            "line": 116,
             "description": "Provide the sync API to a backbone data model\n\nSee the <a href=\"http://documentcloud.github.com/backbone/#Sync\">Backbone documentation</a>\nfor more information on this method.",
             "access": "private",
             "tagname": "",
@@ -3181,7 +3181,7 @@
         },
         {
             "file": "lib/Sync.js",
-            "line": 180,
+            "line": 191,
             "description": "Connect and send the control message to a Sync probe for this class.\n\nThis creates a monitor to a Sync probe with the specified className.\nThe monitor is used to send CRUD control messages for any ID within\nthe class.\n\nOnce connected, it sends the specified control message to the probe.\n\nThis monitor is used for non-liveSync interactions.",
             "access": "private",
             "tagname": "",
@@ -3221,7 +3221,7 @@
         },
         {
             "file": "lib/Sync.js",
-            "line": 217,
+            "line": 228,
             "description": "Connect and send the control message to a liveSync monitor for the model\n\nThis creates a monitor to a Sync probe for the model instance, and\nattaches event listeners onto the monitor and the data model.\n\nOnce connected, it sends the specified control message to the probe.\n\nChanges on the server are automatically propagated to the local\ndata model, and local changes to the data model are automatically\npropagated to the server.",
             "access": "private",
             "tagname": "",
@@ -3261,7 +3261,7 @@
         },
         {
             "file": "lib/Sync.js",
-            "line": 333,
+            "line": 344,
             "description": "Prepare the control options\n\nThis prepares the control options to include the ID element\non a fetch or delete, and the entire model on a create or\nupdate.",
             "access": "private",
             "tagname": "",
@@ -3288,7 +3288,7 @@
         },
         {
             "file": "lib/Sync.js",
-            "line": 361,
+            "line": 372,
             "description": "Prepare the init parameters for a monitor to a Sync probe\n\nThe monitor init params for the class monitor and the liveSync\nmodel monitor only differ in the modelId, so this method was\nbroken out to reduce code duplication.",
             "access": "private",
             "tagname": "",

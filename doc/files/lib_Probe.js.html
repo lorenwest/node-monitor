@@ -15,7 +15,7 @@
 <div id="doc">
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
-            <h1><a href="../index.html">Monitor Min</a> <span class="version">v0.1.1</span></h1>
+            <h1><a href="../index.html">Monitor Min</a> <span class="version">v0.5.1</span></h1>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -138,13 +138,13 @@
       Cron = Monitor.Cron, _ = Monitor._, Backbone = Monitor.Backbone;
 
   &#x2F;**
-  * A software device used to expose real-time data to monitors
+  * A software device used to expose real time data to monitors
   *
   * This is the base class from which all probe implementations extend.
   *
   * In order to send probe data to monitors, probe implementations simply set
-  * data into their data model using &#x60;&#x60;&#x60;set()&#x60;&#x60;&#x60;.  Those changes are propagated into
-  * all monitors of this probe, firing their change events.
+  * their model data using &#x60;&#x60;&#x60;set()&#x60;&#x60;&#x60;.  Those changes are detected and propagated
+  * to all monitors of this probe, firing their change events.
   *
   * In order to allow remote probe control, probes need only provide a method
   * called &#x60;&#x60;&#x60;{name}_control()&#x60;&#x60;&#x60;.  See the &#x60;&#x60;&#x60;ping_control()&#x60;&#x60;&#x60; method as an example,
@@ -306,7 +306,7 @@
     </div>
     <div id="ft">
         <div class="footer-left">
-          Copyright &copy; 2013 <a href="https://github.com/lorenwest/monitor">Loren West, and other contributors</a>. All rights reserved.
+          Copyright &copy; 2010-2013 <a href="https://github.com/lorenwest/monitor">Loren West, and other contributors</a>. All rights reserved.
         </div>
         <div class="footer-right">
           Docs generated using <a href="https://github.com/davglass/yuidocjs">YUIDoc JS</a>

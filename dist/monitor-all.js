@@ -1,4 +1,4 @@
-/* monitor-min - v0.1.1 - 2013-03-26 */
+/* monitor-min - v0.5.1 - 2013-03-27 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -7321,13 +7321,13 @@ if (typeof define === "function" && define.amd) {
       Cron = Monitor.Cron, _ = Monitor._, Backbone = Monitor.Backbone;
 
   /**
-  * A software device used to expose real-time data to monitors
+  * A software device used to expose real time data to monitors
   *
   * This is the base class from which all probe implementations extend.
   *
   * In order to send probe data to monitors, probe implementations simply set
-  * data into their data model using ```set()```.  Those changes are propagated into
-  * all monitors of this probe, firing their change events.
+  * their model data using ```set()```.  Those changes are detected and propagated
+  * to all monitors of this probe, firing their change events.
   *
   * In order to allow remote probe control, probes need only provide a method
   * called ```{name}_control()```.  See the ```ping_control()``` method as an example,
@@ -8920,10 +8920,6 @@ if (typeof define === "function" && define.amd) {
   /**
   * Probe based data synchronization with server-side storage.
   *
-  * This returns a function  contains client-side helpers for connecting local backbone models
-  * with server storage using a specialized
-  * <a href="SyncProbe.html">monitor probe</a>.
-  *
   * This method returns a function conforming to the Backbone
   * <a href="http://documentcloud.github.com/backbone/#Sync">Sync</a>
   * API, offering
@@ -8932,7 +8928,7 @@ if (typeof define === "function" && define.amd) {
   * <a href="http://documentcloud.github.com/backbone/#Model-destroy">```destroy```</a>
   * functionality to any Backbone data model.
   *
-  * This function can be assigned to the ```sync``` element when defining the
+  * The returned function can be assigned to the ```sync``` element when defining the
   * data model:
   *
   *     var BlogEntry = Backbone.Model.extend({
@@ -8993,7 +8989,22 @@ if (typeof define === "function" && define.amd) {
   };
 
   /**
-  * The Sync class contains state about the model being synchronized
+  * Live data model synchronization.
+  *
+  * This class can be attached to Backbone models to synchronize backend data using the
+  * <a href="http://documentcloud.github.com/backbone/#Model-fetch">```fetch```</a>,
+  * <a href="http://documentcloud.github.com/backbone/#Model-save">```save```</a>, and
+  * <a href="http://documentcloud.github.com/backbone/#Model-destroy">```destroy```</a>
+  * Backbone API methods.
+  *
+  * It also provides two-way change based synchronization, updating data on the server as
+  * changes are made to the model, and updating the model as changes are detected on the
+  * server.
+  *
+  * Communication is <a href="Probe.html">Probe</a> based, leveraging the built-in
+  * connection, routing, and socket-io functionality.  The <a href="FileSync.html">FileSync</a>
+  * probe is provided for file-based model persistence, and others can be written to
+  * implement alternate persistence mechanisms.
   *
   * @private
   * @class Sync
