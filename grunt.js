@@ -75,7 +75,7 @@ var MODULE_DEF = {
   ],
   client_ext: [
     "lib/ext/jquery-1.8.2.min.js",
-    "lib/node_modules/monitor-min/dist/monitor-all.js",
+    "lib/ext/monitor-min-all.js",
     "lib/ext/Backbone.ModelBinder.min.js",
     "lib/ext/bootstrap.min.js",
     "lib/ext/bootstrap-tooltip.js",
