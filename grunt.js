@@ -58,22 +58,22 @@ module.exports = function(grunt) {
     concat: {
       lib: {
         src: ['<banner>', '<config:monitor.lib>'],
-        dest: './dist/monitor.js'
+        dest: './dist/monitor-min.js'
       },
       all: {
         src: ['<banner>', '<config:monitor.ext>', '<config:monitor.lib>'],
-        dest: './dist/monitor-all.js'
+        dest: './dist/monitor-min-all.js'
       }
     },
     min: {
       lib: {
-        src: ['<banner>', './dist/monitor.js'],
-        dest: './dist/monitor-min.js'
+        src: ['<banner>', './dist/monitor-min.js'],
+        dest: './dist/monitor-min.min.js'
 
       },
       all: {
-        src: ['<banner>', './dist/monitor-all.js'],
-        dest: './dist/monitor-all-min.js'
+        src: ['<banner>', './dist/monitor-min.js'],
+        dest: './dist/monitor-min-all.min.js'
       }
     },
     jshint: {
