@@ -1,0 +1,18 @@
+{
+  "id": "/index",
+  "title": "Monitor Application",
+  "description": "",
+  "components": [
+    {
+      "id": "c0",
+      "viewClass": "core.Html",
+      "viewOptions": {
+        "title": "",
+        "background": false,
+        "htmlValue": "TBD",
+      },
+      "css": {
+      }
+    }
+  ]
+}
