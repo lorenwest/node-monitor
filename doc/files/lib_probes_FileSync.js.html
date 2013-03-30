@@ -187,63 +187,73 @@
       options.asyncInit = true;
       var callback = options.callback;
 
-      &#x2F;&#x2F; Build the function to watch the file
-      var fullPath = t.getFullPath(t.get(&#x27;modelId&#x27;));
-      var onFileWatch = function(error, content) {
-
-        var isInitializing = (callback !== null),
-            initCallback = callback;
-        callback = null;
-
-        if (error &amp;&amp; error.code === &#x27;ENOENT&#x27;) {
-          &#x2F;&#x2F; File doesn&#x27;t exist. Set the model to null.
-          t.set({model: {}}, {silent: isInitializing});
-          &#x2F;&#x2F; Convert the code from the sync probe spec
-          error.code = &#x27;NOTFOUND&#x27;;
-        }
+      &#x2F;&#x2F; Get the full path to the file
+      t.getFullPath(t.get(&#x27;modelId&#x27;), function(error, response){
         if (error) {
-          if (isInitializing) {
-            t.release();
-            initCallback({code: error.code, msg: &#x27;LiveSync requires the file to exist and be readable&#x27;});
+          return callback({msg: &#x27;Failed to get the path&#x27;, err:error});
+        }
+
+        &#x2F;&#x2F; Get the file and stats
+        var fullPath = response.path;
+        var stats = response.stats;
+
+        &#x2F;&#x2F; Build the function to watch the file
+        var onFileWatch = function(error, content) {
+
+          var isInitializing = (callback !== null),
+              initCallback = callback;
+          callback = null;
+
+          if (error &amp;&amp; error.code === &#x27;ENOENT&#x27;) {
+            &#x2F;&#x2F; File doesn&#x27;t exist. Set the model to null.
+            t.set({model: {}}, {silent: isInitializing});
+            &#x2F;&#x2F; Convert the code from the sync probe spec
+            error.code = &#x27;NOTFOUND&#x27;;
           }
-          return;
-        }
-
-        &#x2F;&#x2F; Parse the JSON content into a JS object.
-        try {
-          content = JSON.parse(content);
-        } catch (e) {
-
-          &#x2F;&#x2F; Fail the probe on first load error
-          if (isInitializing) {
-            t.release();
-            initCallback({code: &#x27;BAD_FORMAT&#x27;, msg: &#x27;Non-JSON formatted file&#x27;});
+          if (error) {
+            if (isInitializing) {
+              t.release();
+              initCallback({code: error.code, msg: &#x27;LiveSync requires the file to exist and be readable&#x27;});
+            }
+            return;
           }
 
-          &#x2F;&#x2F; Nothing productive to do if the file can&#x27;t be parsed. Just log it.
-          return console.error(&#x27;File format error - invalid JSON: &#x27; + fullPath + &#x27; Content: &#x27; + content);
-        }
+          &#x2F;&#x2F; Parse the JSON content into a JS object.
+          try {
+            content = JSON.parse(content);
+          } catch (e) {
 
-        &#x2F;&#x2F; Set the content into the model if it&#x27;s different
-        &#x2F;&#x2F; Have to compare raw objects because toJSON returns deep references to models
-        var priorModel = t.get(&#x27;model&#x27;);
-        if (!priorModel || !_.isEqual(content, JSON.parse(JSON.stringify(priorModel)))) {
-          t.set({model: content}, {silent: isInitializing});
-        }
+            &#x2F;&#x2F; Fail the probe on first load error
+            if (isInitializing) {
+              t.release();
+              initCallback({code: &#x27;BAD_FORMAT&#x27;, msg: &#x27;Non-JSON formatted file&#x27;});
+            }
 
-        &#x2F;&#x2F; Call the initialization callback on first load
-        if (isInitializing) {
-          initCallback();
-        }
-      };
+            &#x2F;&#x2F; Nothing productive to do if the file can&#x27;t be parsed. Just log it.
+            return console.error(&#x27;File format error - invalid JSON on model ID: &#x27; + t.get(&#x27;modelId&#x27;) + &#x27; Content: &#x27; + content);
+          }
 
-      &#x2F;&#x2F; Load and watch the file
-      var watcherOpts = {
-        preload: true,
-        persistent: true
-      };
+          &#x2F;&#x2F; Set the content into the model if it&#x27;s different
+          &#x2F;&#x2F; Have to compare raw objects because toJSON returns deep references to models
+          var priorModel = t.get(&#x27;model&#x27;);
+          if (!priorModel || !_.isEqual(content, JSON.parse(JSON.stringify(priorModel)))) {
+            t.set({model: content}, {silent: isInitializing});
+          }
 
-      t.fileWatcher = FileProbe.watchLoad(fullPath, watcherOpts, onFileWatch);
+          &#x2F;&#x2F; Call the initialization callback on first load
+          if (isInitializing) {
+            initCallback();
+          }
+        };
+
+        &#x2F;&#x2F; Load and watch the file
+        var watcherOpts = {
+          preload: true,
+          persistent: true
+        };
+        t.fileWatcher = FileProbe.watchLoad(fullPath, watcherOpts, onFileWatch);
+
+      });
     },
 
     &#x2F;&#x2F; Documentation for these methods in SyncProbe
@@ -255,15 +265,17 @@
       }
 
       &#x2F;&#x2F; Make sure the file doesn&#x27;t already exist
-      var fullPath = t.getFullPath(model.id);
-      FS.stat(fullPath, function(error, stats) {
-        if (!error) {
+      t.getFullPath(model.id, function(error, response) {
+        if (error) {
+          return callback(error);
+        }
+
+        if (response.stats) {
           return callback({msg:&#x27;Document with this ID already exists&#x27;});
         }
 
         &#x2F;&#x2F; Forward to the update control
         t.update_control(args, callback);
-
       });
     },
 
@@ -275,24 +287,29 @@
       }
 
       &#x2F;&#x2F; Read the file
-      var fullPath = t.getFullPath(id);
-      FS.readFile(fullPath, &#x27;utf8&#x27;, function(error, data) {
-        if (error &amp;&amp; error.code === &#x27;ENOENT&#x27;) {
+      t.getFullPath(id, function(error, response){
+        if (error) {
+          return callback(error);
+        }
+        if (!response.stats) {
           return callback({code: &#x27;NOTFOUND&#x27;, msg:&#x27;Document with this ID not found&#x27;});
         }
 
-        if (error) {
-          return callback({code: &#x27;UNKNOWN&#x27;, msg:&#x27;Error reading file&#x27;, error: error.code});
-        }
+        var fullPath = response.path;
+        FS.readFile(fullPath, &#x27;utf8&#x27;, function(error, data) {
+          if (error) {
+            return callback({code: &#x27;UNKNOWN&#x27;, msg:&#x27;Error reading file&#x27;, error: error.code});
+          }
 
-        &#x2F;&#x2F; Parse the file
-        var model;
-        try {
-          model = JSON.parse(data);
-        } catch (e) {
-          return callback({code: &#x27;PARSE&#x27;, msg: &#x27;Error parsing file&#x27;});
-        }
-        callback(null, model);
+          &#x2F;&#x2F; Parse the file
+          var model;
+          try {
+            model = JSON.parse(data);
+          } catch (e) {
+            return callback({code: &#x27;PARSE&#x27;, msg: &#x27;Error parsing file&#x27;});
+          }
+          callback(null, model);
+        });
       });
     },
 
@@ -305,21 +322,27 @@
       }
 
       &#x2F;&#x2F; Make sure the directory exists
-      var fullPath = t.getFullPath(model.id),
-          parentDir = Path.dirname(fullPath);
-      FileProbe.mkdir_r(parentDir, function(error) {
+      t.getFullPath(model.id, function(error, response) {
         if (error) {
           return callback(error);
         }
 
-        &#x2F;&#x2F; Set the contents of the model for liveSync
-        if (t.has(&#x27;modelId&#x27;)) {
-          t.set(&#x27;model&#x27;, model);
-        }
+        var fullPath = response.path,
+            parentDir = Path.dirname(fullPath);
+        FileProbe.mkdir_r(parentDir, function(error) {
+          if (error) {
+            return callback(error);
+          }
 
-        &#x2F;&#x2F; Write the file
-        FS.writeFile(fullPath, JSON.stringify(model, null, 2), &#x27;utf8&#x27;, function(error){
-          callback(error, {});
+          &#x2F;&#x2F; Set the contents of the model for liveSync
+          if (t.has(&#x27;modelId&#x27;)) {
+            t.set(&#x27;model&#x27;, model);
+          }
+
+          &#x2F;&#x2F; Write the file
+          FS.writeFile(fullPath, JSON.stringify(model, null, 2), &#x27;utf8&#x27;, function(error){
+            callback(error, {});
+          });
         });
       });
 
@@ -333,17 +356,22 @@
       }
 
       &#x2F;&#x2F; Set the contents of the model for liveSync
-      var fullPath = t.getFullPath(id);
-      if (t.has(&#x27;modelId&#x27;)) {
-        t.set(&#x27;model&#x27;, null);
-      }
-
-      &#x2F;&#x2F; Remove the file
-      FS.unlink(fullPath, function(error, data) {
+      t.getFullPath(id, function(error, response) {
         if (error) {
-          return callback({msg:&#x27;Error removing file&#x27;});
+          return callback({msg:&#x27;Error removing file&#x27;, err:error});
         }
-        return callback(null, {});
+        var fullPath = response.path;
+        if (t.has(&#x27;modelId&#x27;)) {
+          t.set(&#x27;model&#x27;, null);
+        }
+
+        &#x2F;&#x2F; Remove the file
+        FS.unlink(fullPath, function(error, data) {
+          if (error) {
+            return callback({msg:&#x27;Error removing file&#x27;});
+          }
+          return callback(null, {});
+        });
       });
     },
 
@@ -355,22 +383,56 @@
       }
     },
 
-    &#x2F;&#x2F; Get the full path to the file.  This can be
-    &#x2F;&#x2F; overridden for custom paths based on ID.
-    getFullPath: function(modelId) {
+    &#x2F;**
+    * Get the full path to the file
+    *
+    * This builds the full pathname to the file, and performs an fs.sync()
+    * on that pathname, providing the pathname and sync object in the callback.
+    *
+    * @method getFullPath
+    * @param modelId {String} ID of the data model to sync
+    * @param callback {Function(error, return)}
+    *   @param callback.error {Object} Error object (null if no error)
+    *   @param callback.return {Object} return object
+    *     @param callback.return.path {String} Full pathname to the file
+    *     @param callback.return.stat {fs.stats} Stats object (null if the file doesn&#x27;t esixt)
+    *&#x2F;
+    getFullPath: function(modelId, callback) {
       var t = this,
           dirPath = t.dirPath;
 
-      &#x2F;&#x2F; Path.join also normalizes the path
-      var fullPath = Path.join(t.dirPath, modelId + &#x27;.json&#x27;);
-
       &#x2F;&#x2F; Don&#x27;t allow relative paths
+      var fullPath = Path.join(t.dirPath, modelId);
       if (fullPath.indexOf(dirPath) !== 0) {
-        throw new Error(&#x27;Model ID cannot represent a relative path&#x27;);
+        return callback({msg: &#x27;Model ID &#x27; + modelId + &#x27; cannot represent a relative path&#x27;});
       }
 
-      &#x2F;&#x2F; Return the path
-      return fullPath;
+      &#x2F;&#x2F; See if the path represents a directory
+      FS.stat(fullPath, function(error, stats){
+
+        &#x2F;&#x2F; If this is an existing directory, return a path to dir&#x2F;index.json
+        if (!error &amp;&amp; stats.isDirectory()) {
+          return t.getFullPath(modelId + &#x27;&#x2F;index&#x27;, callback);
+        }
+
+        &#x2F;&#x2F; Normal case - return the path &amp; stat to the json file
+        fullPath += &#x27;.json&#x27;;
+        FS.stat(fullPath, function(error, stats){
+
+          &#x2F;&#x2F; Not an error if error == ENOENT
+          if (error &amp;&amp; error.code === &#x27;ENOENT&#x27;) {
+            error = null; stats = null;
+          }
+
+          &#x2F;&#x2F; Process other FS errors
+          if (error) {
+            return callback({err: error, msg: &quot;Error while observing file: &quot; + fullPath});
+          }
+
+          &#x2F;&#x2F; Forward the callback
+          return callback(null, {path: fullPath, stats: stats});
+        });
+      });
     }
 
   });

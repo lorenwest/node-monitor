@@ -1390,7 +1390,52 @@
         },
         {
             "file": "lib/probes/FileSync.js",
-            "line": 249,
+            "line": 257,
+            "description": "Get the full path to the file\n\nThis builds the full pathname to the file, and performs an fs.sync()\non that pathname, providing the pathname and sync object in the callback.",
+            "itemtype": "method",
+            "name": "getFullPath",
+            "params": [
+                {
+                    "name": "modelId",
+                    "description": "ID of the data model to sync",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function(error, return)",
+                    "props": [
+                        {
+                            "name": "error",
+                            "description": "Error object (null if no error)",
+                            "type": "Object"
+                        },
+                        {
+                            "name": "return",
+                            "description": "return object",
+                            "type": "Object",
+                            "props": [
+                                {
+                                    "name": "path",
+                                    "description": "Full pathname to the file",
+                                    "type": "String"
+                                },
+                                {
+                                    "name": "stat",
+                                    "description": "Stats object (null if the file doesn't esixt)",
+                                    "type": "Fs.stats"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "class": "FileSync",
+            "module": "Probes"
+        },
+        {
+            "file": "lib/probes/FileSync.js",
+            "line": 311,
             "description": "Set the server root path for objects stored with this probe\n\nFor security purposes, this must be set before the SyncFileProbe\nwill operate.  It will not accept any changes once set.",
             "static": 1,
             "itemtype": "method",
@@ -1407,7 +1452,7 @@
         },
         {
             "file": "lib/probes/FileSync.js",
-            "line": 267,
+            "line": 329,
             "description": "Get the current root path.\n\nAs a static method, this is only available on the server running the probe.\nFor security purposes, this is not exposed in the FileSync data model.",
             "static": 1,
             "itemtype": "method",
