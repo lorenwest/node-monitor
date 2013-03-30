@@ -500,6 +500,22 @@ servers are running on the specified <code>hostName</code>.</p>
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_start">start</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_stop">stop</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_stringify">stringify</a>
 
                                 
@@ -799,7 +815,7 @@ a ping control.</p>
                 
                     <div id="method_deepCopy" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l424" title="lib/Monitor.js:424">deepCopy</a>
+      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l457" title="lib/Monitor.js:457">deepCopy</a>
     </code></h3>
 
     
@@ -1296,7 +1312,7 @@ connected, this will return null.</p>
                 
                     <div id="method_List" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l524" title="lib/Monitor.js:524">List</a>
+      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l557" title="lib/Monitor.js:557">List</a>
     </code></h3>
 
     
@@ -1521,9 +1537,230 @@ assuring they don't clash with other elements in the collection.</p>
 </div>
 
                 
+                    <div id="method_start" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l396" title="lib/Monitor.js:396">start</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>options</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Start a monitor server in this process</p>
+
+<p>This is a shortand for the following:</p>
+
+<pre class="code"><code class="prettyprint">var Monitor = require('monitor-min');
+var server = new Monitor.Server();
+server.start();
+</code></pre>
+
+<p>For more fine-tuned starting, see the <a href="Server.html">Server</a> api.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">options</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <ul>
+<li>Server.start() options.  OPTIONAL</li>
+</ul>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">port</code>
+                                    <span class="type">Integer</span>
+                                
+
+                                <div class="param-description">
+                                    <ul>
+<li>Port to attempt listening on if server isn't specified.  Default: 42000</li>
+</ul>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function(error)</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <ul>
+<li>Called when the server is accepting connections.</li>
+</ul>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_stop" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l418" title="lib/Monitor.js:418">stop</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stop a started monitor server in this process</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function(error)</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <ul>
+<li>Called when the server is accepting connections.</li>
+</ul>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_stringify" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l496" title="lib/Monitor.js:496">stringify</a>
+      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l529" title="lib/Monitor.js:529">stringify</a>
     </code></h3>
 
     
@@ -1888,7 +2125,7 @@ the monitor.</p>
                 
                     <div id="method_toServerString" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l396" title="lib/Monitor.js:396">toServerString</a>
+      <a href="..&#x2F;files&#x2F;lib_Monitor.js.html#l429" title="lib/Monitor.js:429">toServerString</a>
     </code></h3>
 
     
@@ -2312,10 +2549,10 @@ since the last change event.</p>
     </div>
     <div id="ft">
         <div class="footer-left">
-          Copyright &copy; 2010-2013 <a href="https://github.com/lorenwest/monitor">Loren West, and other contributors</a>. All rights reserved.
+          Copyright &copy; 2010-2013 <a href="https://github.com/lorenwest/monitor-min">Loren West, and other contributors</a>. All rights reserved.
         </div>
         <div class="footer-right">
-          Docs generated using <a href="https://github.com/davglass/yuidocjs">YUIDoc JS</a>
+          Docs generated using <a href="https://github.com/yui/yuidoc">YUIDoc JS</a>
         </div>
     </div>
 </div>

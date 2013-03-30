@@ -1,83 +1,101 @@
-Headless Monitor
-================
+NodeJS Monitoring
+=================
 
-Headless (non-UI) version of the [Node Monitor](https://github.com/lorenwest/node-monitor) app
+Remote monitoring and control of your node.js app
 
 [![Build Status](https://secure.travis-ci.org/lorenwest/monitor-min.png?branch=master)](https://travis-ci.org/lorenwest/monitor-min)
-
 
 Introduction
 ------------
 
-This package provides a foundation for monitoring and controlling remote
-node.js applications.
+This is the minimum component necessary for remote monitoring and control of your NodeJS app.
 
-It introduces the concept of a [Probe](http://lorenwest.github.com/monitor/doc/classes/Probe.html) -
-a small software component capable of exposing and controlling state within a
-running node.js server.
+Think of it as a supercharged [JMX](http://www.google.com/search?q=jmx&btnI) for NodeJS:
 
-Probes are written as
-[Backbone](http://documentcloud.github.com/backbone) models, and
-remain dormant in your process until instantiated from remote monitors.
-
-From the monitoring process, a [Monitor](http://lorenwest.github.com/monitor/doc/classes/Monitor.html) class
-is provided to connect with a remote probe.
-
-This package is used for writing and embedding probes into your app server,
-and for writing custom clients for inspecting and controlling these probes.
-A companion package  -
-[Node Monitor](http://lorenwest.github.com/node-monitor) - provides a user interface
-for building real time monitor dashboards.
+* **Easy to embed** - Add to your app with 1 line of code
+* **Auto discovery** - Finds all instances of your app on a server
+* **Remote REPL** - Remote login into your running apps
+* **Process information** - CPU load, memory usage, uptime, etc.
+* **Backbone.js integration** - Remotely monitor Backbone.js models, with active updates
+* **Configuration control** - Inspect and tune your [app configurations](http://lorenwest.github.com/node-config) while running
+* **Powerful** - For multi-node enterprise deployments
+* **Lightweight** - Enough to run in a [Raspberry Pi](http://www.raspberrypi.org/faqs)
+* **And much, much more...** - With a [plugin directory](https://github.com/lorenwest/monitor/wiki) for specialized monitoring
 
 Quick Start
 -----------
 
 **Install using npm**
 
-    $ npm install monitor
+    $ npm install monitor-min
 
-**Start the monitor service (standalone)**
+**Run standalone**
 
-Normally you'll include this package into your own application server, but you can
-run as a standalone application as well.
+Play with the built-in server before embedding into your app:
 
-    $ npm start monitor
+    $ npm start monitor-min
 
-**Observe a probe from a remote process**
+Remotely Connect
+----------------
 
-In this example we're using a REPL console to connect with the
-built-in [Process](http://http://lorenwest.github.com/monitor/doc/classes/Process.html) probe.
+The best way to monitor and control the app is with the
+[Monitor Dashboard](http://lorenwest.github.com/node-monitor), but for this
+example we'll go <i>headless</i>, driving it from another node.js process.
 
-Open a REPL console from another terminal
+With the above server running in another window...
 
-    $ node
+**Create a test.js**
 
-Create a monitor for the Process probe
+    // Get a monitor to the Process probe
+    var Monitor = require('monitor-min');
+    var processMonitor = new Monitor({server:'localhost', probeClass: 'Process'});
+    processMonitor.connect(function(error) {
 
-    > var Monitor = require('monitor');
-    > var processMonitor = new Monitor({server:'localhost', probeClass: 'Process'});
+      // Show the contents of the monitor
+      console.log(processMonitor);
 
-Connect with the probe, and view the properties
+      // Remote monitors are Backbone.js models,
+      // so you can observe them as they change
+      processMonitor.on('change', function() {
+        console.log(processMonitor.get('freemem'));
+      });
+    });
 
-    > processMonitor.connect();
-    > processMonitor.toJSON();
+**Try it out**
 
-The monitor is a Backbone model, so you can watch for changes
+    node test.js
 
-    > var showFreeMem = function(){console.log(processMonitor.get('freemem'))};
-    > processMonitor.on('change', showFreeMem);
+You should see all data from the process montitor, followed by an ongoing report
+of available memory.
 
-See Also
---------
 
-* [API-Docs](http://lorenwest.github.com/monitor/doc/index.html) Monitor internal documentation
-* [Node Monitor](http://lorenwest.github.com/node-monitor) Companion webapp for building real time monitor dashboards
+Embedding Into Your App
+-----------------------
+
+**Add to your app**
+
+Place the following line of code into your application bootstrap:
+
+    require('monitor-min').start();
+
+**Add the dependency to your package.json**
+
+    "monitor-min": "0.5.x"
+
+Now when you start your server, you'll be able to remotely monitor and control.
+
+More Information
+----------------
+
+* [Monitor-Min Documentation](http://lorenwest.github.com/monitor-min)
+* [Monitor Dashboard](http://lorenwest.github.com/node-monitor)
+* [Node Config](http://lorenwest.github.com/node-config)
 
 License
 -------
 
 May be freely distributed under the MIT license
 
-See [LICENSE](https://github.com/lorenwest/monitor/blob/master/LICENSE) file.
+See [LICENSE](https://github.com/lorenwest/monitor-min/blob/master/LICENSE) file.
 
 Copyright (c) 2010-2013 Loren West

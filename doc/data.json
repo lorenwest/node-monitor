@@ -2272,6 +2272,52 @@
         {
             "file": "lib/Monitor.js",
             "line": 396,
+            "description": "Start a monitor server in this process\n\nThis is a shortand for the following:\n\n    var Monitor = require('monitor-min');\n    var server = new Monitor.Server();\n    server.start();\n\nFor more fine-tuned starting, see the <a href=\"Server.html\">Server</a> api.",
+            "static": 1,
+            "itemtype": "method",
+            "name": "start",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "- Server.start() options.  OPTIONAL",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "port",
+                            "description": "- Port to attempt listening on if server isn't specified.  Default: 42000",
+                            "type": "Integer"
+                        }
+                    ]
+                },
+                {
+                    "name": "callback",
+                    "description": "- Called when the server is accepting connections.",
+                    "type": "Function(error)"
+                }
+            ],
+            "class": "Monitor",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Monitor.js",
+            "line": 418,
+            "description": "Stop a started monitor server in this process",
+            "static": 1,
+            "itemtype": "method",
+            "name": "stop",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "- Called when the server is accepting connections.",
+                    "type": "Function(error)"
+                }
+            ],
+            "class": "Monitor",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Monitor.js",
+            "line": 429,
             "description": "Produce a server string representation of the hostName:appName:appInstance\n\nDepending on the presence of the appName and appInstance, this will produce\none of the following:\n\n    hostName\n    hostName:appName\n    hostName:appName:appInstance",
             "itemtype": "method",
             "name": "toServerString",
@@ -2307,7 +2353,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 424,
+            "line": 457,
             "description": "Produce a depth-limited copy of the specified object\n\nFunctions are copied for visual inspection purposes - the fact that\nthey are a function, and any prototype members.  This is so a JSON.stringify\nof the result will show the functions (normally JSON.stringify doesn't output\nfunctions).\n\nThis method is mostly for debugging - for producing a human-readable stream\nrepresentation of the object.  It is an exact copy, except for elements of\ntype function.",
             "itemtype": "method",
             "name": "deepCopy",
@@ -2334,7 +2380,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 496,
+            "line": 529,
             "description": "Produce a recursion-safe JSON string.\n\nThis method recurses the specified object to a maximum specified depth\n(default 4).\n\nIt also indents sub-objects for debugging output.  The indent level can be\nspecified, or set to 0 for no indentation.\n\nThis is mostly useful in debugging when the standard JSON.stringify\nreturns an error.",
             "itemtype": "method",
             "name": "stringify",
@@ -2368,7 +2414,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 524,
+            "line": 557,
             "description": "Constructor for a list of Monitor objects\n\n    var myList = new Monitor.List(initialElements);",
             "static": 1,
             "itemtype": "method",

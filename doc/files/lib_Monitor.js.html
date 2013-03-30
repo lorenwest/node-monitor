@@ -523,6 +523,39 @@
   };
 
   &#x2F;**
+  * Start a monitor server in this process
+  *
+  * This is a shortand for the following:
+  *
+  *     var Monitor = require(&#x27;monitor-min&#x27;);
+  *     var server = new Monitor.Server();
+  *     server.start();
+  *
+  * For more fine-tuned starting, see the &lt;a href=&quot;Server.html&quot;&gt;Server&lt;&#x2F;a&gt; api.
+  *
+  * @static
+  * @method start
+  * @param options {Object} - Server.start() options.  OPTIONAL
+  *     @param options.port {Integer} - Port to attempt listening on if server isn&#x27;t specified.  Default: 42000
+  * @param callback {Function(error)} - Called when the server is accepting connections.
+  *&#x2F;
+  Monitor.start = function(options, callback) {
+    Monitor.defaultServer = new Monitor.Server();
+    Monitor.defaultServer.start(options, callback);
+  };
+
+  &#x2F;**
+  * Stop a started monitor server in this process
+  *
+  * @static
+  * @method stop
+  * @param callback {Function(error)} - Called when the server is accepting connections.
+  *&#x2F;
+  Monitor.stop = function(callback) {
+    Monitor.defaultServer.stop(callback);
+  };
+
+  &#x2F;**
   * Produce a server string representation of the hostName:appName:appInstance
   *
   * Depending on the presence of the appName and appInstance, this will produce
@@ -702,10 +735,10 @@
     </div>
     <div id="ft">
         <div class="footer-left">
-          Copyright &copy; 2010-2013 <a href="https://github.com/lorenwest/monitor">Loren West, and other contributors</a>. All rights reserved.
+          Copyright &copy; 2010-2013 <a href="https://github.com/lorenwest/monitor-min">Loren West, and other contributors</a>. All rights reserved.
         </div>
         <div class="footer-right">
-          Docs generated using <a href="https://github.com/davglass/yuidocjs">YUIDoc JS</a>
+          Docs generated using <a href="https://github.com/yui/yuidoc">YUIDoc JS</a>
         </div>
     </div>
 </div>
