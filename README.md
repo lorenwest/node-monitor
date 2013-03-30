@@ -82,7 +82,7 @@ Place the following line of code into your application bootstrap:
 
     "monitor-min": "0.5.x"
 
-Now when you start your server, you'll be able to remotely monitor and control.
+Now you'll be able to remotely monitor and control your server.
 
 More Information
 ----------------
