@@ -74,7 +74,7 @@ Embedding Into Your App
 
 **Add to your app**
 
-Place the following line of code into your application bootstrap:
+Place the following line of code into your app server bootstrap:
 
     require('monitor-min').start();
 
@@ -82,7 +82,7 @@ Place the following line of code into your application bootstrap:
 
     "monitor-min": "0.5.x"
 
-Now you'll be able to remotely monitor and control your server.
+Now you'll be able to remotely monitor and control your app server.
 
 More Information
 ----------------
