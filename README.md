@@ -1,7 +1,7 @@
 NodeJS Monitoring
 =================
 
-Remote monitoring and control of your node.js app
+Remote monitoring and control for your node.js app
 
 [![Build Status](https://secure.travis-ci.org/lorenwest/monitor-min.png?branch=master)](https://travis-ci.org/lorenwest/monitor-min)
 
@@ -18,9 +18,9 @@ Think of it as a supercharged [JMX](http://www.google.com/search?q=jmx&btnI) for
 * **Process information** - CPU load, memory usage, uptime, etc.
 * **Backbone.js integration** - Remotely monitor Backbone.js models, with active updates
 * **Configuration control** - Inspect and tune your [app configurations](http://lorenwest.github.com/node-config) while running
-* **Powerful** - For multi-node enterprise deployments
-* **Lightweight** - Enough to run in a [Raspberry Pi](http://www.raspberrypi.org/faqs)
-* **And much, much more...** - With a [plugin directory](https://github.com/lorenwest/monitor/wiki) for specialized monitoring
+* **Powerful** - Enterprise grade for multi-node deployments
+* **Lightweight** - Trim enough to run in a [Raspberry Pi](http://www.raspberrypi.org/faqs)
+* **Extensible** - With a [plugin directory](https://github.com/lorenwest/monitor/wiki) for specialized monitoring
 
 Quick Start
 -----------
@@ -72,17 +72,15 @@ of available memory.
 Embedding Into Your App
 -----------------------
 
-**Add to your app**
+**Now add to your app**
 
-Place the following line of code into your app server bootstrap:
+Place the following line into your app server bootstrap:
 
     require('monitor-min').start();
 
-**Add the dependency to your package.json**
-
-    "monitor-min": "0.5.x"
-
-Now you'll be able to remotely monitor and control your app server.
+Now start your app server and run the same test.js, design your own
+monitoring client, or build a visual control center with the
+[Monitor Dashboard](http://lorenwest.github.com/node-monitor) app.
 
 More Information
 ----------------
