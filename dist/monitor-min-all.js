@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.1 - 2013-03-29 */
+/* monitor-min - v0.5.1 - 2013-04-04 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -7141,6 +7141,39 @@ if (typeof define === "function" && define.amd) {
   };
 
   /**
+  * Start a monitor server in this process
+  *
+  * This is a shortand for the following:
+  *
+  *     var Monitor = require('monitor-min');
+  *     var server = new Monitor.Server();
+  *     server.start();
+  *
+  * For more fine-tuned starting, see the <a href="Server.html">Server</a> api.
+  *
+  * @static
+  * @method start
+  * @param options {Object} - Server.start() options.  OPTIONAL
+  *     @param options.port {Integer} - Port to attempt listening on if server isn't specified.  Default: 42000
+  * @param callback {Function(error)} - Called when the server is accepting connections.
+  */
+  Monitor.start = function(options, callback) {
+    Monitor.defaultServer = new Monitor.Server();
+    Monitor.defaultServer.start(options, callback);
+  };
+
+  /**
+  * Stop a started monitor server in this process
+  *
+  * @static
+  * @method stop
+  * @param callback {Function(error)} - Called when the server is accepting connections.
+  */
+  Monitor.stop = function(callback) {
+    Monitor.defaultServer.stop(callback);
+  };
+
+  /**
   * Produce a server string representation of the hostName:appName:appInstance
   *
   * Depending on the presence of the appName and appInstance, this will produce
@@ -9308,6 +9341,113 @@ if (typeof define === "function" && define.amd) {
 
 }(this));
 
+// Stats.js (c) 2010-2013 Loren West and other contributors
+// May be freely distributed under the MIT license.
+// For further details and documentation:
+// http://lorenwest.github.com/monitor-min
+(function(root){
+
+  // Module loading
+  var Monitor = root.Monitor || require('./Monitor'),
+      _ = Monitor._;
+
+  /**
+  * A place to send and gather stats
+  *
+  * This is both a collector and emitter for application statistics.
+  *
+  * As a collector, it's a place to send application stats as they're discovered.
+  * It's designed with low development and runtime cost, encouraging widespread
+  * adoption with minimum concern for overhead.
+  *
+  * As an emitter, it's a place to gather stats as they're collected.
+  * The cost to gather and record stats can be tuned at runtime by listening
+  * for some, none, or all stats being collected.
+  *
+  * All examples assume a Stats class, usually declared statically at the top
+  * of the module.  Example:
+  *
+  *     var Stats = require('monitor-min').Stats;
+  *
+  * Individual stats are named within a dot-delimited naming hierarchy.  For
+  * example, the following stats call:
+  *
+  *     Stats.increment('myModule.requests.inbound');
+  *
+  * Increments the stat named `myModule.requests.inbound`.  When listening for
+  * stats, wildcards can be used to register for many stats within a group.
+  * For example, the following call:
+  *
+  *     Stats.on('myModule.requests.*', myFunction);
+  *
+  * Will notify myFunction when any `myModule.requests` stat is gathered.
+  *
+  * @class Stats
+  * @constructor
+  */
+  var Stats = Monitor.Stats = function() {
+    var t = this;
+  };
+  var proto = Stats.prototype;
+  proto.doThis = function(){
+    console.log("This done.", arguments);
+  }
+  proto.doThat = function(arg1){
+    console.log("That arg1: ", arg1);
+  }
+
+  // Create a global stats object to use across module load contexts
+  var g = global || window || root;
+  g.globalStats = new Stats();
+
+  // Create static methods that proxy to the global stats object
+  _.keys(Stats.prototype).forEach(function(methodName) {
+      Stats[methodName] = function() {
+        proto[methodName].apply(g.globalStats, arguments);
+      };
+  });
+
+
+}(this));
+
+// Log.js (c) 2010-2013 Loren West and other contributors
+// May be freely distributed under the MIT license.
+// For further details and documentation:
+// http://lorenwest.github.com/monitor-min
+(function(root){
+
+  // Module loading
+  var Monitor = root.Monitor || require('./Monitor'),
+      _ = Monitor._;
+
+  /**
+  * A place to send and gather Log
+  *
+  * @static
+  * @class Log
+  * @constructor
+  */
+  var Log = Monitor.Log = function() {
+    var t = this;
+  };
+  var p = Log.prototype;
+  p.doThis = function(){
+    console.log("This done.");
+  }
+
+  // Create a global Log object to use across module load contexts
+  var g = global || window || root;
+  g.globalLog = new Log();
+
+  // Create static methods that proxy to the global Log object
+  for (var methodName in Log.prototype) {
+    Log[methodName] = function() {
+      g.globalLog.call(methodName, arguments);
+    }
+  };
+
+
+}(this));
 // PollingProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:

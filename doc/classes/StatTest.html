@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>FileProbeTest - monitor-min</title>
+    <title>StatTest - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -131,7 +131,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>FileProbeTest Class</h1>
+                        <h1>StatTest Class</h1>
 <div class="box meta">
     
 
@@ -139,7 +139,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l32"><code>test&#x2F;FileProbeTest.js:32</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;test_StatTest.js.html#l12"><code>test&#x2F;StatTest.js:12</code></a>
         </div>
     
 
@@ -155,7 +155,7 @@
 
 
 <div class="box intro">
-    <p>Unit tests for the <a href="FileProbe.html">File</a> probe.</p>
+    <p>Unit tests for the <a href="Stat.html">Stat</a> class.</p>
 </div>
 
 
@@ -183,82 +183,50 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method">
-                                <a href="#method_FileProbe">FileProbe</a>
+                                <a href="#method_Stat">Stat</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_FileProbe-Classes">FileProbe-Classes</a>
+                                <a href="#method_Stat-AllStats">Stat-AllStats</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_FileProbe-Static">FileProbe-Static</a>
+                                <a href="#method_Stat-Classes">Stat-Classes</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_Probe">Probe</a>
+                                <a href="#method_Stat-Decrement">Stat-Decrement</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_Probe-Init">Probe-Init</a>
+                                <a href="#method_Stat-Gauge">Stat-Gauge</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_Probe-RootPath">Probe-RootPath</a>
+                                <a href="#method_Stat-GraphiteRegExp">Stat-GraphiteRegExp</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_Utils">Utils</a>
+                                <a href="#method_Stat-Increment">Stat-Increment</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_Utils-Mkdir_R">Utils-Mkdir_R</a>
+                                <a href="#method_Stat-Time">Stat-Time</a>
 
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_Utils-PollingWatcher">Utils-PollingWatcher</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_Utils-Rm_Rf">Utils-Rm_Rf</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_Utils-Watch">Utils-Watch</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_Utils-WatchLoad">Utils-WatchLoad</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_writeTestFile">writeTestFile</a>
-
-                                
-                                    <span class="flag static">static</span>
                                 
                             </li>
                         
@@ -278,9 +246,9 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_FileProbe" class="method item">
+                    <div id="method_Stat" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l37" title="test/FileProbeTest.js:37">FileProbe</a>
+      <a href="..&#x2F;files&#x2F;test_StatTest.js.html#l17" title="test/StatTest.js:17">Stat</a>
     </code></h3>
 
     
@@ -315,7 +283,7 @@
     </div>
 
     <div class="description">
-        <p>Test group for baseline FileProbe functionality</p>
+        <p>Test group for baseline Stat functionality</p>
     </div>
 
     
@@ -326,9 +294,9 @@
 </div>
 
                 
-                    <div id="method_FileProbe-Classes" class="method item">
+                    <div id="method_Stat-AllStats" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l44" title="test/FileProbeTest.js:44">FileProbe-Classes</a>
+      <a href="..&#x2F;files&#x2F;test_StatTest.js.html#l96" title="test/StatTest.js:96">Stat-AllStats</a>
     </code></h3>
 
     
@@ -363,7 +331,7 @@
     </div>
 
     <div class="description">
-        <p>Tests that classes are in correct</p>
+        <p>Tests that registering for '*' emits all stats</p>
     </div>
 
     
@@ -374,9 +342,9 @@
 </div>
 
                 
-                    <div id="method_FileProbe-Static" class="method item">
+                    <div id="method_Stat-Classes" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l54" title="test/FileProbeTest.js:54">FileProbe-Static</a>
+      <a href="..&#x2F;files&#x2F;test_StatTest.js.html#l27" title="test/StatTest.js:27">Stat-Classes</a>
     </code></h3>
 
     
@@ -411,7 +379,7 @@
     </div>
 
     <div class="description">
-        <p>Tests that public static methods are in place</p>
+        <p>Tests that Stat class is in place</p>
     </div>
 
     
@@ -422,9 +390,9 @@
 </div>
 
                 
-                    <div id="method_Probe" class="method item">
+                    <div id="method_Stat-Decrement" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l199" title="test/FileProbeTest.js:199">Probe</a>
+      <a href="..&#x2F;files&#x2F;test_StatTest.js.html#l161" title="test/StatTest.js:161">Stat-Decrement</a>
     </code></h3>
 
     
@@ -459,7 +427,7 @@
     </div>
 
     <div class="description">
-        <p>Test group for File based probe functionality</p>
+        <p>Tests the decrement stat</p>
     </div>
 
     
@@ -470,9 +438,9 @@
 </div>
 
                 
-                    <div id="method_Probe-Init" class="method item">
+                    <div id="method_Stat-Gauge" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l241" title="test/FileProbeTest.js:241">Probe-Init</a>
+      <a href="..&#x2F;files&#x2F;test_StatTest.js.html#l113" title="test/StatTest.js:113">Stat-Gauge</a>
     </code></h3>
 
     
@@ -507,7 +475,7 @@
     </div>
 
     <div class="description">
-        <p>This tests the File probe initializes properly</p>
+        <p>Tests the gauge functionality</p>
     </div>
 
     
@@ -518,9 +486,9 @@
 </div>
 
                 
-                    <div id="method_Probe-RootPath" class="method item">
+                    <div id="method_Stat-GraphiteRegExp" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l221" title="test/FileProbeTest.js:221">Probe-RootPath</a>
+      <a href="..&#x2F;files&#x2F;test_StatTest.js.html#l36" title="test/StatTest.js:36">Stat-GraphiteRegExp</a>
     </code></h3>
 
     
@@ -555,7 +523,7 @@
     </div>
 
     <div class="description">
-        <p>Tests the ROOT_PATH functionality</p>
+        <p>Internal tests for Graphite type regular expressions</p>
     </div>
 
     
@@ -566,9 +534,9 @@
 </div>
 
                 
-                    <div id="method_Utils" class="method item">
+                    <div id="method_Stat-Increment" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l71" title="test/FileProbeTest.js:71">Utils</a>
+      <a href="..&#x2F;files&#x2F;test_StatTest.js.html#l141" title="test/StatTest.js:141">Stat-Increment</a>
     </code></h3>
 
     
@@ -603,7 +571,7 @@
     </div>
 
     <div class="description">
-        <p>Test group for static file/directory utilities</p>
+        <p>Tests the increment stat</p>
     </div>
 
     
@@ -614,9 +582,9 @@
 </div>
 
                 
-                    <div id="method_Utils-Mkdir_R" class="method item">
+                    <div id="method_Stat-Time" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l78" title="test/FileProbeTest.js:78">Utils-Mkdir_R</a>
+      <a href="..&#x2F;files&#x2F;test_StatTest.js.html#l127" title="test/StatTest.js:127">Stat-Time</a>
     </code></h3>
 
     
@@ -651,305 +619,9 @@
     </div>
 
     <div class="description">
-        <p>Test the mkdir_r utility</p>
+        <p>Tests the time stat</p>
     </div>
 
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_Utils-PollingWatcher" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l142" title="test/FileProbeTest.js:142">Utils-PollingWatcher</a>
-    </code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Tests the polling style file watching mechanism</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_Utils-Rm_Rf" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l91" title="test/FileProbeTest.js:91">Utils-Rm_Rf</a>
-    </code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Test the rm_rf utility</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_Utils-Watch" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l118" title="test/FileProbeTest.js:118">Utils-Watch</a>
-    </code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Tests the file watch functionality</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_Utils-WatchLoad" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l166" title="test/FileProbeTest.js:166">Utils-WatchLoad</a>
-    </code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Tests the watchLoad functionality</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_writeTestFile" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;test_FileProbeTest.js.html#l273" title="test/FileProbeTest.js:273">writeTestFile</a>
-    </code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>append</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>wait</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <span class="flag static">static</span>
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Write the test file to disk, with possible appendage</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">append</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>String to append onto the standard test file</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">wait</code>
-                        <span class="type">Integer</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Number of milliseconds to wait before writing</p>
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     

@@ -198,6 +198,7 @@
 
   /**
   * Test the stringify method
+  * @method Stringify
   */
   module.exports['Stringify'] = {
     Test: function(test) {

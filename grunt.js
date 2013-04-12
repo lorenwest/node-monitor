@@ -15,6 +15,8 @@ var MODULE_DEF = {
     "lib/Server.js",
     "lib/Router.js",
     "lib/Sync.js",
+    "lib/Stat.js",
+    "lib/Log.js",
     "lib/probes/PollingProbe.js",
     "lib/probes/Inspect.js"
   ],
@@ -72,7 +74,7 @@ module.exports = function(grunt) {
 
       },
       all: {
-        src: ['<banner>', './dist/monitor-min.js'],
+        src: ['<banner>', './dist/monitor-min-all.js'],
         dest: './dist/monitor-min-all.min.js'
       }
     },

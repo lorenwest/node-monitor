@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ConfigProbe - monitor-min</title>
+    <title>Log - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -131,25 +131,21 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>ConfigProbe Class</h1>
+                        <h1>Log Class</h1>
 <div class="box meta">
     
 
     
-        <div class="extends">
-            Extends <a href="../classes/Probe.html" class="crosslink">Probe</a>
-        </div>
-    
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_ConfigProbe.js.html#l26"><code>lib&#x2F;probes&#x2F;ConfigProbe.js:26</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;lib_Log.js.html#l14"><code>lib&#x2F;Log.js:14</code></a>
         </div>
     
 
     
         
-            Module: <a href="../modules/Probes.html">Probes</a>
+            Module: <a href="../modules/Monitor.html">Monitor</a>
         
     
 
@@ -159,19 +155,207 @@
 
 
 <div class="box intro">
-    <p>Remote exposure and control of configuration parameters.</p>
+    <p>A lightweight component for sending and gathering logs</p>
 
-<p>This probe can monitor the state of, and make changes to local configuration
-parameters.  The probe can be configured to monitor a specific top-level
-configuration parameter, or all process configuration parameters.</p>
+<p>This is both a collector and emitter for application logs.</p>
+
+<p>It's designed with low development and runtime cost in mind, encouraging
+usage with minimum concern for overhead.  Runtime monitoring can be as chatty
+as desired, outputting every log statement of every type, or finely tuned
+with regular expressions to monitor specific log statements.</p>
+
+<p>It can be used as a log4js appender so your existing application logs can
+be monitored:</p>
+
+<pre class="code"><code class="prettyprint">var log4js = require('log4js');
+var appender = require('monitor-min').log4jsAppender;
+log4js.addAppender(appender);
+</code></pre>
+
+<p>This requires the log4js package to be available to the application, as
+monitor-min doesn't include log4js if your app doesn't use it.</p>
+
+<p>It can also be used directly with a log4js-style calling pattern:</p>
+
+<pre class="code"><code class="prettyprint">var log = require('monitor-min').getLogger('myModule');
+...
+log.warn('Customer credit limit exceeded');
+</code></pre>
+
+<h2>Log Collector</h2>
+
+<p>As a collector, it's a place to send application logs.</p>
+
+<p>Example for outputting a log in your application:</p>
+
+<pre class="code"><code class="prettyprint">var log = require('monitor-min').getLogger('myModule');
+...
+log.info('Credit accepted', limit, requestedAmount);
+</code></pre>
+
+<p>The above is a request to output an <code>info</code> log for <code>myModule</code> named
+<code>Credit limit accepted</code>.  The log entry includes all additional parameters,
+in this case the customer credit limit and the reqeusted amount.</p>
+
+<p>The full name for this log entry is: <code>"info.myModule.Credit limit accepted"</code>
+The name is important, as monitors can be configured to output logs based
+on this name.</p>
+
+<p>Best practices are to include dynamic parameters in extra arguments
+vs. concatenating strings.  This reduces logging overhead, especially
+for log statements that aren't currently being watched.</p>
+
+<h2>Log Emitter</h2>
+
+<p>As an emitter, the Log module is a place to capture logging output.</p>
+
+<p>When listening for log entries, wildcards can be used to register for
+particular log types and entries.</p>
+
+<pre class="code"><code class="prettyprint">var Log = require('monitor-min').Log;
+...
+Log.on('info.myModule.*', myFunction);
+</code></pre>
+
+<p>Will call <code>myFunction</code> when all <code>info.myModule.*</code> logs are emitted.</p>
+
+<p>Listeners are invoked with the following arguments:</p>
+
+<ul>
+<li>type - The log type (info, trace, warn, etc.)</li>
+<li>module - The logger module name</li>
+<li>name - The log entry name</li>
+<li>args... - Additional arguments passed into the log entry are passed on
+        as additional args to the event listener.</li>
+</ul>
+
+<h2>Wildcards</h2>
+
+<p>A flexible and user-oriented wildcard pattern is used for monitoring
+logs.  The pattern is described in the <a href="Stat.html#wildcards">Wildcard secttion of the Stats class</a>.</p>
+
+<h2>Choosing Good Names</h2>
+
+<p>It's a good idea to pick a good naming scheme with each dot-delimited segment
+having a consistent, well-defined purpose.  Volatile segments should be as deep
+into the hierarchy (furthest right) as possible.  Keeping the names less
+volatile makes it easier to turn statistics recording on for all logs.</p>
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_ConfigProbe" class="method item">
+        <div id="method_Log" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_ConfigProbe.js.html#l26" title="lib/probes/ConfigProbe.js:26">ConfigProbe</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l14" title="lib/Log.js:14">Log</a>
+    </code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_debug">debug</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method_emit">emit</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_trace">trace</a>
+
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_debug" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l120" title="lib/Log.js:120">debug</a>
     </code></h3>
 
     
@@ -180,7 +364,13 @@ configuration parameter, or all process configuration parameters.</p>
             
                 <li class="arg">
                     
-                        <code>model</code>
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[...]</code>
                     
                 </li>
             
@@ -216,361 +406,7 @@ configuration parameter, or all process configuration parameters.</p>
     </div>
 
     <div class="description">
-        
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">model</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <ul>
-<li>Monitor data model elements</li>
-</ul>
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">elems</code>
-                                    <span class="type"></span>
-                                
-
-                                <div class="param-description">
-                                    <p>[Mixed] All configuration elements are placed at the top level</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-    </div>
-
-
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-        
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-        
-        
-        
-        
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
-            
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods">
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_initialize">initialize</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_onControl">onControl</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_ping_control">ping_control</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_release">release</a>
-
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
-            
-
-            
-
-            
-
-            
-        </div>
-
-        
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method_initialize" class="method item inherited">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l37" title="lib/Probe.js:37">initialize</a>
-    </code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>attributes</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>options</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Probe.html#method_initialize">Probe</a>:
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Initialize the probe</p>
-
-<p>This is called on the probe during construction.  It contains
-the probe initialization attributes and an option to make probe
-construction asynchronous.</p>
-
-<p>Probe implementations can defer the initial response to the monitor until
-the initial state is loaded.  This allows the callback on
-<a href="Monitor.html#method_connect"><code>Monitor.connect()</code></a>
-to have the complete initial state of the probe when called.</p>
-
-<p>If the initial probe state cannot be determined in <code>initialize</code>, it should
-set the <code>options.asyncInit</code> option to <code>true</code>, and call the
-<code>options.callback(error)</code> once the initial state is determined.</p>
-
-<pre class="code"><code class="prettyprint">// Asynchronous initialization
-options.asyncInit = true;
-var callback = options.callback
-</code></pre>
-
-<p>If <code>asyncInit</code> is set to true, the <code>callback</code> must be called once
-the initial state of the probe is known (or in an error condition).</p>
-
-<pre class="code"><code class="prettyprint">// Set the initial state, and call the callback
-this.set(...);
-callback(null);
-</code></pre>
-
-<p>See the <a href="../files/lib_probes_FileProbe.js.html#l47"><code>initialize</code></a>
-method of the <a href="FileProbe.html">FileProbe</a> probe for an example.  It defers
-returning the probe to the monitor until the initial file contents are loaded.</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">attributes</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Initial probe attributes sent in from the Monitor</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">options</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Initialization options</p>
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">asyncInit</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
-                                
-
-                                <div class="param-description">
-                                    <p>Set this to TRUE if the initial probe
-        state can't be known immediately.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">callback</code>
-                                    <span class="type">Function(error)</span>
-                                
-
-                                <div class="param-description">
-                                    <p>The callback to call
-        if asyncInit is set to true.  If an error is passed, the probe
-        will not be used.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_onControl" class="method item inherited">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l92" title="lib/Probe.js:92">onControl</a>
-    </code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>name</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code class="optional">[params]</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code class="optional">[callback]</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Probe.html#method_onControl">Probe</a>:
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Dispatch a control message to the appropriate control function.</p>
-
-<p>This is called when the
-<a href="Monitor.html#method_control"><code>control()</code></a>
-method of a monitor is called.
-The name determines the method name called on the probe.</p>
-
-<p>The probe must implement a method with the name <code>{name}_control()</code>,
-and that method must accept two parameters - an input params and a callback.
-The callback must be called, passing an optional error and response object.</p>
-
-<p>For example, if the probe supports a control with the name <code>go</code>, then
-all it needs to do is implement the <code>go_control()</code> method with the
-proper signature.  See <code>ping_control()</code> for an example.</p>
+        <p>Output a <code>debug</code> log entry</p>
     </div>
 
     
@@ -588,7 +424,7 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
                     
 
                     <div class="param-description">
-                        <p>Name of the control message.</p>
+                        <p>Log entry name</p>
                     </div>
 
                     
@@ -596,7 +432,7 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
             
                 <li class="param">
                     
-                        <code class="param-name optional">[params]</code>
+                        <code class="param-name optional">[...]</code>
                         <span class="type">Any</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
                     
@@ -604,28 +440,7 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
                     
 
                     <div class="param-description">
-                        <p>Input parameters specific to the control message.</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name optional">[callback]</code>
-                        <span class="type">Function(error, response)</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Called to send the message (or error) response.</p>
-
-<ul>
-  <li>error (Any) An object describing an error (null if no errors)</li>
-  <li>response (Any) Response parameters specific to the control message.
-</ul>
+                        <p>Subsequent arguments to add to the log</p>
                     </div>
 
                     
@@ -641,9 +456,9 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
 </div>
 
                 
-                    <div id="method_ping_control" class="method item inherited">
+                    <div id="method_emit" class="method item private">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l131" title="lib/Probe.js:131">ping_control</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l131" title="lib/Log.js:131">emit</a>
     </code></h3>
 
     
@@ -652,13 +467,161 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
             
                 <li class="arg">
                     
-                        <code>params</code>
+                        <code>type</code>
                     
                 </li>
             
                 <li class="arg">
                     
-                        <code>callback</code>
+                        <code>module</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>args</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Send the log to all registered listeners</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The log type (trace, debug, info, etc)</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">module</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The log module name</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The log entry name</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">args</code>
+                        <span class="type">Any</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>All original, starting with the short name</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_trace" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l109" title="lib/Log.js:109">trace</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[...]</code>
                     
                 </li>
             
@@ -681,8 +644,8 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
     <div class="meta">
         
             
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Probe.html#method_ping_control">Probe</a>:
+                
+                <p>
             
         
         </p>
@@ -694,7 +657,7 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
     </div>
 
     <div class="description">
-        <p>Respond to a ping control sent from a monitor</p>
+        <p>Output a <code>trace</code> log entry</p>
     </div>
 
     
@@ -705,14 +668,14 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">params</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Input parameters (not used)</p>
+                        <p>Log entry name</p>
                     </div>
 
                     
@@ -720,19 +683,15 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">callback</code>
-                        <span class="type">Function(error, response)</span>
+                        <code class="param-name optional">[...]</code>
+                        <span class="type">Any</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Called to send the message (or error) response.</p>
-
-<ul>
-  <li>error (Any) An object describing an error</li>
-  <li>response (String) The string 'pong' is returned as the response</li>
-</ul>
+                        <p>Subsequent arguments to add to the log</p>
                     </div>
 
                     
@@ -740,60 +699,6 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
             
             </ul>
         </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_release" class="method item inherited">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l79" title="lib/Probe.js:79">release</a>
-    </code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Probe.html#method_release">Probe</a>:
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Release any resources consumed by this probe.</p>
-
-<p>This can be implemented by derived classes that need to be informed when
-they are to be shut down.</p>
-
-<p>Probes that listen to events should use this method to remove their
-event listeners.</p>
-    </div>
-
     
 
     

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>test&#x2F;ConfigProbeTest.js - monitor-min</title>
+    <title>test&#x2F;LogTest.js - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -131,11 +131,11 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: test&#x2F;ConfigProbeTest.js</h1>
+                        <h1 class="file-heading">File: test&#x2F;LogTest.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-&#x2F;&#x2F; ConfigProbeTest.js (c) 2010-2013 Loren West and other contributors
+&#x2F;&#x2F; LogTest.js (c) 2010-2013 Loren West and other contributors
 &#x2F;&#x2F; May be freely distributed under the MIT license.
 &#x2F;&#x2F; For further details and documentation:
 &#x2F;&#x2F; http:&#x2F;&#x2F;lorenwest.github.com&#x2F;monitor-min
@@ -143,59 +143,51 @@
 
   &#x2F;&#x2F; Dependencies
   var Monitor = require(&#x27;..&#x2F;lib&#x2F;index&#x27;),
-      CONFIG = require(&#x27;config&#x27;),
-      ConfigProbe = Monitor.ConfigProbe,
-      Backbone = Monitor.Backbone, _ = Monitor._;
+      Log = Monitor.Log,
+      log = Monitor.getLogger(&#x27;log-test&#x27;),
+      Backbone = Monitor.Backbone;
 
   &#x2F;**
-  * Monitor Unit Tests
-  *
-  * This module contains unit test classes for each of the core classes, and
-  * some unit tests for baseline probes.
-  *
-  * @module UnitTests
+  * Unit tests for the &lt;a href=&quot;Log.html&quot;&gt;Log&lt;&#x2F;a&gt; class.
+  * @class LogTest
   *&#x2F;
 
   &#x2F;**
-  * Unit tests for the &lt;a href=&quot;Config.html&quot;&gt;Config&lt;&#x2F;a&gt; probe.
-  * @class ConfigTest
-  *&#x2F;
-
-  &#x2F;**
-  * Test group for baseline Config probe functionality
+  * Test group for baseline Log functionality
   *
-  * @method Config
+  * @method Log
   *&#x2F;
-  module.exports[&#x27;Config&#x27;] = {
+  module.exports[&#x27;Log&#x27;] = {
+
+    setUp: function(callback) {callback();},
+    tearDown: function(callback) {callback();},
 
     &#x2F;**
-    * Tests that classes are in correct
-    * @method Config-Classes
+    * Tests that Log class is in place
+    * @method Log-Classes
     *&#x2F;
     Classes: function(test) {
-      test.ok(ConfigProbe.prototype instanceof Backbone.Model, &#x27;The data model is in place&#x27;);
-      test.ok(ConfigProbe.prototype instanceof Monitor.Probe, &#x27;It is a probe&#x27;);
+      test.ok(Log.prototype, &#x27;The Log model is in place&#x27;);
       test.done();
     },
 
     &#x2F;**
-    * Tests the initial config values
-    * @method Config-InitialValues
+    * Tests that registering for &#x27;*&#x27; emits all logs
+    * @method Stat-AllLogs
     *&#x2F;
-    InitialValues: function(test) {
-      var configMonitor = new Monitor({probeClass:&#x27;Config&#x27;});
-      configMonitor.connect(function() {
-        var json = configMonitor.toJSON();
-        test.ok(json.MonitorMin != null, &#x27;Monitor configuration is present&#x27;);
-        test.equal(json.MonitorMin.appName, &#x27;MonitorMin&#x27;, &#x27;The appName parameter has the correct value&#x27;);
-        test.equal(json.MonitorMin.serviceBasePort, 42000, &#x27;The serviceBasePort parameter has the correct value&#x27;);
-        test.equal(json.MonitorMin.portsToScan, 20, &#x27;The portsToScan parameter has the correct value&#x27;);
-        test.equal(json.MonitorMin.allowExternalConnections, false, &#x27;The allowExternalConnections parameter has the correct value&#x27;);
+    AllLogs: function(test) {
+
+      &#x2F;&#x2F; Listen for all logs
+      Log.once(&#x27;*&#x27;, function(log, module, name) {
+        test.equals(log, &#x27;info&#x27;, &#x27;The log type is correct&#x27;);
+        test.equals(module, &#x27;log-test&#x27;, &#x27;found the log-test module when listening to *&#x27;);
+        test.equals(name, &#x27;All logs test&#x27;, &#x27;found the correct log name *&#x27;);
         test.done();
       });
+      log.info(&#x27;All logs test&#x27;, 34);
     }
-  };
 
+  };
 
 }(this));
 

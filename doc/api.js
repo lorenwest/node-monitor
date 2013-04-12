@@ -10,6 +10,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "FileSync",
         "Inspect",
         "InspectTest",
+        "Log",
+        "LogTest",
         "Monitor",
         "MonitorTest",
         "PollingProbe",
@@ -21,6 +23,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "RouterTest",
         "Server",
         "ServerTest",
+        "Stat",
+        "StatTest",
         "Sync",
         "SyncProbe",
         "SyncProbeTest"
