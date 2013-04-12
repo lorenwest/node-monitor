@@ -251,9 +251,6 @@
   * @param [...] {Any} Subsequent arguments to add to the log
   *&#x2F;
 
-
-&#x2F;&#x2F; [&#x27;Trace&#x27;,&#x27;Debug&#x27;,&#x27;Info&#x27;,&#x27;Warn&#x27;,&#x27;Error&#x27;,&#x27;Fatal&#x27;].forEach(
-
   &#x2F;**
   * Output a &#x60;&#x60;&#x60;debug&#x60;&#x60;&#x60; log entry
   *
@@ -261,9 +258,45 @@
   * @param name {String} Log entry name
   * @param [...] {Any} Subsequent arguments to add to the log
   *&#x2F;
-  proto.debug = function(name){
-    Log._emit(&#x27;debug&#x27;, this.module, name, arguments);
-  };
+
+  &#x2F;**
+  * Output a &#x60;&#x60;&#x60;info&#x60;&#x60;&#x60; log entry
+  *
+  * @method info
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  *&#x2F;
+
+  &#x2F;**
+  * Output a &#x60;&#x60;&#x60;warn&#x60;&#x60;&#x60; log entry
+  *
+  * @method warn
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  *&#x2F;
+
+  &#x2F;**
+  * Output a &#x60;&#x60;&#x60;error&#x60;&#x60;&#x60; log entry
+  *
+  * @method error
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  *&#x2F;
+
+  &#x2F;**
+  * Output a &#x60;&#x60;&#x60;fatal&#x60;&#x60;&#x60; log entry
+  *
+  * @method fatal
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  *&#x2F;
+
+  &#x2F;&#x2F; Add a method for each log type
+  [&#x27;trace&#x27;,&#x27;debug&#x27;,&#x27;info&#x27;,&#x27;warn&#x27;,&#x27;error&#x27;,&#x27;fatal&#x27;].forEach(function(method) {
+    proto[method] = function(name) {
+      Log._emit(method, this.module, name, arguments);
+    };
+  });
 
   &#x2F;**
   * Send the log to all registered listeners
@@ -297,10 +330,10 @@
       &#x2F;&#x2F; Test the long name with the regex, and emit if it matches
       if (regex.test(fullName)) {
 
-        &#x2F;&#x2F; Remove the short name from args
-        var otherArgs = _.toArray(args);
-        otherArgs.splice(0,1);
-        Log.emit(eventName, type, module, name, args);
+        &#x2F;&#x2F; Build the arguments as event name, log type, module, name, [other args...]
+        var allArgs = _.toArray(args);
+        allArgs.splice(0, 1, eventName, type, module, name);
+        Log.emit.apply(Log, allArgs);
       }
     }
   };
@@ -311,7 +344,7 @@
   &#x2F;&#x2F; Place the getLogger method into the Monitor namespace
   Monitor.getLogger = function(module) {
     return new Log(module);
-  }
+  };
 
 }(this));
 

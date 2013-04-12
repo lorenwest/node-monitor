@@ -2158,7 +2158,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 120,
+            "line": 117,
             "description": "Output a ```debug``` log entry",
             "itemtype": "method",
             "name": "debug",
@@ -2180,7 +2180,95 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 131,
+            "line": 125,
+            "description": "Output a ```info``` log entry",
+            "itemtype": "method",
+            "name": "info",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Log entry name",
+                    "type": "String"
+                },
+                {
+                    "name": "...",
+                    "description": "Subsequent arguments to add to the log",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "class": "Log",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Log.js",
+            "line": 133,
+            "description": "Output a ```warn``` log entry",
+            "itemtype": "method",
+            "name": "warn",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Log entry name",
+                    "type": "String"
+                },
+                {
+                    "name": "...",
+                    "description": "Subsequent arguments to add to the log",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "class": "Log",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Log.js",
+            "line": 141,
+            "description": "Output a ```error``` log entry",
+            "itemtype": "method",
+            "name": "error",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Log entry name",
+                    "type": "String"
+                },
+                {
+                    "name": "...",
+                    "description": "Subsequent arguments to add to the log",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "class": "Log",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Log.js",
+            "line": 149,
+            "description": "Output a ```fatal``` log entry",
+            "itemtype": "method",
+            "name": "fatal",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Log entry name",
+                    "type": "String"
+                },
+                {
+                    "name": "...",
+                    "description": "Subsequent arguments to add to the log",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "class": "Log",
+            "module": "Monitor"
+        },
+        {
+            "file": "lib/Log.js",
+            "line": 164,
             "description": "Send the log to all registered listeners",
             "access": "private",
             "tagname": "",
@@ -4000,7 +4088,70 @@
             "line": 37,
             "description": "Tests that registering for '*' emits all logs",
             "itemtype": "method",
-            "name": "Stat-AllLogs",
+            "name": "Log-AllLogs",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/LogTest.js",
+            "line": 53,
+            "description": "Tests for the inclusion of multiple arguments in logs",
+            "itemtype": "method",
+            "name": "Log-MultiArg",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/LogTest.js",
+            "line": 73,
+            "description": "Tests for the trace log",
+            "itemtype": "method",
+            "name": "Log-trace",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/LogTest.js",
+            "line": 89,
+            "description": "Tests for the debug log",
+            "itemtype": "method",
+            "name": "Log-debug",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/LogTest.js",
+            "line": 105,
+            "description": "Tests for the info log",
+            "itemtype": "method",
+            "name": "Log-info",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/LogTest.js",
+            "line": 121,
+            "description": "Tests for the warn log",
+            "itemtype": "method",
+            "name": "Log-warn",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/LogTest.js",
+            "line": 137,
+            "description": "Tests for the error log",
+            "itemtype": "method",
+            "name": "Log-error",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/LogTest.js",
+            "line": 153,
+            "description": "Tests for the fatal log",
+            "itemtype": "method",
+            "name": "Log-fatal",
             "class": "LogTest",
             "module": "UnitTests"
         },

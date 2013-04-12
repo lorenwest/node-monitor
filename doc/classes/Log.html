@@ -332,7 +332,31 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_error">error</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_fatal">fatal</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_info">info</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_trace">trace</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_warn">warn</a>
 
                                 
                             </li>
@@ -355,7 +379,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                 
                     <div id="method_debug" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l120" title="lib/Log.js:120">debug</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l117" title="lib/Log.js:117">debug</a>
     </code></h3>
 
     
@@ -458,7 +482,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                 
                     <div id="method_emit" class="method item private">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l131" title="lib/Log.js:131">emit</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l164" title="lib/Log.js:164">emit</a>
     </code></h3>
 
     
@@ -604,6 +628,315 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
 </div>
 
                 
+                    <div id="method_error" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l141" title="lib/Log.js:141">error</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[...]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Output a <code>error</code> log entry</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Log entry name</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[...]</code>
+                        <span class="type">Any</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Subsequent arguments to add to the log</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_fatal" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l149" title="lib/Log.js:149">fatal</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[...]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Output a <code>fatal</code> log entry</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Log entry name</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[...]</code>
+                        <span class="type">Any</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Subsequent arguments to add to the log</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_info" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l125" title="lib/Log.js:125">info</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[...]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Output a <code>info</code> log entry</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Log entry name</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[...]</code>
+                        <span class="type">Any</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Subsequent arguments to add to the log</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_trace" class="method item">
     <h3 class="name"><code>
       <a href="..&#x2F;files&#x2F;lib_Log.js.html#l109" title="lib/Log.js:109">trace</a>
@@ -658,6 +991,109 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
 
     <div class="description">
         <p>Output a <code>trace</code> log entry</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Log entry name</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[...]</code>
+                        <span class="type">Any</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Subsequent arguments to add to the log</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_warn" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l133" title="lib/Log.js:133">warn</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[...]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Output a <code>warn</code> log entry</p>
     </div>
 
     

@@ -173,7 +173,7 @@
 
     &#x2F;**
     * Tests that registering for &#x27;*&#x27; emits all logs
-    * @method Stat-AllLogs
+    * @method Log-AllLogs
     *&#x2F;
     AllLogs: function(test) {
 
@@ -185,6 +185,122 @@
         test.done();
       });
       log.info(&#x27;All logs test&#x27;, 34);
+    },
+
+    &#x2F;**
+    * Tests for the inclusion of multiple arguments in logs
+    * @method Log-MultiArg
+    *&#x2F;
+    MultiArg: function(test) {
+
+      &#x2F;&#x2F; Listen for all logs
+      Log.once(&#x27;*&#x27;, function(log, module, name, hello, number, obj) {
+        test.equals(log, &#x27;error&#x27;, &#x27;The log type is correct&#x27;);
+        test.equals(name, &#x27;MultiArg&#x27;, &#x27;found the correct log name *&#x27;);
+        test.equals(hello, &#x27;hello&#x27;, &#x27;hello arg is found&#x27;);
+        test.equals(number, 34, &#x27;Numeric argument is found&#x27;);
+        test.ok(obj, &#x27;Object argument is found&#x27;);
+        test.equals(obj.there, &#x27;world&#x27;, &#x27;Object elements are intact&#x27;);
+        test.equals(obj.num, 9273, &#x27;Object elements are intact&#x27;);
+        test.done();
+      });
+      log.error(&#x27;MultiArg&#x27;, &#x27;hello&#x27;, 34, {there:&#x27;world&#x27;, num: 9273});
+    },
+
+    &#x2F;**
+    * Tests for the trace log
+    * @method Log-trace
+    *&#x2F;
+    TraceLog: function(test) {
+
+      &#x2F;&#x2F; Listen for trace logs
+      Log.once(&#x27;trace.*&#x27;, function(log, module, name) {
+        test.equals(log, &#x27;trace&#x27;, &#x27;The log type is correct&#x27;);
+        test.equals(module, &#x27;log-test&#x27;, &#x27;found the correct module name&#x27;);
+        test.equals(name, &#x27;traceLog&#x27;, &#x27;found the correct log name&#x27;);
+        test.done();
+      });
+      log.trace(&#x27;traceLog&#x27;);
+    },
+
+    &#x2F;**
+    * Tests for the debug log
+    * @method Log-debug
+    *&#x2F;
+    DebugLog: function(test) {
+
+      &#x2F;&#x2F; Listen for debug logs
+      Log.once(&#x27;*.*.debugLog&#x27;, function(log, module, name) {
+        test.equals(log, &#x27;debug&#x27;, &#x27;The log type is correct&#x27;);
+        test.equals(module, &#x27;log-test&#x27;, &#x27;found the correct module name&#x27;);
+        test.equals(name, &#x27;debugLog&#x27;, &#x27;found the correct log name&#x27;);
+        test.done();
+      });
+      log.debug(&#x27;debugLog&#x27;);
+    },
+
+    &#x2F;**
+    * Tests for the info log
+    * @method Log-info
+    *&#x2F;
+    InfoLog: function(test) {
+
+      &#x2F;&#x2F; Listen for info logs
+      Log.once(&#x27;*.log-test.infoLog&#x27;, function(log, module, name) {
+        test.equals(log, &#x27;info&#x27;, &#x27;The log type is correct&#x27;);
+        test.equals(module, &#x27;log-test&#x27;, &#x27;found the correct module name&#x27;);
+        test.equals(name, &#x27;infoLog&#x27;, &#x27;found the correct log name&#x27;);
+        test.done();
+      });
+      log.info(&#x27;infoLog&#x27;);
+    },
+
+    &#x2F;**
+    * Tests for the warn log
+    * @method Log-warn
+    *&#x2F;
+    WarnLog: function(test) {
+
+      &#x2F;&#x2F; Listen for warn logs
+      Log.once(&#x27;*.log-test.*&#x27;, function(log, module, name) {
+        test.equals(log, &#x27;warn&#x27;, &#x27;The log type is correct&#x27;);
+        test.equals(module, &#x27;log-test&#x27;, &#x27;found the correct module name&#x27;);
+        test.equals(name, &#x27;warnLog&#x27;, &#x27;found the correct log name&#x27;);
+        test.done();
+      });
+      log.warn(&#x27;warnLog&#x27;);
+    },
+
+    &#x2F;**
+    * Tests for the error log
+    * @method Log-error
+    *&#x2F;
+    ErrorLog: function(test) {
+
+      &#x2F;&#x2F; Listen for error logs
+      Log.once(&#x27;error.log-test.errorLog&#x27;, function(log, module, name) {
+        test.equals(log, &#x27;error&#x27;, &#x27;The log type is correct&#x27;);
+        test.equals(module, &#x27;log-test&#x27;, &#x27;found the correct module name&#x27;);
+        test.equals(name, &#x27;errorLog&#x27;, &#x27;found the correct log name&#x27;);
+        test.done();
+      });
+      log.error(&#x27;errorLog&#x27;);
+    },
+
+    &#x2F;**
+    * Tests for the fatal log
+    * @method Log-fatal
+    *&#x2F;
+    FatalLog: function(test) {
+
+      &#x2F;&#x2F; Listen for fatal logs
+      Log.once(&#x27;{error,fatal}.*.fatal[Ll]og&#x27;, function(log, module, name) {
+        test.equals(log, &#x27;fatal&#x27;, &#x27;The log type is correct&#x27;);
+        test.equals(module, &#x27;log-test&#x27;, &#x27;found the correct module name&#x27;);
+        test.equals(name, &#x27;fatalLog&#x27;, &#x27;found the correct log name&#x27;);
+        test.done();
+      });
+      log.fatal(&#x27;fatalLog&#x27;);
     }
 
   };
