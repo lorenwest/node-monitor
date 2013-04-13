@@ -164,6 +164,23 @@
         test.done();
       });
       log.fatal('fatalLog');
+    },
+
+    /**
+    * Make sure a stat is output for every log
+    * @method Log-Stat
+    */
+    Stat: function(test) {
+
+      // Listen for the stat
+      Monitor.Stat.once('*', function(module, name, value, type) {
+        test.equals(module, 'Log', 'The stat module is correct');
+        test.equals(name, 'info.log-test.Checking for stat emission', 'found the correct stat name');
+        test.equals(value, 1, 'Correctly incremented the log stat by 1');
+        test.equals(type, 'c', 'Correct stat type - counter');
+        test.done();
+      });
+      log.info('Checking for stat emission');
     }
 
   };
