@@ -483,10 +483,12 @@
     *&#x2F;
     determineConnection: function(monitorJSON, makeNewConnections, callback) {
       var t = this, connection = null, probeClass = monitorJSON.probeClass,
-          hostName = monitorJSON.hostName, appName = monitorJSON.appName,
+          hostName = monitorJSON.hostName,
+          appName = monitorJSON.appName,
           appInstance = monitorJSON.appInstance,
           thisHostName = t.getHostName().toLowerCase(),
-          thisAppName = Config.appName;
+          thisAppName = Config.appName,
+          thisAppInstance = typeof process !== &#x27;undefined&#x27; ? process.env.NODE_APP_INSTANCE : &#x27;1&#x27;;
 
       &#x2F;&#x2F; Return a found connection immediately if it&#x27;s connected.
       &#x2F;&#x2F; If connecting, wait for connection to complete.
@@ -534,7 +536,10 @@
 
       &#x2F;&#x2F; Connect with this process (internally)?
       hostName = hostName ? hostName.toLowerCase() : null;
-      if ((!hostName || hostName === thisHostName) &amp;&amp; (!appName || appName === thisAppName)) {
+      var thisHost = (!hostName || hostName === thisHostName);
+      var thisApp = (!appName || appName === thisAppName);
+      var thisInstance = (!appInstance || appInstance === thisAppInstance);
+      if (thisHost &amp;&amp; thisApp &amp;&amp; thisInstance) {
 
         &#x2F;&#x2F; Connect internally if the probe is available
         if (Probe.classes[probeClass] != null) {
@@ -603,7 +608,7 @@
     * @protected
     * @param hostName {String} - Host name to find a connection for (null = any host)
     * @param appName {String} - App name to find a connection with (null = any app)
-    * @param appInstance {Integer} - Index into the list of hostName&#x2F;appName matches (default: 0)
+    * @param appInstance {Any} - Application instance running on this host (null = any instance)
     * @return connection {Connection} - A Connection object if found, otherwise null
     *&#x2F;
     findConnection: function(hostName, appName, appInstance) {
@@ -613,15 +618,11 @@
         &#x2F;&#x2F; Host or app matches if not specified or if specified and equal
         var matchesHost = !hostName || conn.isThisHost(hostName);
         var matchesApp = !appName || appName === conn.get(&#x27;remoteAppName&#x27;);
+        var matchesInstance = !appInstance || appInstance === conn.get(&#x27;remoteAppInstance&#x27;);
         var remoteFirewall = conn.get(&#x27;remoteFirewall&#x27;);
 
         &#x2F;&#x2F; This is a match if host + app + instance matches, and it&#x27;s not firewalled
-        if (!remoteFirewall &amp;&amp; matchesHost &amp;&amp; matchesApp) {
-          return (thisInstance++ === appInstance);
-        }
-
-        &#x2F;&#x2F; No match
-        return false;
+        return (!remoteFirewall &amp;&amp; matchesHost &amp;&amp; matchesApp &amp;&amp; matchesInstance);
       });
     },
 

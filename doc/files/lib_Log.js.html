@@ -146,6 +146,7 @@
   var Monitor = root.Monitor || require(&#x27;.&#x2F;Monitor&#x27;),
       EventEmitter = require(&#x27;events&#x27;).EventEmitter,
       Stat = Monitor.Stat,
+      stat = new Stat(&#x27;Log&#x27;),
       _ = Monitor._;
 
   &#x2F;**
@@ -157,22 +158,6 @@
   * usage with minimum concern for overhead.  Runtime monitoring can be as chatty
   * as desired, outputting every log statement of every type, or finely tuned
   * with regular expressions to monitor specific log statements.
-  *
-  * It can be used as a log4js appender so your existing application logs can
-  * be monitored:
-  *
-  *     var log4js = require(&#x27;log4js&#x27;);
-  *     var appender = require(&#x27;monitor-min&#x27;).log4jsAppender;
-  *     log4js.addAppender(appender);
-  *
-  * This requires the log4js package to be available to the application, as
-  * monitor-min doesn&#x27;t include log4js if your app doesn&#x27;t use it.
-  *
-  * It can also be used directly with a log4js-style calling pattern:
-  *
-  *     var log = require(&#x27;monitor-min&#x27;).getLogger(&#x27;myModule&#x27;);
-  *     ...
-  *     log.warn(&#x27;Customer credit limit exceeded&#x27;);
   *
   * Log Collector
   * -------------
@@ -311,15 +296,13 @@
   *&#x2F;
   Log._emit = function(type, module, name, args) {
     var eventName,
-        fullName;
+        fullName = type + &#x27;.&#x27; + module + &#x27;.&#x27; + name;
+
+    &#x2F;&#x2F; Output a counter stat for this log
+    stat.increment(fullName);
 
     &#x2F;&#x2F; Test the name against all registered events
     for (eventName in Log._events) {
-
-      &#x2F;&#x2F; Build the full name only if someone is listening
-      if (!fullName) {
-        fullName = type + &#x27;.&#x27; + module + &#x27;.&#x27; + name;
-      }
 
       &#x2F;&#x2F; Get the regex associated with the name (using the Stat package)
       var regex = Log.eventRegex[eventName];

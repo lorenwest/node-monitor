@@ -212,9 +212,12 @@
   *       If not set, the Router will connect with the first host capable of running this probe.
   *     @param [model.appName] {String} Application name the probe is (or will) run within.
   *       If not set, the Router will disregard the appName of the process it is connecting with.
-  *     @param [model.appInstance=0] {Integer} Index into the list of hostName&#x2F;appName matches.
-  *       If not set, the Router will connect to the first hostName&#x2F;appName combination.
-  *       This can be useful for connecting with a specific instance of a multi-process application.
+  *     @param [model.appInstance] {String} Application instance ID the probe is (or will) run within.
+  *       If not set, the Router will disregard the appInstance of the process it is connecting with.
+  *       Application instances can (should) set the $NODE_APP_INSTANCE environment
+  *       variable prior to running to uniquely identify their unique instance within a
+  *       server or network.  If this variable is not set prior to running the
+  *       app, node-monitor will assign a unique ID among other running apps on the host.
   *     @param model.probeId {String} ID of the probe this is monitoring (once connected). READONLY
   *     @param model.PROBE_PARAMS... {(defined by the probe)} ... all other &lt;strong&gt;&#x60;&#x60;&#x60;model&#x60;&#x60;&#x60;&lt;&#x2F;strong&gt; parameters are READONLY parameters of the connected probe
   *&#x2F;
@@ -243,7 +246,7 @@
       initParams: {},
       hostName: &#x27;&#x27;,
       appName: &#x27;&#x27;,
-      appInstance: 0
+      appInstance: &#x27;&#x27;
     },
     initialize: function(params, options) {},
 
@@ -577,7 +580,7 @@
   * @param monitorJSON [Object] JSON object containing the following
   *     @param hostName {String} The host to monitor
   *     @param [appName] {String} The app name running on the host
-  *     @param [appInstance] {Integer} The instance of this app on the host
+  *     @param [appInstance] {String} The application instance ID running on the host
   * @return {String} A string representation of the monitor server
   *&#x2F;
   Monitor.toServerString = function(monitorJSON) {

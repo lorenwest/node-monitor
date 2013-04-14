@@ -139,7 +139,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;lib_Log.js.html#l14"><code>lib&#x2F;Log.js:14</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;lib_Log.js.html#l15"><code>lib&#x2F;Log.js:15</code></a>
         </div>
     
 
@@ -163,24 +163,6 @@
 usage with minimum concern for overhead.  Runtime monitoring can be as chatty
 as desired, outputting every log statement of every type, or finely tuned
 with regular expressions to monitor specific log statements.</p>
-
-<p>It can be used as a log4js appender so your existing application logs can
-be monitored:</p>
-
-<pre class="code"><code class="prettyprint">var log4js = require('log4js');
-var appender = require('monitor-min').log4jsAppender;
-log4js.addAppender(appender);
-</code></pre>
-
-<p>This requires the log4js package to be available to the application, as
-monitor-min doesn't include log4js if your app doesn't use it.</p>
-
-<p>It can also be used directly with a log4js-style calling pattern:</p>
-
-<pre class="code"><code class="prettyprint">var log = require('monitor-min').getLogger('myModule');
-...
-log.warn('Customer credit limit exceeded');
-</code></pre>
 
 <h2>Log Collector</h2>
 
@@ -247,7 +229,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
         <h2>Constructor</h2>
         <div id="method_Log" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l14" title="lib/Log.js:14">Log</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l15" title="lib/Log.js:15">Log</a>
     </code></h3>
 
     
@@ -379,7 +361,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                 
                     <div id="method_debug" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l117" title="lib/Log.js:117">debug</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l102" title="lib/Log.js:102">debug</a>
     </code></h3>
 
     
@@ -482,7 +464,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                 
                     <div id="method_emit" class="method item private">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l164" title="lib/Log.js:164">emit</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l149" title="lib/Log.js:149">emit</a>
     </code></h3>
 
     
@@ -630,7 +612,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                 
                     <div id="method_error" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l141" title="lib/Log.js:141">error</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l126" title="lib/Log.js:126">error</a>
     </code></h3>
 
     
@@ -733,7 +715,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                 
                     <div id="method_fatal" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l149" title="lib/Log.js:149">fatal</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l134" title="lib/Log.js:134">fatal</a>
     </code></h3>
 
     
@@ -836,7 +818,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                 
                     <div id="method_info" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l125" title="lib/Log.js:125">info</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l110" title="lib/Log.js:110">info</a>
     </code></h3>
 
     
@@ -939,7 +921,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                 
                     <div id="method_trace" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l109" title="lib/Log.js:109">trace</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l94" title="lib/Log.js:94">trace</a>
     </code></h3>
 
     
@@ -1042,7 +1024,7 @@ volatile makes it easier to turn statistics recording on for all logs.</p>
                 
                     <div id="method_warn" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l133" title="lib/Log.js:133">warn</a>
+      <a href="..&#x2F;files&#x2F;lib_Log.js.html#l118" title="lib/Log.js:118">warn</a>
     </code></h3>
 
     

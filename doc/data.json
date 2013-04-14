@@ -872,6 +872,12 @@
                             "optional": true
                         },
                         {
+                            "name": "remoteAppInstance",
+                            "description": "The remote application instance ID running on the host.",
+                            "type": "Integer READONLY",
+                            "optional": true
+                        },
+                        {
                             "name": "remotePID",
                             "description": "Remote process ID.",
                             "type": "String READONLY",
@@ -910,8 +916,8 @@
             "module": "Monitor",
             "namespace": "",
             "file": "lib/Log.js",
-            "line": 14,
-            "description": "A lightweight component for sending and gathering logs\n\nThis is both a collector and emitter for application logs.\n\nIt's designed with low development and runtime cost in mind, encouraging\nusage with minimum concern for overhead.  Runtime monitoring can be as chatty\nas desired, outputting every log statement of every type, or finely tuned\nwith regular expressions to monitor specific log statements.\n\nIt can be used as a log4js appender so your existing application logs can\nbe monitored:\n\n    var log4js = require('log4js');\n    var appender = require('monitor-min').log4jsAppender;\n    log4js.addAppender(appender);\n\nThis requires the log4js package to be available to the application, as\nmonitor-min doesn't include log4js if your app doesn't use it.\n\nIt can also be used directly with a log4js-style calling pattern:\n\n    var log = require('monitor-min').getLogger('myModule');\n    ...\n    log.warn('Customer credit limit exceeded');\n\nLog Collector\n-------------\n\nAs a collector, it's a place to send application logs.\n\nExample for outputting a log in your application:\n\n    var log = require('monitor-min').getLogger('myModule');\n    ...\n    log.info('Credit accepted', limit, requestedAmount);\n\nThe above is a request to output an ```info``` log for ```myModule``` named\n```Credit limit accepted```.  The log entry includes all additional parameters,\nin this case the customer credit limit and the reqeusted amount.\n\nThe full name for this log entry is: ```\"info.myModule.Credit limit accepted\"```\nThe name is important, as monitors can be configured to output logs based\non this name.\n\nBest practices are to include dynamic parameters in extra arguments\nvs. concatenating strings.  This reduces logging overhead, especially\nfor log statements that aren't currently being watched.\n\nLog Emitter\n-----------\nAs an emitter, the Log module is a place to capture logging output.\n\nWhen listening for log entries, wildcards can be used to register for\nparticular log types and entries.\n\n    var Log = require('monitor-min').Log;\n    ...\n    Log.on('info.myModule.*', myFunction);\n\nWill call ```myFunction``` when all ```info.myModule.*``` logs are emitted.\n\nListeners are invoked with the following arguments:\n\n- type - The log type (info, trace, warn, etc.)\n- module - The logger module name\n- name - The log entry name\n- args... - Additional arguments passed into the log entry are passed on\n            as additional args to the event listener.\n\nWildcards\n---------\nA flexible and user-oriented wildcard pattern is used for monitoring\nlogs.  The pattern is described in the <a href=\"Stat.html#wildcards\">Wildcard secttion of the Stats class</a>.\n\nChoosing Good Names\n-------------------\nIt's a good idea to pick a good naming scheme with each dot-delimited segment\nhaving a consistent, well-defined purpose.  Volatile segments should be as deep\ninto the hierarchy (furthest right) as possible.  Keeping the names less\nvolatile makes it easier to turn statistics recording on for all logs.",
+            "line": 15,
+            "description": "A lightweight component for sending and gathering logs\n\nThis is both a collector and emitter for application logs.\n\nIt's designed with low development and runtime cost in mind, encouraging\nusage with minimum concern for overhead.  Runtime monitoring can be as chatty\nas desired, outputting every log statement of every type, or finely tuned\nwith regular expressions to monitor specific log statements.\n\nLog Collector\n-------------\n\nAs a collector, it's a place to send application logs.\n\nExample for outputting a log in your application:\n\n    var log = require('monitor-min').getLogger('myModule');\n    ...\n    log.info('Credit accepted', limit, requestedAmount);\n\nThe above is a request to output an ```info``` log for ```myModule``` named\n```Credit limit accepted```.  The log entry includes all additional parameters,\nin this case the customer credit limit and the reqeusted amount.\n\nThe full name for this log entry is: ```\"info.myModule.Credit limit accepted\"```\nThe name is important, as monitors can be configured to output logs based\non this name.\n\nBest practices are to include dynamic parameters in extra arguments\nvs. concatenating strings.  This reduces logging overhead, especially\nfor log statements that aren't currently being watched.\n\nLog Emitter\n-----------\nAs an emitter, the Log module is a place to capture logging output.\n\nWhen listening for log entries, wildcards can be used to register for\nparticular log types and entries.\n\n    var Log = require('monitor-min').Log;\n    ...\n    Log.on('info.myModule.*', myFunction);\n\nWill call ```myFunction``` when all ```info.myModule.*``` logs are emitted.\n\nListeners are invoked with the following arguments:\n\n- type - The log type (info, trace, warn, etc.)\n- module - The logger module name\n- name - The log entry name\n- args... - Additional arguments passed into the log entry are passed on\n            as additional args to the event listener.\n\nWildcards\n---------\nA flexible and user-oriented wildcard pattern is used for monitoring\nlogs.  The pattern is described in the <a href=\"Stat.html#wildcards\">Wildcard secttion of the Stats class</a>.\n\nChoosing Good Names\n-------------------\nIt's a good idea to pick a good naming scheme with each dot-delimited segment\nhaving a consistent, well-defined purpose.  Volatile segments should be as deep\ninto the hierarchy (furthest right) as possible.  Keeping the names less\nvolatile makes it easier to turn statistics recording on for all logs.",
             "is_constructor": 1
         },
         "Monitor": {
@@ -965,10 +971,9 @@
                         },
                         {
                             "name": "appInstance",
-                            "description": "Index into the list of hostName/appName matches.\n      If not set, the Router will connect to the first hostName/appName combination.\n      This can be useful for connecting with a specific instance of a multi-process application.",
-                            "type": "Integer",
-                            "optional": true,
-                            "optdefault": "0"
+                            "description": "Application instance ID the probe is (or will) run within.\n      If not set, the Router will disregard the appInstance of the process it is connecting with.\n      Application instances can (should) set the $NODE_APP_INSTANCE environment\n      variable prior to running to uniquely identify their unique instance within a\n      server or network.  If this variable is not set prior to running the\n      app, node-monitor will assign a unique ID among other running apps on the host.",
+                            "type": "String",
+                            "optional": true
                         },
                         {
                             "name": "probeId",
@@ -1079,7 +1084,7 @@
             "module": "Monitor",
             "namespace": "",
             "file": "lib/Stat.js",
-            "line": 27,
+            "line": 14,
             "description": "A lightweight component for sending and gathering stats\n\nThis is both a collector and emitter for application statistics.\n\nIt's designed with low development and runtime cost in mind, encouraging\nusage with minimum concern for overhead.\n\nStat Collector\n--------------\n\nAs a collector, it's a place to send application stats as they're discovered.\n\nExample for incrementing a stat in your application:\n\n    var stat = require('monitor-min').getStatLogger('myModule');\n    ...\n    stat.increment('requests.inbound');\n\nThe above is a request to increment the ```myModule.requests.inbound``` stat.\nIt peforms work only if someone is listening for that event.\n\nStat Emitter\n-------------\nAs an emitter, Stat is a place to gather stats as they're collected.\n\nWhen listening for stats, wildcards can be used to register for many stats\nwithin a group. For example, the following call:\n\n    var Stat = require('monitor-min').Stat;\n    Stat.on('myModule.*.timer', myFunction);\n\nWill call ```myFunction``` when all ```myModule.*.timer``` stats are emitted.\n\nListeners are invoked with 4 arguments:\n\n- module - The statLogger module name\n- name - The name of the stat that just fired\n- value - The numeric value passed\n- type - An enumeration of the types of stats:<br/>\n  'c'  - Counter.  Add (or subtract) the value to (or from) the prior value<br/>\n  'g'  - Gague.  Value is to be recorded as provided<br/>\n  'ms' - Timer.  Millisecond amount of time something took.\n\n<h2 id=\"wildcards\">Wildcards</h2>\n\nThe following wildcards are allowed for registering events.  They're\nmodeled after the graphite wildcard syntax (from the\n<a href=\"https://graphite.readthedocs.org/en/latest/render_api.html#paths-and-wildcards\">graphite docs</a>):\n\n#### Delimiter\nThe period (.) character is literal, and matches name segment separators.\n\n#### Asterisk\nThe asterisk (*) matches zero or more characters. It is non-greedy, so you\ncan have more than one within a single path element.\n\nExample: servers.ix\\*ehssvc\\*v.cpu.total.\\* will return all total CPU metrics\nfor all servers matching the given name pattern.\n\nAn asterisk at the far right of the pattern matches everything to the right,\nincluding all path segments.  For example, ```servers.*``` matches all\nnames beginning with ```servers.```.\n\n#### Character list or range\nCharacters in square brackets ([...]) specify a single character position in\nthe path string, and match if the character in that position matches one of\nthe characters in the list or range.\n\nA character range is indicated by 2 characters separated by a dash (-), and\nmeans that any character between those 2 characters (inclusive) will match.\nMore than one range can be included within the square brackets, e.g. foo[a-z0-9]bar\nwill match foopbar, foo7bar etc..\n\nIf the characters cannot be read as a range, they are treated as a\nlist - any character in the list will match, e.g. foo[bc]ar will match\nfoobar and foocar. If you want to include a dash (-) in your list, put\nit at the beginning or end, so it's not interpreted as a range.\n\n#### Value list\nComma-separated values within curly braces ({foo,bar,...}) are treated as\nvalue lists, and match if any of the values matches the current point in\nthe path. For example, servers.ix01ehssvc04v.cpu.total.{user,system,iowait}\nwill match the user, system and I/O wait total CPU metrics for the specified\nserver.\n\n#### Javascript Regex\nFor finer grained expression matching, a javascript style regex can be\nspecified using the ```/.../``` syntax.  This style spans the entire identifier.\nYou can ignore case using the ```/.../i``` syntax.  If the first character of the\nstring is a slash, it considers the string a javascript regular expression.\n\nChoosing Good Names\n-------------------\nIt's a good idea to pick a good naming scheme with each dot-delimited segment\nhaving a consistent, well-defined purpose.  Volatile segments should be as deep\ninto the hierarchy (furthest right) as possible.  Keeping the names less\nvolatile makes it easier to turn recording on for all statistics.",
             "is_constructor": 1
         },
@@ -1877,7 +1882,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 51,
+            "line": 52,
             "description": "Connected to remote monitor process\n\nThis event is emitted after the two sides of the connection have exchanged\ninformation about themselves.",
             "itemtype": "event",
             "name": "connect",
@@ -1886,7 +1891,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 101,
+            "line": 112,
             "description": "Ping a remote connection",
             "itemtype": "method",
             "name": "ping",
@@ -1902,7 +1907,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 118,
+            "line": 129,
             "description": "Disconnect from the remote process\n\nThis can be called from the underlying transport if it detects a disconnect,\nor it can be manually called to force a disconnect.",
             "itemtype": "method",
             "name": "disconnect",
@@ -1918,7 +1923,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 127,
+            "line": 138,
             "description": "<strong>Disconnected from a remote monitor process</strong>\n\nThis event is emitted after the remote connection is disconnected and\nresources released.",
             "itemtype": "event",
             "name": "disconnect",
@@ -1934,7 +1939,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 151,
+            "line": 162,
             "description": "Is this connection with the specified host?",
             "itemtype": "method",
             "name": "isThisHost",
@@ -1956,7 +1961,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 167,
+            "line": 178,
             "description": "Emit the specified message to the socket.\n\nThe other side of the connection can handle and respond to the message\nusing the 'on' method.",
             "itemtype": "method",
             "name": "emit",
@@ -1984,7 +1989,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 184,
+            "line": 195,
             "description": "Bind the specified handler to the remote socket message.\n\nOnly a single handler (per message name) can be bound using this method.",
             "itemtype": "method",
             "name": "addEvent",
@@ -2007,7 +2012,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 229,
+            "line": 240,
             "description": "An error has occurred on the connection\n\nThis event is triggered when an error occurs on the connection.  Errors\nmay occur when network is unstable, and can be an indication of impending\ndisconnection.",
             "itemtype": "event",
             "name": "error",
@@ -2023,7 +2028,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 290,
+            "line": 309,
             "description": "Process an inbound request to connect with a probe\n\nThis will fail if this connection was created as a firewall.",
             "itemtype": "method",
             "name": "probeConnect",
@@ -2068,7 +2073,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 342,
+            "line": 361,
             "description": "Process an inbound request to disconnect with a probe",
             "itemtype": "method",
             "name": "probeDisconnect",
@@ -2091,7 +2096,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 383,
+            "line": 402,
             "description": "Process an inbound control request to a probe",
             "itemtype": "method",
             "name": "probeControl",
@@ -2114,7 +2119,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 423,
+            "line": 442,
             "description": "Constructor for a list of Connection objects\n\n    var myList = new Connection.List(initialElements);",
             "static": 1,
             "itemtype": "method",
@@ -2136,7 +2141,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 109,
+            "line": 94,
             "description": "Output a ```trace``` log entry",
             "itemtype": "method",
             "name": "trace",
@@ -2158,7 +2163,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 117,
+            "line": 102,
             "description": "Output a ```debug``` log entry",
             "itemtype": "method",
             "name": "debug",
@@ -2180,7 +2185,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 125,
+            "line": 110,
             "description": "Output a ```info``` log entry",
             "itemtype": "method",
             "name": "info",
@@ -2202,7 +2207,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 133,
+            "line": 118,
             "description": "Output a ```warn``` log entry",
             "itemtype": "method",
             "name": "warn",
@@ -2224,7 +2229,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 141,
+            "line": 126,
             "description": "Output a ```error``` log entry",
             "itemtype": "method",
             "name": "error",
@@ -2246,7 +2251,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 149,
+            "line": 134,
             "description": "Output a ```fatal``` log entry",
             "itemtype": "method",
             "name": "fatal",
@@ -2268,7 +2273,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 164,
+            "line": 149,
             "description": "Send the log to all registered listeners",
             "access": "private",
             "tagname": "",
@@ -2302,7 +2307,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 84,
+            "line": 87,
             "description": "Receive real time notifications from the probe\n\nWhen the probe data model changes, all changed attributes are forwarded\nto monitors, triggering this event.\n\nAll probe attributes are available in the monitor, and the\ngetChangedAttributes() method returns the list of attributes changed\nsince the last change event.\n\n    myMonitor.on('change', function(){\n      console.log('Changes:', myMonitor.getChangedAttributes());\n    });",
             "itemtype": "event",
             "name": "change",
@@ -2311,7 +2316,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 113,
+            "line": 116,
             "description": "Connect the monitor to the remote probe\n\nUpon connection, the monitor data model is a proxy of the current state\nof the probe.",
             "itemtype": "method",
             "name": "connect",
@@ -2327,7 +2332,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 122,
+            "line": 125,
             "description": "The monitor has successfully connected with the probe",
             "itemtype": "event",
             "name": "connect",
@@ -2336,7 +2341,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 144,
+            "line": 147,
             "description": "Get the connection to the remote probe\n\nThis method returns the Connection object that represents the remote\nserver used for communicating with the connected probe.\n\nIf the probe is running internally or the monitor isn't currently\nconnected, this will return null.",
             "itemtype": "method",
             "name": "getConnection",
@@ -2349,7 +2354,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 161,
+            "line": 164,
             "description": "Is the monitor currently connected?",
             "itemtype": "method",
             "name": "isConnected",
@@ -2362,7 +2367,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 172,
+            "line": 175,
             "description": "Disconnect from the remote probe\n\nThis should be called when the monitor is no longer needed.\nIt releases resources associated with monitoring the probe.\n\nIf this was the last object monitoring the probe, the probe will be\nstopped, releasing resources associated with running the probe.",
             "itemtype": "method",
             "name": "disconnect",
@@ -2378,7 +2383,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 184,
+            "line": 187,
             "description": "The monitor has disconnected from the probe",
             "itemtype": "event",
             "name": "disconnect",
@@ -2394,7 +2399,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 202,
+            "line": 205,
             "description": "Send a control message to the probe.\n\nMonitors can use this method to send a message and receive a response\nfrom a connected probe.\n\nThe probe must implement the specified control method.  All probes are\nderived from the base <a href=\"Probe.html\">Probe</a> class, which offers\na ping control.\n\nTo send a ping message to a probe and log the results:\n\n    var myMonitor.control('ping', console.log);",
             "itemtype": "method",
             "name": "control",
@@ -2422,7 +2427,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 240,
+            "line": 243,
             "description": "Produce an object without monitor attributes\n\nA Monitor object contains a union of the connection attributes required for\na Monitor, and the additional attributes defined by the probe it's monitoring.\n\nThis method produces an object containing only the probe portion of\nthose attributes.\n\nThe id attribute of the returned JSON is set to the probeId from\nthe monitor.",
             "itemtype": "method",
             "name": "toProbeJSON",
@@ -2443,7 +2448,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 269,
+            "line": 272,
             "description": "Produce an object with the monitor only attributes.\n\nA Monitor object contains a union of the connection attributes required for\na Monitor, and the additional attributes defined by the probe it's monitoring.\n\nThis method produces an object containing only the monitor portion of\nthose attributes.",
             "itemtype": "method",
             "name": "toMonitorJSON",
@@ -2464,7 +2469,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 295,
+            "line": 298,
             "description": "Produce a server string representation of the hostName:appName:appInstance\n\nDepending on the presence of the appName and appInstance, this will produce\none of the following:\n\n    hostName\n    hostName:appName\n    hostName:appName:appInstance",
             "itemtype": "method",
             "name": "toServerString",
@@ -2477,7 +2482,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 318,
+            "line": 321,
             "description": "Generate a unique UUID-v4 style string\n\nThis is a cross-platform UUID implementation used to uniquely identify\nmodel instances.  It is a random number based UUID, and as such can't be\nguaranteed unique.",
             "static": 1,
             "access": "protected",
@@ -2493,7 +2498,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 336,
+            "line": 339,
             "description": "Generate a unique ID for a collection\n\nThis generates an ID to be used for new elements of the collection,\nassuring they don't clash with other elements in the collection.",
             "itemtype": "method",
             "name": "Monitor.generateUniqueCollectionId",
@@ -2519,7 +2524,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 366,
+            "line": 369,
             "description": "Get the default router (an application singleton)\n\nThis instantiates a Router on first call.",
             "static": 1,
             "access": "protected",
@@ -2535,7 +2540,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 396,
+            "line": 399,
             "description": "Start a monitor server in this process\n\nThis is a shortand for the following:\n\n    var Monitor = require('monitor-min');\n    var server = new Monitor.Server();\n    server.start();\n\nFor more fine-tuned starting, see the <a href=\"Server.html\">Server</a> api.",
             "static": 1,
             "itemtype": "method",
@@ -2564,7 +2569,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 418,
+            "line": 421,
             "description": "Stop a started monitor server in this process",
             "static": 1,
             "itemtype": "method",
@@ -2581,7 +2586,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 429,
+            "line": 432,
             "description": "Produce a server string representation of the hostName:appName:appInstance\n\nDepending on the presence of the appName and appInstance, this will produce\none of the following:\n\n    hostName\n    hostName:appName\n    hostName:appName:appInstance",
             "itemtype": "method",
             "name": "toServerString",
@@ -2603,8 +2608,8 @@
                 },
                 {
                     "name": "appInstance",
-                    "description": "The instance of this app on the host",
-                    "type": "Integer",
+                    "description": "The application instance ID running on the host",
+                    "type": "String",
                     "optional": true
                 }
             ],
@@ -2617,7 +2622,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 457,
+            "line": 460,
             "description": "Produce a depth-limited copy of the specified object\n\nFunctions are copied for visual inspection purposes - the fact that\nthey are a function, and any prototype members.  This is so a JSON.stringify\nof the result will show the functions (normally JSON.stringify doesn't output\nfunctions).\n\nThis method is mostly for debugging - for producing a human-readable stream\nrepresentation of the object.  It is an exact copy, except for elements of\ntype function.",
             "itemtype": "method",
             "name": "deepCopy",
@@ -2644,7 +2649,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 529,
+            "line": 532,
             "description": "Produce a recursion-safe JSON string.\n\nThis method recurses the specified object to a maximum specified depth\n(default 4).\n\nIt also indents sub-objects for debugging output.  The indent level can be\nspecified, or set to 0 for no indentation.\n\nThis is mostly useful in debugging when the standard JSON.stringify\nreturns an error.",
             "itemtype": "method",
             "name": "stringify",
@@ -2678,7 +2683,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 557,
+            "line": 560,
             "description": "Constructor for a list of Monitor objects\n\n    var myList = new Monitor.List(initialElements);",
             "static": 1,
             "itemtype": "method",
@@ -3122,7 +3127,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 457,
+            "line": 462,
             "description": "Find an existing connection to use\n\nThis method looks into the existing known connections to find one\nthat matches the specified parameters.\n\nFirewalled connections are not returned.",
             "itemtype": "method",
             "name": "findConnection",
@@ -3141,8 +3146,8 @@
                 },
                 {
                     "name": "appInstance",
-                    "description": "- Index into the list of hostName/appName matches (default: 0)",
-                    "type": "Integer"
+                    "description": "- Application instance running on this host (null = any instance)",
+                    "type": "Any"
                 }
             ],
             "return": {
@@ -3154,7 +3159,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 491,
+            "line": 492,
             "description": "Find all connections matching the selection criteria\n\nThis method looks into the existing known connections to find all\nthat match the specified parameters.\n\nFirewalled connections are not returned.",
             "itemtype": "method",
             "name": "findConnections",
@@ -3181,7 +3186,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 519,
+            "line": 520,
             "description": "Add connections for the specified host\n\nThis performs a scan of monitor ports on the server, and adds connections\nfor newly discovered servers.",
             "itemtype": "method",
             "name": "addHostConnections",
@@ -3204,7 +3209,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 563,
+            "line": 564,
             "description": "Connect to an internal probe implementation\n\nThis connects with a probe running in this process.  It will instantiate\nthe probe if it isn't currently running.",
             "itemtype": "method",
             "name": "connectInternal",
@@ -3239,7 +3244,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 646,
+            "line": 647,
             "description": "Disconnect with an internal probe implementation.",
             "itemtype": "method",
             "name": "disconnectInternal",
@@ -3262,7 +3267,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 668,
+            "line": 669,
             "description": "Connect to an external probe implementation.\n\nThis connects with a probe running in another process.  It will\ncoordinate the remote instantiation of the probe if it's not running.",
             "itemtype": "method",
             "name": "connectExternal",
@@ -3302,7 +3307,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 725,
+            "line": 726,
             "description": "Disconnect with an external probe implementation.",
             "itemtype": "method",
             "name": "disconnectExternal",
@@ -3381,7 +3386,7 @@
         },
         {
             "file": "lib/Server.js",
-            "line": 127,
+            "line": 134,
             "description": "Bind incoming socket events to the server\n\nThis method binds to the socket events and attaches the socket.io\nserver.  It is called when the connection starts listening.",
             "access": "protected",
             "tagname": "",
@@ -3399,7 +3404,7 @@
         },
         {
             "file": "lib/Server.js",
-            "line": 174,
+            "line": 181,
             "description": "Stop processing inbound monitor traffic\n\nThis method stops accepting new inbound monitor connections, and closes\nall existing monitor connections associated with the server.",
             "itemtype": "method",
             "name": "stop",
@@ -3415,7 +3420,7 @@
         },
         {
             "file": "lib/Server.js",
-            "line": 183,
+            "line": 190,
             "description": "The server has stopped\n\nThis event is fired after the server has stopped accepting inbound\nconnections, and has closed all existing connections and released\nassociated resources.",
             "itemtype": "event",
             "name": "stop",
@@ -3424,7 +3429,7 @@
         },
         {
             "file": "lib/Server.js",
-            "line": 215,
+            "line": 222,
             "description": "Constructor for a list of Server objects\n\n    var myList = new Server.List(initialElements);",
             "static": 1,
             "itemtype": "method",
@@ -3446,7 +3451,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 139,
+            "line": 126,
             "description": "Increment a counter by a specified value\n\nAssuming someone is listening to this stat, this is an instruction for that\nlistener to add the specified value (usually 1) to their prior value for this stat.\n\nThis is known as server-side setting, as the server (listener) is responsible\nfor maintaining the prior and new value for the stat.",
             "itemtype": "method",
             "name": "increment",
@@ -3469,7 +3474,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 157,
+            "line": 144,
             "description": "Decrement a counter by a specified value\n\nAssuming someone is listening to this stat, this is an instruction for that\nlistener to subtract the specified value (usually 1) to their prior value for this stat.\n\nThis is known as server-side setting, as the server (listener) is responsible\nfor maintaining the prior and new value for the stat.",
             "itemtype": "method",
             "name": "decrement",
@@ -3492,7 +3497,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 175,
+            "line": 162,
             "description": "Set the stat to the specified value\n\nThis is an instruction to any (all) listener(s) to set the stat to a\nspecific value.\n\nThis is known as client-side setting, because the client determines the value\nof the stat.",
             "itemtype": "method",
             "name": "gauge",
@@ -3513,7 +3518,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 192,
+            "line": 179,
             "description": "Record the specified duration (in milliseconds) for the stat\n\nThis is like Stat.gauge() in that it is a client-side setting of a\nspecified value.  The difference is the scale of the value is specified\nas milliseconds.\n\nThis may be one of the most widely used stat methods.  It can (should?) be\nused upon callback from asynchronous methods.\n\nPattern:\n\n    var stat = require('monitor-min').getStatLogger('myModule');\n    ...\n    var stamp = Date.now();\n    SomeAsyncFunction(arg1, function(error) {\n      stat.time('SomeAsyncFunction.time', Date.Now() - stamp);\n      ...continue with error handling & callback handling\n    });",
             "itemtype": "method",
             "name": "time",
@@ -3534,7 +3539,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 220,
+            "line": 207,
             "description": "Send the stat to all registered listeners",
             "access": "private",
             "tagname": "",
@@ -3568,7 +3573,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 259,
+            "line": 246,
             "description": "Build a regex from a user entered string following the pattern described\nin the class definition.  Loosely:\n\n   If it looks like a JS regexp, process it as a regexp\n   Change all '.' to '\\.'\n   Change all '*' to '[^\\.]*' (unless it's at the end, then convert to '.*')\n   Change all {one,two} to (one|two)\n   Leave all [...] alone - they work as-is\n\n If an error occurs, throw an exception",
             "access": "private",
             "tagname": "",
@@ -4156,6 +4161,15 @@
             "module": "UnitTests"
         },
         {
+            "file": "test/LogTest.js",
+            "line": 169,
+            "description": "Make sure a stat is output for every log",
+            "itemtype": "method",
+            "name": "Log-Stat",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
             "file": "test/MonitorTest.js",
             "line": 36,
             "description": "Tests for verifying modules are loaded and exposed properly",
@@ -4382,7 +4396,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 35,
+            "line": 36,
             "description": "Tests that Router classes are in place",
             "itemtype": "method",
             "name": "Router-Classes",
@@ -4391,7 +4405,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 44,
+            "line": 45,
             "description": "Test that the router finds an internal probe",
             "itemtype": "method",
             "name": "Router-ConnectInternal",
@@ -4400,7 +4414,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 58,
+            "line": 59,
             "description": "Test that the same probe is connected when requested with the same initParams",
             "itemtype": "method",
             "name": "Router-InternalSameProbe",
@@ -4409,7 +4423,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 73,
+            "line": 74,
             "description": "Test that different probes are connected when requested with the different initParams",
             "itemtype": "method",
             "name": "Router-InternalDifferentProbe",
@@ -4418,7 +4432,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 88,
+            "line": 89,
             "description": "Test that the router finds an external probe",
             "itemtype": "method",
             "name": "Router-ConnectExternal",
@@ -4427,7 +4441,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 102,
+            "line": 104,
             "description": "Test the getConnection method returns the connection",
             "itemtype": "method",
             "name": "Router-GetConnection",
@@ -4436,7 +4450,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 113,
+            "line": 115,
             "description": "Test that the same external probe is connected when requested with the same initParams",
             "itemtype": "method",
             "name": "Router-ExternalSameProbe",
@@ -4445,7 +4459,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 128,
+            "line": 130,
             "description": "Test that different external probes are connected when requested with the different initParams",
             "itemtype": "method",
             "name": "Router-ExternalDifferentProbe",
@@ -4454,7 +4468,16 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 143,
+            "line": 145,
+            "description": "Test that the router can connect with a probe in an app by instance ID",
+            "itemtype": "method",
+            "name": "Router-ByAppInstance",
+            "class": "RouterTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/RouterTest.js",
+            "line": 163,
             "description": "Test that the local probe forwards change events",
             "itemtype": "method",
             "name": "Router-InternalChanges",
@@ -4463,7 +4486,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 158,
+            "line": 178,
             "description": "Test that the remote probe forwards change events",
             "itemtype": "method",
             "name": "Router-ExternalChanges",
@@ -4472,7 +4495,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 173,
+            "line": 193,
             "description": "Test that the router can route control an external probe",
             "itemtype": "method",
             "name": "Router-ControlExternal",
@@ -4481,7 +4504,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 186,
+            "line": 206,
             "description": "Test that a disconnect to an internal probe works",
             "itemtype": "method",
             "name": "Router-DisconnectInternal",
@@ -4490,7 +4513,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 198,
+            "line": 218,
             "description": "Test that a disconnect to an external probe works",
             "itemtype": "method",
             "name": "Router-DisconnectExternal",
@@ -4499,7 +4522,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 209,
+            "line": 229,
             "description": "Test that the external connection:add event is fired on add.",
             "itemtype": "method",
             "name": "Router-ConnectionAddEvent",
@@ -4508,7 +4531,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 228,
+            "line": 248,
             "description": "Test that the external connection:remove event is fired on connection remove.",
             "itemtype": "method",
             "name": "Router-ConnectionRemoveEvent",
@@ -4517,7 +4540,7 @@
         },
         {
             "file": "test/RouterTest.js",
-            "line": 245,
+            "line": 265,
             "description": "Tear down the test Server and disconnect the test probes",
             "itemtype": "method",
             "name": "Router-TearDown",

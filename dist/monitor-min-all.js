@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.1 - 2013-04-12 */
+/* monitor-min - v0.5.1 - 2013-04-13 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -6822,9 +6822,12 @@ if (typeof define === "function" && define.amd) {
   *       If not set, the Router will connect with the first host capable of running this probe.
   *     @param [model.appName] {String} Application name the probe is (or will) run within.
   *       If not set, the Router will disregard the appName of the process it is connecting with.
-  *     @param [model.appInstance=0] {Integer} Index into the list of hostName/appName matches.
-  *       If not set, the Router will connect to the first hostName/appName combination.
-  *       This can be useful for connecting with a specific instance of a multi-process application.
+  *     @param [model.appInstance] {String} Application instance ID the probe is (or will) run within.
+  *       If not set, the Router will disregard the appInstance of the process it is connecting with.
+  *       Application instances can (should) set the $NODE_APP_INSTANCE environment
+  *       variable prior to running to uniquely identify their unique instance within a
+  *       server or network.  If this variable is not set prior to running the
+  *       app, node-monitor will assign a unique ID among other running apps on the host.
   *     @param model.probeId {String} ID of the probe this is monitoring (once connected). READONLY
   *     @param model.PROBE_PARAMS... {(defined by the probe)} ... all other <strong>```model```</strong> parameters are READONLY parameters of the connected probe
   */
@@ -6853,7 +6856,7 @@ if (typeof define === "function" && define.amd) {
       initParams: {},
       hostName: '',
       appName: '',
-      appInstance: 0
+      appInstance: ''
     },
     initialize: function(params, options) {},
 
@@ -7187,7 +7190,7 @@ if (typeof define === "function" && define.amd) {
   * @param monitorJSON [Object] JSON object containing the following
   *     @param hostName {String} The host to monitor
   *     @param [appName] {String} The app name running on the host
-  *     @param [appInstance] {Integer} The instance of this app on the host
+  *     @param [appInstance] {String} The application instance ID running on the host
   * @return {String} A string representation of the monitor server
   */
   Monitor.toServerString = function(monitorJSON) {
@@ -7556,6 +7559,7 @@ if (typeof define === "function" && define.amd) {
   *   @param [model.firewall=false] {Boolean} Firewall inbound probe requests on this connection?
   *   @param [model.remoteHostName] {String READONLY} Host name given by the remote server.
   *   @param [model.remoteAppName] {String READONLY} App name given by the remote server.
+  *   @param [model.remoteAppInstance] {Integer READONLY} The remote application instance ID running on the host.
   *   @param [model.remotePID] {String READONLY} Remote process ID.
   *   @param [model.remoteProbeClasses] {Array of String READONLY} Array of probe classes available to the remote server.
   *   @param [model.remoteGateway] {Boolean READONLY} Can the remote process act as a gateway?
@@ -7573,9 +7577,19 @@ if (typeof define === "function" && define.amd) {
   var Connection = Monitor.Connection = Backbone.Model.extend({
 
     defaults:  {
-      hostName: '', hostPort: null, url: null, socket: null, gateway: false,
-      firewall: false, remoteHostName: null, remoteAppName: null, remotePID: 0,
-      remoteProbeClasses: [], remoteGateway: false, remoteFirewall: false
+      hostName: '',
+      hostPort: null,
+      url: null,
+      socket: null,
+      gateway: false,
+      firewall: false,
+      remoteHostName: null,
+      remoteAppName: null,
+      remoteAppInstance: 0,
+      remotePID: 0,
+      remoteProbeClasses: [],
+      remoteGateway: false,
+      remoteFirewall: false
     },
 
     initialize: function(params) {
@@ -7780,6 +7794,7 @@ if (typeof define === "function" && define.amd) {
         t.set({
           remoteHostName: info.hostName,
           remoteAppName: info.appName,
+          remoteAppInstance: info.appInstance,
           remotePID: info.pid,
           remoteProbeClasses: info.probeClasses,
           remoteGateway: info.gateway,
@@ -7790,11 +7805,18 @@ if (typeof define === "function" && define.amd) {
         t.trigger('connect');
       });
 
+      // Determine the process id
+      var pid = typeof process === 'undefined' ? '1' : process.pid;
+
+      // Determine the app instance
+      var appInstance = process.env.NODE_APP_INSTANCE || '' + pid;
+
       // Exchange connection information
       socket.emit('connection:info', {
         hostName:Monitor.getRouter().getHostName(),
         appName:Config.MonitorMin.appName,
-        pid: typeof process === 'undefined' ? 0 : process.pid,
+        appInstance: appInstance,
+        pid: pid,
         probeClasses: _.keys(Probe.classes),
         gateway:t.get('gateway'),
         firewall:t.get('firewall')
@@ -8067,7 +8089,14 @@ if (typeof define === "function" && define.amd) {
         var host = allowExternalConnections ? '0.0.0.0' : '127.0.0.1';
 
         // Start listening, callback on success
-        server.listen(port, function(){
+        server.listen(port, host, function(){
+
+          // Set a default NODE_APP_INSTANCE based on the available server port
+          if (!process.env.NODE_APP_INSTANCE)  {
+            process.env.NODE_APP_INSTANCE = '' + (port - Config.MonitorMin.serviceBasePort + 1);
+          }
+
+          // Record the server & port, and bind incoming events
           t.set({server: server, port: port});
           t.bindEvents(callback);
         });
@@ -8524,10 +8553,12 @@ if (typeof define === "function" && define.amd) {
     */
     determineConnection: function(monitorJSON, makeNewConnections, callback) {
       var t = this, connection = null, probeClass = monitorJSON.probeClass,
-          hostName = monitorJSON.hostName, appName = monitorJSON.appName,
+          hostName = monitorJSON.hostName,
+          appName = monitorJSON.appName,
           appInstance = monitorJSON.appInstance,
           thisHostName = t.getHostName().toLowerCase(),
-          thisAppName = Config.appName;
+          thisAppName = Config.appName,
+          thisAppInstance = typeof process !== 'undefined' ? process.env.NODE_APP_INSTANCE : '1';
 
       // Return a found connection immediately if it's connected.
       // If connecting, wait for connection to complete.
@@ -8575,7 +8606,10 @@ if (typeof define === "function" && define.amd) {
 
       // Connect with this process (internally)?
       hostName = hostName ? hostName.toLowerCase() : null;
-      if ((!hostName || hostName === thisHostName) && (!appName || appName === thisAppName)) {
+      var thisHost = (!hostName || hostName === thisHostName);
+      var thisApp = (!appName || appName === thisAppName);
+      var thisInstance = (!appInstance || appInstance === thisAppInstance);
+      if (thisHost && thisApp && thisInstance) {
 
         // Connect internally if the probe is available
         if (Probe.classes[probeClass] != null) {
@@ -8644,7 +8678,7 @@ if (typeof define === "function" && define.amd) {
     * @protected
     * @param hostName {String} - Host name to find a connection for (null = any host)
     * @param appName {String} - App name to find a connection with (null = any app)
-    * @param appInstance {Integer} - Index into the list of hostName/appName matches (default: 0)
+    * @param appInstance {Any} - Application instance running on this host (null = any instance)
     * @return connection {Connection} - A Connection object if found, otherwise null
     */
     findConnection: function(hostName, appName, appInstance) {
@@ -8654,15 +8688,11 @@ if (typeof define === "function" && define.amd) {
         // Host or app matches if not specified or if specified and equal
         var matchesHost = !hostName || conn.isThisHost(hostName);
         var matchesApp = !appName || appName === conn.get('remoteAppName');
+        var matchesInstance = !appInstance || appInstance === conn.get('remoteAppInstance');
         var remoteFirewall = conn.get('remoteFirewall');
 
         // This is a match if host + app + instance matches, and it's not firewalled
-        if (!remoteFirewall && matchesHost && matchesApp) {
-          return (thisInstance++ === appInstance);
-        }
-
-        // No match
-        return false;
+        return (!remoteFirewall && matchesHost && matchesApp && matchesInstance);
       });
     },
 
@@ -9341,19 +9371,6 @@ if (typeof define === "function" && define.amd) {
 
 }(this));
 
-/*
-Stat & Log:
-
-Global: Singleton instance (for the registry)
-Export: The logger class
-Class:  Log / Stat.  Not meant to be instantiated. Contains static getLogger
-Logger: Instances w/module.  Contains module name & methods
-Monitor: get{}Logger - Instantiates a new instance of the logger w/ the name
-
-Logger class IS the main class.
-*/
-
-
 /*jslint browser: true */
 // Stat.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -9690,6 +9707,7 @@ Logger class IS the main class.
   var Monitor = root.Monitor || require('./Monitor'),
       EventEmitter = require('events').EventEmitter,
       Stat = Monitor.Stat,
+      stat = new Stat('Log'),
       _ = Monitor._;
 
   /**
@@ -9701,22 +9719,6 @@ Logger class IS the main class.
   * usage with minimum concern for overhead.  Runtime monitoring can be as chatty
   * as desired, outputting every log statement of every type, or finely tuned
   * with regular expressions to monitor specific log statements.
-  *
-  * It can be used as a log4js appender so your existing application logs can
-  * be monitored:
-  *
-  *     var log4js = require('log4js');
-  *     var appender = require('monitor-min').log4jsAppender;
-  *     log4js.addAppender(appender);
-  *
-  * This requires the log4js package to be available to the application, as
-  * monitor-min doesn't include log4js if your app doesn't use it.
-  *
-  * It can also be used directly with a log4js-style calling pattern:
-  *
-  *     var log = require('monitor-min').getLogger('myModule');
-  *     ...
-  *     log.warn('Customer credit limit exceeded');
   *
   * Log Collector
   * -------------
@@ -9855,15 +9857,13 @@ Logger class IS the main class.
   */
   Log._emit = function(type, module, name, args) {
     var eventName,
-        fullName;
+        fullName = type + '.' + module + '.' + name;
+
+    // Output a counter stat for this log
+    stat.increment(fullName);
 
     // Test the name against all registered events
     for (eventName in Log._events) {
-
-      // Build the full name only if someone is listening
-      if (!fullName) {
-        fullName = type + '.' + module + '.' + name;
-      }
 
       // Get the regex associated with the name (using the Stat package)
       var regex = Log.eventRegex[eventName];

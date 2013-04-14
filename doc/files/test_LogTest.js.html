@@ -301,6 +301,23 @@
         test.done();
       });
       log.fatal(&#x27;fatalLog&#x27;);
+    },
+
+    &#x2F;**
+    * Make sure a stat is output for every log
+    * @method Log-Stat
+    *&#x2F;
+    Stat: function(test) {
+
+      &#x2F;&#x2F; Listen for the stat
+      Monitor.Stat.once(&#x27;*&#x27;, function(module, name, value, type) {
+        test.equals(module, &#x27;Log&#x27;, &#x27;The stat module is correct&#x27;);
+        test.equals(name, &#x27;info.log-test.Checking for stat emission&#x27;, &#x27;found the correct stat name&#x27;);
+        test.equals(value, 1, &#x27;Correctly incremented the log stat by 1&#x27;);
+        test.equals(type, &#x27;c&#x27;, &#x27;Correct stat type - counter&#x27;);
+        test.done();
+      });
+      log.info(&#x27;Checking for stat emission&#x27;);
     }
 
   };

@@ -179,6 +179,7 @@
   *   @param [model.firewall=false] {Boolean} Firewall inbound probe requests on this connection?
   *   @param [model.remoteHostName] {String READONLY} Host name given by the remote server.
   *   @param [model.remoteAppName] {String READONLY} App name given by the remote server.
+  *   @param [model.remoteAppInstance] {Integer READONLY} The remote application instance ID running on the host.
   *   @param [model.remotePID] {String READONLY} Remote process ID.
   *   @param [model.remoteProbeClasses] {Array of String READONLY} Array of probe classes available to the remote server.
   *   @param [model.remoteGateway] {Boolean READONLY} Can the remote process act as a gateway?
@@ -196,9 +197,19 @@
   var Connection = Monitor.Connection = Backbone.Model.extend({
 
     defaults:  {
-      hostName: &#x27;&#x27;, hostPort: null, url: null, socket: null, gateway: false,
-      firewall: false, remoteHostName: null, remoteAppName: null, remotePID: 0,
-      remoteProbeClasses: [], remoteGateway: false, remoteFirewall: false
+      hostName: &#x27;&#x27;,
+      hostPort: null,
+      url: null,
+      socket: null,
+      gateway: false,
+      firewall: false,
+      remoteHostName: null,
+      remoteAppName: null,
+      remoteAppInstance: 0,
+      remotePID: 0,
+      remoteProbeClasses: [],
+      remoteGateway: false,
+      remoteFirewall: false
     },
 
     initialize: function(params) {
@@ -403,6 +414,7 @@
         t.set({
           remoteHostName: info.hostName,
           remoteAppName: info.appName,
+          remoteAppInstance: info.appInstance,
           remotePID: info.pid,
           remoteProbeClasses: info.probeClasses,
           remoteGateway: info.gateway,
@@ -413,11 +425,18 @@
         t.trigger(&#x27;connect&#x27;);
       });
 
+      &#x2F;&#x2F; Determine the process id
+      var pid = typeof process === &#x27;undefined&#x27; ? &#x27;1&#x27; : process.pid;
+
+      &#x2F;&#x2F; Determine the app instance
+      var appInstance = process.env.NODE_APP_INSTANCE || &#x27;&#x27; + pid;
+
       &#x2F;&#x2F; Exchange connection information
       socket.emit(&#x27;connection:info&#x27;, {
         hostName:Monitor.getRouter().getHostName(),
         appName:Config.MonitorMin.appName,
-        pid: typeof process === &#x27;undefined&#x27; ? 0 : process.pid,
+        appInstance: appInstance,
+        pid: pid,
         probeClasses: _.keys(Probe.classes),
         gateway:t.get(&#x27;gateway&#x27;),
         firewall:t.get(&#x27;firewall&#x27;)

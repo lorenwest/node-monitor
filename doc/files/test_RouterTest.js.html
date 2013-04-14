@@ -165,6 +165,7 @@
     * @method Router-SetUp
     *&#x2F;
     SetUp: function(test) {
+      process.env.NODE_APP_INSTANCE = &#x27;test&#x27;;
       server = new Monitor.Server();
       server.start(test.done);
     },
@@ -230,8 +231,9 @@
       external = new Monitor({probeClass:&#x27;Process&#x27;, hostName:&#x27;localhost&#x27;, initParams:{a:&#x27;b&#x27;}});
       external.connect(function(error) {
         test.ok(!error, &#x27;The error was &#x27; + JSON.stringify(error));
+        test.equal(&#x27;test&#x27;, external.probe.connection.get(&#x27;remoteAppInstance&#x27;), &#x27;Verified the probe connected externally&#x27;);
         var probeId = external.get(&#x27;probeId&#x27;);
-        test.ok(probeId, &quot;The router found the probe&quot;);
+        test.ok(probeId, &quot;The router found the remote probe based on class and host&quot;);
         test.done();
       });
     },
@@ -274,6 +276,24 @@
         var otherId = other.get(&#x27;probeId&#x27;);
         test.notEqual(externalId, otherId, &quot;Two monitors created with the same initParams are connected to different probes&quot;);
         other.disconnect(test.done);
+      });
+    },
+
+    &#x2F;**
+    * Test that the router can connect with a probe in an app by instance ID
+    * @method Router-ByAppInstance
+    *&#x2F;
+    ByAppInstance: function(test) {
+      &#x2F;&#x2F; Don&#x27;t connect locally
+      delete process.env.NODE_APP_INSTANCE;
+
+      external = new Monitor({probeClass:&#x27;Process&#x27;, appInstance: &#x27;test&#x27;, initParams:{a:&#x27;b&#x27;}});
+      external.connect(function(error) {
+        test.ok(!error, &#x27;The error was &#x27; + JSON.stringify(error));
+        test.equal(&#x27;test&#x27;, external.probe.connection.get(&#x27;remoteAppInstance&#x27;), &#x27;Verified the probe connected to the right instance&#x27;);
+        var probeId = external.get(&#x27;probeId&#x27;);
+        test.ok(probeId, &quot;The router found the remote probe based on instance id&quot;);
+        test.done();
       });
     },
 
