@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Repl - monitor-min</title>
+    <title>InspectProbe - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -131,19 +131,19 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Repl Class</h1>
+                        <h1>InspectProbe Class</h1>
 <div class="box meta">
     
 
     
         <div class="extends">
-            Extends <a href="../classes/Probe.html" class="crosslink">Probe</a>
+            Extends <a href="../classes/PollingProbe.html" class="crosslink">PollingProbe</a>
         </div>
     
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_Repl.js.html#l21"><code>lib&#x2F;probes&#x2F;Repl.js:21</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_InspectProbe.js.html#l20"><code>lib&#x2F;probes&#x2F;InspectProbe.js:20</code></a>
         </div>
     
 
@@ -159,15 +159,26 @@
 
 
 <div class="box intro">
-    <p>A probe based Read-Execute-Print-Loop console for node.js processes</p>
+    <p>Inspect and manipulate variables on the monitored server.</p>
+
+<p>This class monitors the variable specified by the key.</p>
+
+<p>The key is evaluated to determine the variable to monitor, so it may
+be a complex key starting at global scope.  If the key isn't
+specified, it monitors all variables in the global scope.</p>
+
+<p>If the key points to an object of type Backbone.Model, this probe
+will update the value in real time, triggered on the <em>change</em> event.
+Otherwise it will update the value as it notices changes, while polling
+on the specified polling interval (default: 1 second).</p>
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_Repl" class="method item">
+        <div id="method_InspectProbe" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Repl.js.html#l21" title="lib/probes/Repl.js:21">Repl</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_InspectProbe.js.html#l20" title="lib/probes/InspectProbe.js:20">InspectProbe</a>
     </code></h3>
 
     
@@ -176,7 +187,7 @@
             
                 <li class="arg">
                     
-                        <code>initParams</code>
+                        <code class="optional">[initParams]</code>
                     
                 </li>
             
@@ -229,14 +240,17 @@
             
                 <li class="param">
                     
-                        <code class="param-name">initParams</code>
+                        <code class="param-name optional">[initParams]</code>
                         <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Probe initialization parameters</p>
+                        <ul>
+<li>Initialization parameters</li>
+</ul>
                     </div>
 
                     
@@ -244,14 +258,57 @@
                             
                             <li class="param">
                                 
-                                    <code class="param-name">uniqueInstance</code>
-                                    <span class="type"></span>
+                                    <code class="param-name optional">[key=null]</code>
+                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
                                 
 
                                 <div class="param-description">
-                                    <ul>
-<li>Usually specified to obtain a unique REPL probe instance</li>
-</ul>
+                                    <p>A global variable name or expression</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name optional">[depth=2]</code>
+                                    <span class="type">Integer</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                
+
+                                <div class="param-description">
+                                    <p>If the key points to an object, this
+      is the depth to traverse the object for changes.  Default=2, or 1 if
+      key='window'.</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name optional">[pollInterval]</code>
+                                    <span class="type">Integer</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                
+
+                                <div class="param-description">
+                                    <p>(from <a href="PollingProbe.html">PollingProbe</a>) Polling interval in milliseconds. Default: null</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name optional">[cronPattern]</code>
+                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                
+
+                                <div class="param-description">
+                                    <p>(from <a href="PollingProbe.html">PollingProbe</a>) Crontab syle polling pattern. Default once per second: "* * * * * *"</p>
                                 </div>
 
                                 
@@ -270,7 +327,9 @@
                     
 
                     <div class="param-description">
-                        <p>Monitor data model elements</p>
+                        <ul>
+<li>Monitor data model elements</li>
+</ul>
                     </div>
 
                     
@@ -278,12 +337,14 @@
                             
                             <li class="param">
                                 
-                                    <code class="param-name">output</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                    <code class="param-name">value</code>
+                                    <span class="type"></span>
                                 
 
                                 <div class="param-description">
-                                    <p>Last (current) REPL output line</p>
+                                    <ul>
+<li>The value of the element being inspected</li>
+</ul>
                                 </div>
 
                                 
@@ -291,12 +352,14 @@
                             
                             <li class="param">
                                 
-                                    <code class="param-name">sequence</code>
-                                    <span class="type">Integer</span>
+                                    <code class="param-name">isModel</code>
+                                    <span class="type"></span>
                                 
 
                                 <div class="param-description">
-                                    <p>Increasing sequence number - to enforce unique line output</p>
+                                    <ul>
+<li>Is the value a Backbone.Model?</li>
+</ul>
                                 </div>
 
                                 
@@ -340,14 +403,14 @@
 
                     <ul class="index-list methods">
                         
-                            <li class="index-item method private">
-                                <a href="#method__runShellCmd">_runShellCmd</a>
+                            <li class="index-item method protected">
+                                <a href="#method__evaluate">_evaluate</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_autocomplete">autocomplete</a>
+                                <a href="#method_eval_control">eval_control</a>
 
                                 
                             </li>
@@ -358,20 +421,8 @@
                                 
                             </li>
                         
-                            <li class="index-item method">
-                                <a href="#method_input">input</a>
-
-                                
-                            </li>
-                        
                             <li class="index-item method inherited">
                                 <a href="#method_onControl">onControl</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method protected">
-                                <a href="#method_output">output</a>
 
                                 
                             </li>
@@ -382,14 +433,14 @@
                                 
                             </li>
                         
-                            <li class="index-item method inherited">
-                                <a href="#method_release">release</a>
+                            <li class="index-item method">
+                                <a href="#method_poll">poll</a>
 
                                 
                             </li>
                         
-                            <li class="index-item method">
-                                <a href="#method_sh">sh</a>
+                            <li class="index-item method inherited">
+                                <a href="#method_release">release</a>
 
                                 
                             </li>
@@ -410,9 +461,9 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method__runShellCmd" class="method item private">
+                    <div id="method__evaluate" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Repl.js.html#l153" title="lib/probes/Repl.js:153">_runShellCmd</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_InspectProbe.js.html#l123" title="lib/probes/InspectProbe.js:123">_evaluate</a>
     </code></h3>
 
     
@@ -421,7 +472,7 @@
             
                 <li class="arg">
                     
-                        <code>command</code>
+                        <code>expression</code>
                     
                 </li>
             
@@ -430,11 +481,15 @@
     
 
     
-
+        <span class="returns-inline">
+            <span class="type">Mixed</span>
+        </span>
     
 
     
-        <span class="flag private">private</span>
+
+    
+        <span class="flag protected">protected</span>
     
 
     
@@ -459,7 +514,7 @@
     </div>
 
     <div class="description">
-        <p>Run a shell command and emit the output to the browser.</p>
+        <p>Evaluate an expression, returning the raw results</p>
     </div>
 
     
@@ -470,16 +525,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">command</code>
+                        <code class="param-name">expression</code>
                         <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <ul>
-<li>The shell command to invoke</li>
-</ul>
+                        <p>Expression to evaluate</p>
                     </div>
 
                     
@@ -490,14 +543,27 @@
     
 
     
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Mixed</span>:
+                    
+                    value  Returns the expression value
+                
+            </div>
+        </div>
+    
 
     
 </div>
 
                 
-                    <div id="method_autocomplete" class="method item">
+                    <div id="method_eval_control" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Repl.js.html#l99" title="lib/probes/Repl.js:99">autocomplete</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_InspectProbe.js.html#l102" title="lib/probes/InspectProbe.js:102">eval_control</a>
     </code></h3>
 
     
@@ -506,13 +572,13 @@
             
                 <li class="arg">
                     
-                        <code>params</code>
+                        <code>expression</code>
                     
                 </li>
             
                 <li class="arg">
                     
-                        <code>callback</code>
+                        <code class="optional">[depth=2]</code>
                     
                 </li>
             
@@ -520,6 +586,10 @@
         </div>
     
 
+    
+        <span class="returns-inline">
+            <span class="type">Mixed</span>
+        </span>
     
 
     
@@ -548,7 +618,7 @@
     </div>
 
     <div class="description">
-        <p>Process an autocomplete request from the client</p>
+        <p>Evaluate an expression, returning the depth-limited results</p>
     </div>
 
     
@@ -559,14 +629,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">params</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <code class="param-name">expression</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Named parameters</p>
+                        <p>Expression to evaluate</p>
                     </div>
 
                     
@@ -574,14 +644,15 @@
             
                 <li class="param">
                     
-                        <code class="param-name">callback</code>
-                        <span class="type">Function(error, returnParams)</span>
+                        <code class="param-name optional">[depth=2]</code>
+                        <span class="type">Integer</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Callback function</p>
+                        <p>Depth of the object to return</p>
                     </div>
 
                     
@@ -591,6 +662,19 @@
         </div>
     
 
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Mixed</span>:
+                    
+                    value  Returns the depth-limited value
+                
+            </div>
+        </div>
     
 
     
@@ -762,108 +846,6 @@ returning the probe to the monitor until the initial file contents are loaded.</
 </div>
 
                 
-                    <div id="method_input" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Repl.js.html#l121" title="lib/probes/Repl.js:121">input</a>
-    </code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>params</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Handle user input from the console line</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">params</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Named parameters</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function(error, returnParams)</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Callback function</p>
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
                     <div id="method_onControl" class="method item inherited">
     <h3 class="name"><code>
       <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l92" title="lib/Probe.js:92">onControl</a>
@@ -1007,92 +989,6 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
 </div>
 
                 
-                    <div id="method_output" class="method item protected">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Repl.js.html#l66" title="lib/probes/Repl.js:66">output</a>
-    </code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>str</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag protected">protected</span>
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Send output to the terminal</p>
-
-<p>This forces the change event even if the last output is the same
-as this output.</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">str</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>String to output to the repl console</p>
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
                     <div id="method_ping_control" class="method item inherited">
     <h3 class="name"><code>
       <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l131" title="lib/Probe.js:131">ping_control</a>
@@ -1200,84 +1096,13 @@ as this output.</p>
 </div>
 
                 
-                    <div id="method_release" class="method item">
+                    <div id="method_poll" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Repl.js.html#l84" title="lib/probes/Repl.js:84">release</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_InspectProbe.js.html#l146" title="lib/probes/InspectProbe.js:146">poll</a>
     </code></h3>
 
     
         <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            <p>Inherited from
-            <a href="..&#x2F;classes&#x2F;Probe.html#method_release">
-                Probe
-            </a>
-            
-            but overwritten in
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Release any resources consumed by this probe.</p>
-
-<p>Stop the REPL console.  Consoles live 1-1 with a UI counterpart, so stop
-requests exit the underlying repl console.  If the probe is re-started it
-will get a new repl stream and console.</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_sh" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Repl.js.html#l141" title="lib/probes/Repl.js:141">sh</a>
-    </code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>params</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
     
 
     
@@ -1308,47 +1133,63 @@ will get a new repl stream and console.</p>
     </div>
 
     <div class="description">
-        <p>Execute a shell command</p>
+        <p>Poll for changes in the evaluation</p>
     </div>
 
     
-        <div class="params">
-            <h4>Parameters:</h4>
 
-            <ul class="params-list">
+    
+
+    
+</div>
+
+                
+                    <div id="method_release" class="method item inherited">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l79" title="lib/Probe.js:79">release</a>
+    </code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
             
-                <li class="param">
-                    
-                        <code class="param-name">params</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Named parameters</p>
-                    </div>
-
-                    
-                </li>
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Probe.html#method_release">Probe</a>:
             
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function(error, returnParams)</span>
-                    
+        
+        </p>
 
-                    
 
-                    <div class="param-description">
-                        <p>Callback function</p>
-                    </div>
+        
 
-                    
-                </li>
-            
-            </ul>
-        </div>
+        
+    </div>
+
+    <div class="description">
+        <p>Release any resources consumed by this probe.</p>
+
+<p>This can be implemented by derived classes that need to be informed when
+they are to be shut down.</p>
+
+<p>Probes that listen to events should use this method to remove their
+event listeners.</p>
+    </div>
+
     
 
     

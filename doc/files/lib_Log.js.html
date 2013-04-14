@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -144,15 +144,14 @@
 
   &#x2F;&#x2F; Module loading
   var Monitor = root.Monitor || require(&#x27;.&#x2F;Monitor&#x27;),
-      EventEmitter = require(&#x27;events&#x27;).EventEmitter,
+      &#x2F;&#x2F; Raw events on the server (for speed), backbone events on the browser (for functionality)
+      EventEmitter = Monitor.commonJS ? require(&#x27;events&#x27;).EventEmitter : Monitor.Backbone.Events,
       Stat = Monitor.Stat,
       stat = new Stat(&#x27;Log&#x27;),
       _ = Monitor._;
 
   &#x2F;**
-  * A lightweight component for sending and gathering logs
-  *
-  * This is both a collector and emitter for application logs.
+  * A lightweight component for gathering and emitting application logs
   *
   * It&#x27;s designed with low development and runtime cost in mind, encouraging
   * usage with minimum concern for overhead.  Runtime monitoring can be as chatty

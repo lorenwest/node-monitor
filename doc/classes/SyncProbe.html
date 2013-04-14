@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -166,7 +166,7 @@ to connect a local backbone model with server-side storage.</p>
 
 <p>It delegates to a specialized SyncProbe defined by the server for the
 specific data class.  For example, the server may determine that one class
-type uses FileSync, and another class uses a different persistence
+type uses FileSyncProbe, and another class uses a different persistence
 mechanism.</p>
 
 <p>For security purposes, the server must <a href="SyncProbe.html#property_Config">configure</a> specific SyncProbes for
@@ -1468,7 +1468,7 @@ will call update vs. create.</p>
 <p>Example:</p>
 
 <pre class="code"><code class="prettyprint">var syncConfig = Monitor.SyncProbe.Config;
-syncConfig.defaultProbe = 'SyncFile';
+syncConfig.defaultProbe = 'FileSyncProbe';
 syncConfig.classMap = {
   Book: 'MongoDbSync',
   Author: 'MongoDbSync'

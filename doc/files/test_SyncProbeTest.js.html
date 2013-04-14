@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -150,10 +150,10 @@
       Sync = Monitor.Sync,
       FileProbe = Monitor.FileProbe,
       SyncProbe = Monitor.SyncProbe,
-      FileSync = SyncProbe.FileSync;
+      FileSyncProbe = SyncProbe.FileSyncProbe;
 
   &#x2F;&#x2F; Constants
-  var TEST_FILE_DIR = FileSync.getRootPath() || __dirname + &#x27;&#x2F;syncProbeTest&#x27;,
+  var TEST_FILE_DIR = FileSyncProbe.getRootPath() || __dirname + &#x27;&#x2F;syncProbeTest&#x27;,
       TEST_OBJECT = {
         testNumber:1,
         testString:&quot;two&quot;,
@@ -171,9 +171,9 @@
   var WATCH_CONNECT_TIME = FS.watch ? 10 : 1000;
 
   &#x2F;&#x2F; Initialize the server-side sync probes
-  var DEFAULT_PROBE_NAME = &#x27;FileSync&#x27;;
+  var DEFAULT_PROBE_NAME = &#x27;FileSyncProbe&#x27;;
   SyncProbe.Config.defaultProbe = DEFAULT_PROBE_NAME;
-  FileSync.setRootPath(TEST_FILE_DIR);
+  FileSyncProbe.setRootPath(TEST_FILE_DIR);
 
   &#x2F;**
   * Unit tests for the &lt;a href=&quot;SyncProbe.html&quot;&gt;SyncProbe&lt;&#x2F;a&gt; probe.

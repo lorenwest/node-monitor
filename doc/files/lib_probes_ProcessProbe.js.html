@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>lib&#x2F;probes&#x2F;Process.js - monitor-min</title>
+    <title>lib&#x2F;probes&#x2F;ProcessProbe.js - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -131,11 +131,11 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: lib&#x2F;probes&#x2F;Process.js</h1>
+                        <h1 class="file-heading">File: lib&#x2F;probes&#x2F;ProcessProbe.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-&#x2F;&#x2F; Process.js (c) 2010-2013 Loren West and other contributors
+&#x2F;&#x2F; ProcessProbe.js (c) 2010-2013 Loren West and other contributors
 &#x2F;&#x2F; May be freely distributed under the MIT license.
 &#x2F;&#x2F; For further details and documentation:
 &#x2F;&#x2F; http:&#x2F;&#x2F;lorenwest.github.com&#x2F;monitor-min
@@ -149,7 +149,7 @@
   &#x2F;**
   * Probe for attaining process and O&#x2F;S information
   *
-  * @class Process
+  * @class ProcessProbe
   * @extends PollingProbe
   * @constructor
   * @param [initParams] {Object} Probe initialization parameters (from PollingProbe)
@@ -186,7 +186,7 @@
   *         @param model.os.totalmem {Integer} Total O&#x2F;S memory capacity (in bytes)
   *         @param model.os.cpus {Array(Object)} An array of objects containing information about each CPU&#x2F;core installed
   *&#x2F;
-  var Process = Monitor.Process = PollingProbe.extend({
+  var ProcessProbe = Monitor.ProcessProbe = PollingProbe.extend({
 
     &#x2F;&#x2F; These are required for Probes
     probeClass: &#x27;Process&#x27;,

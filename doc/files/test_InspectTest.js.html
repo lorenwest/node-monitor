@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -143,7 +143,7 @@
 
   &#x2F;&#x2F; Dependencies
   var Monitor = require(&#x27;..&#x2F;lib&#x2F;index&#x27;),
-      Inspect = Monitor.Inspect,
+      InspectProbe = Monitor.InspectProbe,
       Backbone = Monitor.Backbone, _ = Monitor._;
 
   &#x2F;**
@@ -163,9 +163,9 @@
     * @method Inspect-Classes
     *&#x2F;
     Classes: function(test) {
-      test.ok(Inspect.prototype instanceof Backbone.Model, &#x27;The data model is in place&#x27;);
-      test.ok(Inspect.prototype instanceof Monitor.Probe, &#x27;It is a probe&#x27;);
-      test.ok(Inspect.prototype instanceof Monitor.PollingProbe, &#x27;It is a polling probe&#x27;);
+      test.ok(InspectProbe.prototype instanceof Backbone.Model, &#x27;The data model is in place&#x27;);
+      test.ok(InspectProbe.prototype instanceof Monitor.Probe, &#x27;It is a probe&#x27;);
+      test.ok(InspectProbe.prototype instanceof Monitor.PollingProbe, &#x27;It is a polling probe&#x27;);
       test.done();
     },
 

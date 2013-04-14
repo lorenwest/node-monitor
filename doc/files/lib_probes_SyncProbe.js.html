@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -153,7 +153,7 @@
   *
   * It delegates to a specialized SyncProbe defined by the server for the
   * specific data class.  For example, the server may determine that one class
-  * type uses FileSync, and another class uses a different persistence
+  * type uses FileSyncProbe, and another class uses a different persistence
   * mechanism.
   *
   * For security purposes, the server must &lt;a href=&quot;SyncProbe.html#property_Config&quot;&gt;configure&lt;&#x2F;a&gt; specific SyncProbes for
@@ -287,7 +287,7 @@
   * Example:
   *
   *     var syncConfig = Monitor.SyncProbe.Config;
-  *     syncConfig.defaultProbe = &#x27;SyncFile&#x27;;
+  *     syncConfig.defaultProbe = &#x27;FileSyncProbe&#x27;;
   *     syncConfig.classMap = {
   *       Book: &#x27;MongoDbSync&#x27;,
   *       Author: &#x27;MongoDbSync&#x27;

@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -231,7 +231,6 @@
       external = new Monitor({probeClass:&#x27;Process&#x27;, hostName:&#x27;localhost&#x27;, initParams:{a:&#x27;b&#x27;}});
       external.connect(function(error) {
         test.ok(!error, &#x27;The error was &#x27; + JSON.stringify(error));
-        test.equal(&#x27;test&#x27;, external.probe.connection.get(&#x27;remoteAppInstance&#x27;), &#x27;Verified the probe connected externally&#x27;);
         var probeId = external.get(&#x27;probeId&#x27;);
         test.ok(probeId, &quot;The router found the remote probe based on class and host&quot;);
         test.done();

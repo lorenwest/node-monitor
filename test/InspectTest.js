@@ -6,7 +6,7 @@
 
   // Dependencies
   var Monitor = require('../lib/index'),
-      Inspect = Monitor.Inspect,
+      InspectProbe = Monitor.InspectProbe,
       Backbone = Monitor.Backbone, _ = Monitor._;
 
   /**
@@ -26,9 +26,9 @@
     * @method Inspect-Classes
     */
     Classes: function(test) {
-      test.ok(Inspect.prototype instanceof Backbone.Model, 'The data model is in place');
-      test.ok(Inspect.prototype instanceof Monitor.Probe, 'It is a probe');
-      test.ok(Inspect.prototype instanceof Monitor.PollingProbe, 'It is a polling probe');
+      test.ok(InspectProbe.prototype instanceof Backbone.Model, 'The data model is in place');
+      test.ok(InspectProbe.prototype instanceof Monitor.Probe, 'It is a probe');
+      test.ok(InspectProbe.prototype instanceof Monitor.PollingProbe, 'It is a polling probe');
       test.done();
     },
 

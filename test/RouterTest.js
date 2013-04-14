@@ -94,7 +94,6 @@
       external = new Monitor({probeClass:'Process', hostName:'localhost', initParams:{a:'b'}});
       external.connect(function(error) {
         test.ok(!error, 'The error was ' + JSON.stringify(error));
-        test.equal('test', external.probe.connection.get('remoteAppInstance'), 'Verified the probe connected externally');
         var probeId = external.get('probeId');
         test.ok(probeId, "The router found the remote probe based on class and host");
         test.done();

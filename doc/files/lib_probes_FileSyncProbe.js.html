@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>lib&#x2F;probes&#x2F;FileSync.js - monitor-min</title>
+    <title>lib&#x2F;probes&#x2F;FileSyncProbe.js - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -131,11 +131,11 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: lib&#x2F;probes&#x2F;FileSync.js</h1>
+                        <h1 class="file-heading">File: lib&#x2F;probes&#x2F;FileSyncProbe.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-&#x2F;&#x2F; FileSync.js (c) 2010-2013 Loren West and other contributors
+&#x2F;&#x2F; FileSyncProbe.js (c) 2010-2013 Loren West and other contributors
 &#x2F;&#x2F; May be freely distributed under the MIT license.
 &#x2F;&#x2F; For further details and documentation:
 &#x2F;&#x2F; http:&#x2F;&#x2F;lorenwest.github.com&#x2F;node-monitor
@@ -154,17 +154,17 @@
   var ROOT_PATH = null;
 
   &#x2F;**
-  * Probe for synchronizing a data model with a file on the O&#x2F;S
+  * Probe for synchronizing a Backbone data model with a file on the O&#x2F;S
   *
   * Probe parameters are listed under &lt;a href=&quot;SyncProbe.html&quot;&gt;SyncProbe&lt;&#x2F;a&gt;.
   *
-  * @class FileSync
+  * @class FileSyncProbe
   * @extends Probe
   * @constructor
   *&#x2F;
-  var FileSync = SyncProbe.FileSync = Probe.extend({
+  var FileSyncProbe = SyncProbe.FileSyncProbe = Probe.extend({
 
-    probeClass: &#x27;FileSync&#x27;,
+    probeClass: &#x27;FileSyncProbe&#x27;,
 
     initialize: function(attributes, options){
       var t = this;
@@ -455,7 +455,7 @@
   * @method setRootPath
   * @param rootPath {String} A path to the root directory for model object storage
   *&#x2F;
-  FileSync.setRootPath = function(rootPath) {
+  FileSyncProbe.setRootPath = function(rootPath) {
     var normalized = Path.normalize(rootPath);
     if (ROOT_PATH &amp;&amp; ROOT_PATH !== normalized) {
       throw new Error(&#x27;Cannot change the File probe root path once set.&#x27;);
@@ -467,13 +467,13 @@
   * Get the current root path.
   *
   * As a static method, this is only available on the server running the probe.
-  * For security purposes, this is not exposed in the FileSync data model.
+  * For security purposes, this is not exposed in the FileSyncProbe data model.
   *
   * @static
   * @method getRootPath
   * @return {String} The path to the root directory for the FilePath probe
   *&#x2F;
-  FileSync.getRootPath = function() {
+  FileSyncProbe.getRootPath = function() {
     return ROOT_PATH;
   };
 

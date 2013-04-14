@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Inspect - monitor-min</title>
+    <title>FileSyncProbe - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -131,19 +131,19 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Inspect Class</h1>
+                        <h1>FileSyncProbe Class</h1>
 <div class="box meta">
     
 
     
         <div class="extends">
-            Extends <a href="../classes/PollingProbe.html" class="crosslink">PollingProbe</a>
+            Extends <a href="../classes/Probe.html" class="crosslink">Probe</a>
         </div>
     
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_Inspect.js.html#l20"><code>lib&#x2F;probes&#x2F;Inspect.js:20</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l19"><code>lib&#x2F;probes&#x2F;FileSyncProbe.js:19</code></a>
         </div>
     
 
@@ -159,46 +159,21 @@
 
 
 <div class="box intro">
-    <p>Inspect and manipulate variables on the monitored server.</p>
+    <p>Probe for synchronizing a Backbone data model with a file on the O/S</p>
 
-<p>This class monitors the variable specified by the key.</p>
-
-<p>The key is evaluated to determine the variable to monitor, so it may
-be a complex key starting at global scope.  If the key isn't
-specified, it monitors all variables in the global scope.</p>
-
-<p>If the key points to an object of type Backbone.Model, this probe
-will update the value in real time, triggered on the <em>change</em> event.
-Otherwise it will update the value as it notices changes, while polling
-on the specified polling interval (default: 1 second).</p>
+<p>Probe parameters are listed under <a href="SyncProbe.html">SyncProbe</a>.</p>
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_Inspect" class="method item">
+        <div id="method_FileSyncProbe" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Inspect.js.html#l20" title="lib/probes/Inspect.js:20">Inspect</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l19" title="lib/probes/FileSyncProbe.js:19">FileSyncProbe</a>
     </code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code class="optional">[initParams]</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>model</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
     
@@ -232,145 +207,6 @@ on the specified polling interval (default: 1 second).</p>
         
     </div>
 
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name optional">[initParams]</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <ul>
-<li>Initialization parameters</li>
-</ul>
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name optional">[key=null]</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-                                
-
-                                <div class="param-description">
-                                    <p>A global variable name or expression</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name optional">[depth=2]</code>
-                                    <span class="type">Integer</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-                                
-
-                                <div class="param-description">
-                                    <p>If the key points to an object, this
-      is the depth to traverse the object for changes.  Default=2, or 1 if
-      key='window'.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name optional">[pollInterval]</code>
-                                    <span class="type">Integer</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-                                
-
-                                <div class="param-description">
-                                    <p>(from <a href="PollingProbe.html">PollingProbe</a>) Polling interval in milliseconds. Default: null</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name optional">[cronPattern]</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-                                
-
-                                <div class="param-description">
-                                    <p>(from <a href="PollingProbe.html">PollingProbe</a>) Crontab syle polling pattern. Default once per second: "* * * * * *"</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">model</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <ul>
-<li>Monitor data model elements</li>
-</ul>
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">value</code>
-                                    <span class="type"></span>
-                                
-
-                                <div class="param-description">
-                                    <ul>
-<li>The value of the element being inspected</li>
-</ul>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">isModel</code>
-                                    <span class="type"></span>
-                                
-
-                                <div class="param-description">
-                                    <ul>
-<li>Is the value a Backbone.Model?</li>
-</ul>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     
@@ -403,15 +239,17 @@ on the specified polling interval (default: 1 second).</p>
 
                     <ul class="index-list methods">
                         
-                            <li class="index-item method protected">
-                                <a href="#method__evaluate">_evaluate</a>
+                            <li class="index-item method">
+                                <a href="#method_getFullPath">getFullPath</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_eval_control">eval_control</a>
+                                <a href="#method_getRootPath">getRootPath</a>
 
+                                
+                                    <span class="flag static">static</span>
                                 
                             </li>
                         
@@ -433,15 +271,17 @@ on the specified polling interval (default: 1 second).</p>
                                 
                             </li>
                         
-                            <li class="index-item method">
-                                <a href="#method_poll">poll</a>
+                            <li class="index-item method inherited">
+                                <a href="#method_release">release</a>
 
                                 
                             </li>
                         
-                            <li class="index-item method inherited">
-                                <a href="#method_release">release</a>
+                            <li class="index-item method">
+                                <a href="#method_setRootPath">setRootPath</a>
 
+                                
+                                    <span class="flag static">static</span>
                                 
                             </li>
                         
@@ -461,9 +301,9 @@ on the specified polling interval (default: 1 second).</p>
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method__evaluate" class="method item protected">
+                    <div id="method_getFullPath" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Inspect.js.html#l123" title="lib/probes/Inspect.js:123">_evaluate</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l257" title="lib/probes/FileSyncProbe.js:257">getFullPath</a>
     </code></h3>
 
     
@@ -472,7 +312,13 @@ on the specified polling interval (default: 1 second).</p>
             
                 <li class="arg">
                     
-                        <code>expression</code>
+                        <code>modelId</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
                     
                 </li>
             
@@ -481,15 +327,9 @@ on the specified polling interval (default: 1 second).</p>
     
 
     
-        <span class="returns-inline">
-            <span class="type">Mixed</span>
-        </span>
-    
 
     
 
-    
-        <span class="flag protected">protected</span>
     
 
     
@@ -514,7 +354,10 @@ on the specified polling interval (default: 1 second).</p>
     </div>
 
     <div class="description">
-        <p>Evaluate an expression, returning the raw results</p>
+        <p>Get the full path to the file</p>
+
+<p>This builds the full pathname to the file, and performs an fs.sync()
+on that pathname, providing the pathname and sync object in the callback.</p>
     </div>
 
     
@@ -525,16 +368,87 @@ on the specified polling interval (default: 1 second).</p>
             
                 <li class="param">
                     
-                        <code class="param-name">expression</code>
+                        <code class="param-name">modelId</code>
                         <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Expression to evaluate</p>
+                        <p>ID of the data model to sync</p>
                     </div>
 
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function(error, return)</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">error</code>
+                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                                
+
+                                <div class="param-description">
+                                    <p>Error object (null if no error)</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">return</code>
+                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                                
+
+                                <div class="param-description">
+                                    <p>return object</p>
+                                </div>
+
+                                
+                                    <ul class="params-list">
+                                        
+                                        <li class="param">
+                                            
+                                                <code class="param-name">path</code>
+                                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                            
+
+                                            <div class="param-description">
+                                                Full pathname to the file
+                                            </div>
+                                        </li>
+                                        
+                                        <li class="param">
+                                            
+                                                <code class="param-name">stat</code>
+                                                <span class="type">Fs.stats</span>
+                                            
+
+                                            <div class="param-description">
+                                                Stats object (null if the file doesn't esixt)
+                                            </div>
+                                        </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                            
+                        </ul>
                     
                 </li>
             
@@ -542,53 +456,24 @@ on the specified polling interval (default: 1 second).</p>
         </div>
     
 
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Mixed</span>:
-                    
-                    value  Returns the expression value
-                
-            </div>
-        </div>
     
 
     
 </div>
 
                 
-                    <div id="method_eval_control" class="method item">
+                    <div id="method_getRootPath" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Inspect.js.html#l102" title="lib/probes/Inspect.js:102">eval_control</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l329" title="lib/probes/FileSyncProbe.js:329">getRootPath</a>
     </code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>expression</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code class="optional">[depth=2]</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
     
         <span class="returns-inline">
-            <span class="type">Mixed</span>
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
         </span>
     
 
@@ -598,6 +483,8 @@ on the specified polling interval (default: 1 second).</p>
 
     
 
+    
+        <span class="flag static">static</span>
     
 
     
@@ -618,48 +505,12 @@ on the specified polling interval (default: 1 second).</p>
     </div>
 
     <div class="description">
-        <p>Evaluate an expression, returning the depth-limited results</p>
+        <p>Get the current root path.</p>
+
+<p>As a static method, this is only available on the server running the probe.
+For security purposes, this is not exposed in the FileSyncProbe data model.</p>
     </div>
 
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">expression</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Expression to evaluate</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name optional">[depth=2]</code>
-                        <span class="type">Integer</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Depth of the object to return</p>
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     
@@ -669,9 +520,9 @@ on the specified polling interval (default: 1 second).</p>
             <div class="returns-description">
                 
                     
-                        <span class="type">Mixed</span>:
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>:
                     
-                    value  Returns the depth-limited value
+                    The path to the root directory for the FilePath probe
                 
             </div>
         </div>
@@ -1096,54 +947,6 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
 </div>
 
                 
-                    <div id="method_poll" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_Inspect.js.html#l146" title="lib/probes/Inspect.js:146">poll</a>
-    </code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Poll for changes in the evaluation</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
                     <div id="method_release" class="method item inherited">
     <h3 class="name"><code>
       <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l79" title="lib/Probe.js:79">release</a>
@@ -1190,6 +993,92 @@ they are to be shut down.</p>
 event listeners.</p>
     </div>
 
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_setRootPath" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l311" title="lib/probes/FileSyncProbe.js:311">setRootPath</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>rootPath</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Set the server root path for objects stored with this probe</p>
+
+<p>For security purposes, this must be set before the SyncFileProbe
+will operate.  It will not accept any changes once set.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">rootPath</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A path to the root directory for model object storage</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     

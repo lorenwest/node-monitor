@@ -18,7 +18,7 @@ var MODULE_DEF = {
     "lib/Stat.js",
     "lib/Log.js",
     "lib/probes/PollingProbe.js",
-    "lib/probes/Inspect.js"
+    "lib/probes/InspectProbe.js"
   ],
   ext: [
     "node_modules/underscore/underscore.js",
@@ -29,10 +29,10 @@ var MODULE_DEF = {
   probes: [
     "lib/probes/ConfigProbe.js",
     "lib/probes/FileProbe.js",
-    "lib/probes/Repl.js",
-    "lib/probes/Process.js",
+    "lib/probes/ReplProbe.js",
+    "lib/probes/ProcessProbe.js",
     "lib/probes/SyncProbe.js",
-    "lib/probes/FileSync.js"
+    "lib/probes/FileSyncProbe.js"
   ]
 };
 

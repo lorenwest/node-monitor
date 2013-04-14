@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>FileSync - monitor-min</title>
+    <title>ReplProbe - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -131,7 +131,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>FileSync Class</h1>
+                        <h1>ReplProbe Class</h1>
 <div class="box meta">
     
 
@@ -143,7 +143,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_FileSync.js.html#l19"><code>lib&#x2F;probes&#x2F;FileSync.js:19</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_ReplProbe.js.html#l21"><code>lib&#x2F;probes&#x2F;ReplProbe.js:21</code></a>
         </div>
     
 
@@ -159,21 +159,35 @@
 
 
 <div class="box intro">
-    <p>Probe for synchronizing a data model with a file on the O/S</p>
-
-<p>Probe parameters are listed under <a href="SyncProbe.html">SyncProbe</a>.</p>
+    <p>A probe based Read-Execute-Print-Loop console for node.js processes</p>
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_FileSync" class="method item">
+        <div id="method_ReplProbe" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_FileSync.js.html#l19" title="lib/probes/FileSync.js:19">FileSync</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_ReplProbe.js.html#l21" title="lib/probes/ReplProbe.js:21">ReplProbe</a>
     </code></h3>
 
     
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>initParams</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>model</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
     
 
     
@@ -208,6 +222,93 @@
     </div>
 
     
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">initParams</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Probe initialization parameters</p>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">uniqueInstance</code>
+                                    <span class="type"></span>
+                                
+
+                                <div class="param-description">
+                                    <ul>
+<li>Usually specified to obtain a unique REPL probe instance</li>
+</ul>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">model</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Monitor data model elements</p>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">output</code>
+                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                
+
+                                <div class="param-description">
+                                    <p>Last (current) REPL output line</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">sequence</code>
+                                    <span class="type">Integer</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Increasing sequence number - to enforce unique line output</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
 
     
 
@@ -239,17 +340,15 @@
 
                     <ul class="index-list methods">
                         
-                            <li class="index-item method">
-                                <a href="#method_getFullPath">getFullPath</a>
+                            <li class="index-item method private">
+                                <a href="#method__runShellCmd">_runShellCmd</a>
 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_getRootPath">getRootPath</a>
+                                <a href="#method_autocomplete">autocomplete</a>
 
-                                
-                                    <span class="flag static">static</span>
                                 
                             </li>
                         
@@ -259,8 +358,20 @@
                                 
                             </li>
                         
+                            <li class="index-item method">
+                                <a href="#method_input">input</a>
+
+                                
+                            </li>
+                        
                             <li class="index-item method inherited">
                                 <a href="#method_onControl">onControl</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_output">output</a>
 
                                 
                             </li>
@@ -278,10 +389,8 @@
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_setRootPath">setRootPath</a>
+                                <a href="#method_sh">sh</a>
 
-                                
-                                    <span class="flag static">static</span>
                                 
                             </li>
                         
@@ -301,9 +410,9 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_getFullPath" class="method item">
+                    <div id="method__runShellCmd" class="method item private">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_FileSync.js.html#l257" title="lib/probes/FileSync.js:257">getFullPath</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_ReplProbe.js.html#l153" title="lib/probes/ReplProbe.js:153">_runShellCmd</a>
     </code></h3>
 
     
@@ -312,7 +421,92 @@
             
                 <li class="arg">
                     
-                        <code>modelId</code>
+                        <code>command</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Run a shell command and emit the output to the browser.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">command</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <ul>
+<li>The shell command to invoke</li>
+</ul>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_autocomplete" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_probes_ReplProbe.js.html#l99" title="lib/probes/ReplProbe.js:99">autocomplete</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>params</code>
                     
                 </li>
             
@@ -354,10 +548,7 @@
     </div>
 
     <div class="description">
-        <p>Get the full path to the file</p>
-
-<p>This builds the full pathname to the file, and performs an fs.sync()
-on that pathname, providing the pathname and sync object in the callback.</p>
+        <p>Process an autocomplete request from the client</p>
     </div>
 
     
@@ -368,14 +559,14 @@ on that pathname, providing the pathname and sync object in the callback.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">modelId</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                        <code class="param-name">params</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>ID of the data model to sync</p>
+                        <p>Named parameters</p>
                     </div>
 
                     
@@ -384,71 +575,15 @@ on that pathname, providing the pathname and sync object in the callback.</p>
                 <li class="param">
                     
                         <code class="param-name">callback</code>
-                        <span class="type">Function(error, return)</span>
+                        <span class="type">Function(error, returnParams)</span>
                     
 
                     
 
                     <div class="param-description">
-                         
+                        <p>Callback function</p>
                     </div>
 
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">error</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                                
-
-                                <div class="param-description">
-                                    <p>Error object (null if no error)</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">return</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                                
-
-                                <div class="param-description">
-                                    <p>return object</p>
-                                </div>
-
-                                
-                                    <ul class="params-list">
-                                        
-                                        <li class="param">
-                                            
-                                                <code class="param-name">path</code>
-                                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                                            
-
-                                            <div class="param-description">
-                                                Full pathname to the file
-                                            </div>
-                                        </li>
-                                        
-                                        <li class="param">
-                                            
-                                                <code class="param-name">stat</code>
-                                                <span class="type">Fs.stats</span>
-                                            
-
-                                            <div class="param-description">
-                                                Stats object (null if the file doesn't esixt)
-                                            </div>
-                                        </li>
-                                        
-                                    </ul>
-                                
-                            </li>
-                            
-                        </ul>
                     
                 </li>
             
@@ -456,76 +591,6 @@ on that pathname, providing the pathname and sync object in the callback.</p>
         </div>
     
 
-    
-
-    
-</div>
-
-                
-                    <div id="method_getRootPath" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_FileSync.js.html#l329" title="lib/probes/FileSync.js:329">getRootPath</a>
-    </code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-        <span class="flag static">static</span>
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Get the current root path.</p>
-
-<p>As a static method, this is only available on the server running the probe.
-For security purposes, this is not exposed in the FileSync data model.</p>
-    </div>
-
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>:
-                    
-                    The path to the root directory for the FilePath probe
-                
-            </div>
-        </div>
     
 
     
@@ -697,6 +762,108 @@ returning the probe to the monitor until the initial file contents are loaded.</
 </div>
 
                 
+                    <div id="method_input" class="method item">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_probes_ReplProbe.js.html#l121" title="lib/probes/ReplProbe.js:121">input</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>params</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Handle user input from the console line</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Named parameters</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function(error, returnParams)</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Callback function</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_onControl" class="method item inherited">
     <h3 class="name"><code>
       <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l92" title="lib/Probe.js:92">onControl</a>
@@ -840,6 +1007,92 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
 </div>
 
                 
+                    <div id="method_output" class="method item protected">
+    <h3 class="name"><code>
+      <a href="..&#x2F;files&#x2F;lib_probes_ReplProbe.js.html#l66" title="lib/probes/ReplProbe.js:66">output</a>
+    </code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>str</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+            
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Send output to the terminal</p>
+
+<p>This forces the change event even if the last output is the same
+as this output.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">str</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>String to output to the repl console</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_ping_control" class="method item inherited">
     <h3 class="name"><code>
       <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l131" title="lib/Probe.js:131">ping_control</a>
@@ -947,9 +1200,9 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
 </div>
 
                 
-                    <div id="method_release" class="method item inherited">
+                    <div id="method_release" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Probe.js.html#l79" title="lib/Probe.js:79">release</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_ReplProbe.js.html#l84" title="lib/probes/ReplProbe.js:84">release</a>
     </code></h3>
 
     
@@ -970,9 +1223,12 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
 
     <div class="meta">
         
+            <p>Inherited from
+            <a href="..&#x2F;classes&#x2F;Probe.html#method_release">
+                Probe
+            </a>
             
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Probe.html#method_release">Probe</a>:
+            but overwritten in
             
         
         </p>
@@ -986,11 +1242,9 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
     <div class="description">
         <p>Release any resources consumed by this probe.</p>
 
-<p>This can be implemented by derived classes that need to be informed when
-they are to be shut down.</p>
-
-<p>Probes that listen to events should use this method to remove their
-event listeners.</p>
+<p>Stop the REPL console.  Consoles live 1-1 with a UI counterpart, so stop
+requests exit the underlying repl console.  If the probe is re-started it
+will get a new repl stream and console.</p>
     </div>
 
     
@@ -1001,9 +1255,9 @@ event listeners.</p>
 </div>
 
                 
-                    <div id="method_setRootPath" class="method item">
+                    <div id="method_sh" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_FileSync.js.html#l311" title="lib/probes/FileSync.js:311">setRootPath</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_ReplProbe.js.html#l141" title="lib/probes/ReplProbe.js:141">sh</a>
     </code></h3>
 
     
@@ -1012,7 +1266,13 @@ event listeners.</p>
             
                 <li class="arg">
                     
-                        <code>rootPath</code>
+                        <code>params</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
                     
                 </li>
             
@@ -1028,8 +1288,6 @@ event listeners.</p>
 
     
 
-    
-        <span class="flag static">static</span>
     
 
     
@@ -1050,10 +1308,7 @@ event listeners.</p>
     </div>
 
     <div class="description">
-        <p>Set the server root path for objects stored with this probe</p>
-
-<p>For security purposes, this must be set before the SyncFileProbe
-will operate.  It will not accept any changes once set.</p>
+        <p>Execute a shell command</p>
     </div>
 
     
@@ -1064,14 +1319,29 @@ will operate.  It will not accept any changes once set.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">rootPath</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                        <code class="param-name">params</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>A path to the root directory for model object storage</p>
+                        <p>Named parameters</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function(error, returnParams)</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Callback function</p>
                     </div>
 
                     

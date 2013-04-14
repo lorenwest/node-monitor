@@ -13,10 +13,10 @@
       Sync = Monitor.Sync,
       FileProbe = Monitor.FileProbe,
       SyncProbe = Monitor.SyncProbe,
-      FileSync = SyncProbe.FileSync;
+      FileSyncProbe = SyncProbe.FileSyncProbe;
 
   // Constants
-  var TEST_FILE_DIR = FileSync.getRootPath() || __dirname + '/syncProbeTest',
+  var TEST_FILE_DIR = FileSyncProbe.getRootPath() || __dirname + '/syncProbeTest',
       TEST_OBJECT = {
         testNumber:1,
         testString:"two",
@@ -34,9 +34,9 @@
   var WATCH_CONNECT_TIME = FS.watch ? 10 : 1000;
 
   // Initialize the server-side sync probes
-  var DEFAULT_PROBE_NAME = 'FileSync';
+  var DEFAULT_PROBE_NAME = 'FileSyncProbe';
   SyncProbe.Config.defaultProbe = DEFAULT_PROBE_NAME;
-  FileSync.setRootPath(TEST_FILE_DIR);
+  FileSyncProbe.setRootPath(TEST_FILE_DIR);
 
   /**
   * Unit tests for the <a href="SyncProbe.html">SyncProbe</a> probe.

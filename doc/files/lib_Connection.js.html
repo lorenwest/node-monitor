@@ -49,9 +49,9 @@
             
                 <li><a href="..&#x2F;classes/FileProbeTest.html">FileProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/FileSync.html">FileSync</a></li>
+                <li><a href="..&#x2F;classes/FileSyncProbe.html">FileSyncProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Inspect.html">Inspect</a></li>
+                <li><a href="..&#x2F;classes/InspectProbe.html">InspectProbe</a></li>
             
                 <li><a href="..&#x2F;classes/InspectTest.html">InspectTest</a></li>
             
@@ -69,9 +69,9 @@
             
                 <li><a href="..&#x2F;classes/ProbeTest.html">ProbeTest</a></li>
             
-                <li><a href="..&#x2F;classes/Process.html">Process</a></li>
+                <li><a href="..&#x2F;classes/ProcessProbe.html">ProcessProbe</a></li>
             
-                <li><a href="..&#x2F;classes/Repl.html">Repl</a></li>
+                <li><a href="..&#x2F;classes/ReplProbe.html">ReplProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Router.html">Router</a></li>
             
@@ -426,10 +426,10 @@
       });
 
       &#x2F;&#x2F; Determine the process id
-      var pid = typeof process === &#x27;undefined&#x27; ? &#x27;1&#x27; : process.pid;
+      var pid = typeof process === &#x27;undefined&#x27; ? 1 : process.pid;
 
       &#x2F;&#x2F; Determine the app instance
-      var appInstance = process.env.NODE_APP_INSTANCE || &#x27;&#x27; + pid;
+      var appInstance = &#x27;&#x27; + (typeof process === &#x27;undefined&#x27; ? pid : process.env.NODE_APP_INSTANCE || pid);
 
       &#x2F;&#x2F; Exchange connection information
       socket.emit(&#x27;connection:info&#x27;, {

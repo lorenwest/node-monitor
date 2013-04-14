@@ -1061,10 +1061,10 @@
       });
 
       // Determine the process id
-      var pid = typeof process === 'undefined' ? '1' : process.pid;
+      var pid = typeof process === 'undefined' ? 1 : process.pid;
 
       // Determine the app instance
-      var appInstance = process.env.NODE_APP_INSTANCE || '' + pid;
+      var appInstance = '' + (typeof process === 'undefined' ? pid : process.env.NODE_APP_INSTANCE || pid);
 
       // Exchange connection information
       socket.emit('connection:info', {
@@ -2316,8 +2316,8 @@
   * Backbone API methods.
   *
   * It also provides two-way change based synchronization, updating data on the server as
-  * changes are made to the model, and updating the model as changes are detected on the
-  * server.
+  * changes are made to the model, and updating the client model as changes are detected
+  * on the server.
   *
   * Communication is <a href="Probe.html">Probe</a> based, leveraging the built-in
   * connection, routing, and socket-io functionality.  The <a href="FileSync.html">FileSync</a>
@@ -2635,14 +2635,15 @@
 
   // Module loading
   var Monitor = root.Monitor || require('./Monitor'),
-      EventEmitter = require('events').EventEmitter,
+      // Raw events on the server (for speed), backbone events on the browser (for functionality)
+      EventEmitter = Monitor.commonJS ? require('events').EventEmitter : Monitor.Backbone.Events,
       _ = Monitor._;
 
 
   /**
-  * A lightweight component for sending and gathering stats
+  * A lightweight component for gathering and emitting application statistics
   *
-  * This is both a collector and emitter for application statistics.
+  * This is both a collector and emitter for application stats.
   *
   * It's designed with low development and runtime cost in mind, encouraging
   * usage with minimum concern for overhead.
@@ -2960,15 +2961,14 @@
 
   // Module loading
   var Monitor = root.Monitor || require('./Monitor'),
-      EventEmitter = require('events').EventEmitter,
+      // Raw events on the server (for speed), backbone events on the browser (for functionality)
+      EventEmitter = Monitor.commonJS ? require('events').EventEmitter : Monitor.Backbone.Events,
       Stat = Monitor.Stat,
       stat = new Stat('Log'),
       _ = Monitor._;
 
   /**
-  * A lightweight component for sending and gathering logs
-  *
-  * This is both a collector and emitter for application logs.
+  * A lightweight component for gathering and emitting application logs
   *
   * It's designed with low development and runtime cost in mind, encouraging
   * usage with minimum concern for overhead.  Runtime monitoring can be as chatty
@@ -3238,7 +3238,7 @@
 
 }(this));
 
-// Inspect.js (c) 2010-2013 Loren West and other contributors
+// InspectProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/monitor-min
@@ -3271,7 +3271,7 @@
   * Otherwise it will update the value as it notices changes, while polling
   * on the specified polling interval (default: 1 second).
   *
-  * @class Inspect
+  * @class InspectProbe
   * @extends PollingProbe
   * @constructor
   * @param [initParams] - Initialization parameters
@@ -3285,7 +3285,7 @@
   *     @param model.value - The value of the element being inspected
   *     @param model.isModel - Is the value a Backbone.Model?
   */
-  var Inspect = Monitor.Inspect = PollingProbe.extend({
+  var InspectProbe = Monitor.InspectProbe = PollingProbe.extend({
 
     // These are required for Probes
     probeClass: 'Inspect',
