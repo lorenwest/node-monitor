@@ -28,6 +28,7 @@
     * @method Router-SetUp
     */
     SetUp: function(test) {
+      process.env.NODE_APP_INSTANCE = 'test';
       server = new Monitor.Server();
       server.start(test.done);
     },
@@ -93,8 +94,9 @@
       external = new Monitor({probeClass:'Process', hostName:'localhost', initParams:{a:'b'}});
       external.connect(function(error) {
         test.ok(!error, 'The error was ' + JSON.stringify(error));
+        test.equal('test', external.probe.connection.get('remoteAppInstance'), 'Verified the probe connected externally');
         var probeId = external.get('probeId');
-        test.ok(probeId, "The router found the probe");
+        test.ok(probeId, "The router found the remote probe based on class and host");
         test.done();
       });
     },
@@ -137,6 +139,24 @@
         var otherId = other.get('probeId');
         test.notEqual(externalId, otherId, "Two monitors created with the same initParams are connected to different probes");
         other.disconnect(test.done);
+      });
+    },
+
+    /**
+    * Test that the router can connect with a probe in an app by instance ID
+    * @method Router-ByAppInstance
+    */
+    ByAppInstance: function(test) {
+      // Don't connect locally
+      delete process.env.NODE_APP_INSTANCE;
+
+      external = new Monitor({probeClass:'Process', appInstance: 'test', initParams:{a:'b'}});
+      external.connect(function(error) {
+        test.ok(!error, 'The error was ' + JSON.stringify(error));
+        test.equal('test', external.probe.connection.get('remoteAppInstance'), 'Verified the probe connected to the right instance');
+        var probeId = external.get('probeId');
+        test.ok(probeId, "The router found the remote probe based on instance id");
+        test.done();
       });
     },
 
