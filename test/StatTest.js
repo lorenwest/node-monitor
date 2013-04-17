@@ -176,7 +176,76 @@
         stat.decrement('decr2', 29344);
       });
       stat.decrement('decr1');
+    },
+
+    /**
+    * Tests the stat probe
+    * @method Stat-ProbeTest
+    */
+    ProbeTest: function(test) {
+      var statMonitor = new Monitor({probeClass:'Stat', initParams:{interval:10}});
+      statMonitor.connect(function(error) {
+        test.ok(!error, 'Stat monitor error: ' + JSON.stringify(error));
+        statMonitor.on('change', function() {
+          var bundle = statMonitor.get('bundle');
+
+          // Omit the initial state of the monitor
+          if (bundle.length === 0) {
+            return;
+          }
+
+          test.ok(bundle, 'The stat bundle is available');
+          test.equals(bundle.length, 1, 'There is a single stat in the bundle');
+          var statArgs = bundle[0];
+          test.equals(statArgs.length, 4, 'There are 4 stat arguments');
+          test.equals(statArgs[0], 'stat-test', 'The module is correct');
+          test.equals(statArgs[1], 'probeTest', 'The stat name is correct');
+          test.equals(statArgs[2], 1, 'The value is correct');
+          test.equals(statArgs[3], 'c', 'There stat type is correct');
+          statMonitor.off('change');
+          test.done();
+        });
+        stat.increment('probeTest');
+      });
+    },
+
+    /**
+    * Tests the probe streams multiple items at once
+    * @method Stat-ProbeStream
+    */
+    ProbeStream: function(test) {
+
+      // This relies on the fact that the monitor was created in the prior
+      // function, and it just emitted a single item.
+      var statMonitor = new Monitor({probeClass:'Stat', initParams:{interval:10}});
+      statMonitor.connect(function(error) {
+        test.ok(!error, 'Stat monitor error: ' + JSON.stringify(error));
+        statMonitor.on('change', function() {
+          var bundle = statMonitor.get('bundle');
+
+          // Omit the current state of the probe (first change event)
+          if (bundle.length < 4) {
+            return;
+          }
+
+          test.ok(bundle, 'The stat bundle is available');
+          test.equals(bundle.length, 4, 'There were the correct number of items in the stream');
+          var statArgs = bundle[2];
+          test.equals(statArgs.length, 4, 'There are 4 stat arguments');
+          test.equals(statArgs[0], 'stat-test', 'The module is correct');
+          test.equals(statArgs[1], 'statGauge', 'The stat name is correct');
+          test.equals(statArgs[2], 420, 'The value is correct');
+          test.equals(statArgs[3], 'g', 'There stat type is correct');
+          statMonitor.off('change');
+          test.done();
+        });
+        stat.increment('probeTestr');
+        stat.decrement('probeTest');
+        stat.gauge('statGauge', 420);
+        stat.time('statTimer', 2840);
+      });
     }
+
 
   };
 

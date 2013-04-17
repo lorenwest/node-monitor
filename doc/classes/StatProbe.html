@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>SyncProbe - monitor-min</title>
+    <title>StatProbe - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -137,19 +137,19 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>SyncProbe Class</h1>
+                        <h1>StatProbe Class</h1>
 <div class="box meta">
     
 
     
         <div class="extends">
-            Extends <a href="../classes/Probe.html" class="crosslink">Probe</a>
+            Extends <a href="../classes/StreamProbe.html" class="crosslink">StreamProbe</a>
         </div>
     
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_SyncProbe.js.html#l11"><code>lib&#x2F;probes&#x2F;SyncProbe.js:11</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_StatProbe.js.html#l16"><code>lib&#x2F;probes&#x2F;StatProbe.js:16</code></a>
         </div>
     
 
@@ -165,26 +165,17 @@
 
 
 <div class="box intro">
-    <p>Probe for exposing backbone data models from server-side persistence</p>
+    <p>Remote application statistics monitoring</p>
 
-<p>This probe is used by the client-side <a href="Sync.html">Sync</a> class
-to connect a local backbone model with server-side storage.</p>
-
-<p>It delegates to a specialized SyncProbe defined by the server for the
-specific data class.  For example, the server may determine that one class
-type uses FileSyncProbe, and another class uses a different persistence
-mechanism.</p>
-
-<p>For security purposes, the server must <a href="SyncProbe.html#property_Config">configure</a> specific SyncProbes for
-classes, or a default sync probe before this will operate.</p>
+<p>This probe forwards application statistics to the monitor.</p>
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_SyncProbe" class="method item">
+        <div id="method_StatProbe" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_SyncProbe.js.html#l11" title="lib/probes/SyncProbe.js:11">SyncProbe</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_StatProbe.js.html#l16" title="lib/probes/StatProbe.js:16">StatProbe</a>
     </code></h3>
 
     
@@ -193,19 +184,13 @@ classes, or a default sync probe before this will operate.</p>
             
                 <li class="arg">
                     
-                        <code>className</code>
+                        <code class="optional">[initParams]</code>
                     
                 </li>
             
                 <li class="arg">
                     
-                        <code class="optional">[modelId]</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code class="optional">[model]</code>
+                        <code>model</code>
                     
                 </li>
             
@@ -252,39 +237,7 @@ classes, or a default sync probe before this will operate.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">className</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Name of the class to synchronize with</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name optional">[modelId]</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Id of the data model for live synchronization
-  If not set, a non-live probe is set up for control access only.</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name optional">[model]</code>
+                        <code class="param-name optional">[initParams]</code>
                         <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
                     
@@ -292,10 +245,134 @@ classes, or a default sync probe before this will operate.</p>
                     
 
                     <div class="param-description">
-                        <p>If this is a liveSync probe, this contains
-  the attributes of the current model object.</p>
+                        <p>Probe initialization parameters</p>
                     </div>
 
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name optional">[pattern=*]</code>
+                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Stat name pattern to monitor (see <a href="Stat.html">Stat</a>)</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name optional">[interval=1000]</code>
+                                    <span class="type">Numeric</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Queue interval (see <a href="StreamProbe.html">StreamProbe</a>)</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">model</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Monitor data model elements</p>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">bundle</code>
+                                    <span class="type">Stat array</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Array of Stat elements.</p>
+                                </div>
+
+                                
+                                    <ul class="params-list">
+                                        
+                                        <li class="param">
+                                            
+                                                <code class="param-name">module</code>
+                                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                            
+
+                                            <div class="param-description">
+                                                Stat module
+                                            </div>
+                                        </li>
+                                        
+                                        <li class="param">
+                                            
+                                                <code class="param-name">name</code>
+                                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                            
+
+                                            <div class="param-description">
+                                                Stat name
+                                            </div>
+                                        </li>
+                                        
+                                        <li class="param">
+                                            
+                                                <code class="param-name">value</code>
+                                                <span class="type">Numeric</span>
+                                            
+
+                                            <div class="param-description">
+                                                Stat value
+                                            </div>
+                                        </li>
+                                        
+                                        <li class="param">
+                                            
+                                                <code class="param-name">type</code>
+                                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                            
+
+                                            <div class="param-description">
+                                                'c'ounter, 'g'ague, or 'ms'timer
+                                            </div>
+                                        </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">sequence</code>
+                                    <span class="type">Integer</span>
+                                
+
+                                <div class="param-description">
+                                    <p>A numeric incrementer causing a change event</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
                     
                 </li>
             
@@ -319,8 +396,6 @@ classes, or a default sync probe before this will operate.</p>
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
         
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
-        
         
         
     </ul>
@@ -335,14 +410,8 @@ classes, or a default sync probe before this will operate.</p>
 
                     <ul class="index-list methods">
                         
-                            <li class="index-item method">
-                                <a href="#method_create_control">create_control</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_delete_control">delete_control</a>
+                            <li class="index-item method private inherited">
+                                <a href="#method__send">_send</a>
 
                                 
                             </li>
@@ -365,8 +434,8 @@ classes, or a default sync probe before this will operate.</p>
                                 
                             </li>
                         
-                            <li class="index-item method">
-                                <a href="#method_read_control">read_control</a>
+                            <li class="index-item method inherited">
+                                <a href="#method_queueItem">queueItem</a>
 
                                 
                             </li>
@@ -377,32 +446,10 @@ classes, or a default sync probe before this will operate.</p>
                                 
                             </li>
                         
-                            <li class="index-item method">
-                                <a href="#method_update_control">update_control</a>
-
-                                
-                            </li>
-                        
                     </ul>
                 </div>
             
 
-            
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties">
-                        
-                            <li class="index-item property">
-                                <a href="#property_Config">Config</a>
-
-                                
-                                    <span class="flag static">static</span>
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
             
 
             
@@ -415,35 +462,21 @@ classes, or a default sync probe before this will operate.</p>
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_create_control" class="method item">
+                    <div id="method__send" class="method item private inherited">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_SyncProbe.js.html#l67" title="lib/probes/SyncProbe.js:67">create_control</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_StreamProbe.js.html#l95" title="lib/probes/StreamProbe.js:95">_send</a>
     </code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>model</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
     
 
     
 
+    
+        <span class="flag private">private</span>
     
 
     
@@ -455,8 +488,8 @@ classes, or a default sync probe before this will operate.</p>
     <div class="meta">
         
             
-                
-                <p>
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;StreamProbe.html#method__send">StreamProbe</a>:
             
         
         </p>
@@ -468,205 +501,9 @@ classes, or a default sync probe before this will operate.</p>
     </div>
 
     <div class="description">
-        <p>Create and save a new instance of the class into storage</p>
-
-<p>This probe control requests a new instance of a data model to be
-persisted onto storage.  It is invoked when a data model that has
-the Sync probe attached calls <code>save()</code> on a new object.</p>
+        <p>Send the bundle to the montitor</p>
     </div>
 
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">model</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Full data model to save.  This must contain
-    the id element.</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function(error, result)</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Callback when complete</p>
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">error</code>
-                                    <span class="type">Mixed</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Set if an error occurs during creation.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">result</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                                
-
-                                <div class="param-description">
-                                    <p>An object containing any differing
-        parameters from the model sent in.  Normally a blank object.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_delete_control" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_SyncProbe.js.html#l126" title="lib/probes/SyncProbe.js:126">delete_control</a>
-    </code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>id</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Delete an instance from storage</p>
-
-<p>This probe control deletes the instance with the specified id
-from storage.</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">id</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>ID of the object to read</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function(error)</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Callback when complete</p>
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">error</code>
-                                    <span class="type">Mixed</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Set if an error occurs during read.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     
@@ -1090,9 +927,9 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
 </div>
 
                 
-                    <div id="method_read_control" class="method item">
+                    <div id="method_queueItem" class="method item inherited">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_SyncProbe.js.html#l86" title="lib/probes/SyncProbe.js:86">read_control</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_StreamProbe.js.html#l63" title="lib/probes/StreamProbe.js:63">queueItem</a>
     </code></h3>
 
     
@@ -1101,13 +938,7 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
             
                 <li class="arg">
                     
-                        <code>id</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
+                        <code>item</code>
                     
                 </li>
             
@@ -1130,8 +961,8 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
     <div class="meta">
         
             
-                
-                <p>
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;StreamProbe.html#method_queueItem">StreamProbe</a>:
             
         
         </p>
@@ -1143,10 +974,10 @@ proper signature.  See <code>ping_control()</code> for an example.</p>
     </div>
 
     <div class="description">
-        <p>Read an instance from storage</p>
+        <p>Queue an item in the stream</p>
 
-<p>This probe control reads the instance with the specified id
-from storage, and returns it in the callback.</p>
+<p>This method places the item into the stream and outputs it to the
+monitor, or queues it up for the next bundle.</p>
     </div>
 
     
@@ -1157,63 +988,16 @@ from storage, and returns it in the callback.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">id</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                        <code class="param-name">item</code>
+                        <span class="type">Any</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>ID of the object to read</p>
+                        <p>Item to place into the queue</p>
                     </div>
 
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function(error, result)</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Callback when complete</p>
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">error</code>
-                                    <span class="type">Mixed</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Set if an error occurs during read.
-      if error.code === 'NOTFOUND' then the requested object wasn't found.
-      if error.code === 'PARSE' then the document was poorly formatted JSON.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">result</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                                
-
-                                <div class="param-description">
-                                    <p>The full object.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
                     
                 </li>
             
@@ -1281,216 +1065,9 @@ event listeners.</p>
 </div>
 
                 
-                    <div id="method_update_control" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_SyncProbe.js.html#l104" title="lib/probes/SyncProbe.js:104">update_control</a>
-    </code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>model</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Update a data model in storage</p>
-
-<p>This acts like a REST PUT, meaning it can create a new object, or
-update an existing object.</p>
-
-<p>Backbone has only a save() method.  If the client sets the ID
-of the object before save(), Backbone thinks the object exists and
-will call update vs. create.</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">model</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Full data model to save.  This must contain
-    the id element.</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function(error, result)</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Callback when complete</p>
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">error</code>
-                                    <span class="type">Mixed</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Set if an error occurs during save.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">result</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                                
-
-                                <div class="param-description">
-                                    <p>An object containing any differing
-        parameters from the model sent in.  Normally a blank object.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
             </div>
         
 
-        
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
-
-                
-                    <div id="property_Config" class="property item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_SyncProbe.js.html#l143" title="lib/probes/SyncProbe.js:143">Config</a>
-    </code></h3>
-    <span class="type">&lt;Object&gt;
-<ul>
-  <li><code>defaultProbe (String)</code> Name of the sync probe to use if the class isn't listed in the classMap</li>
-  <li><code>classMap (Object)</code> Map of className to sync probe name to use instead of the default for that class</li>
-</ul></span>
-
-    
-
-    
-
-    
-
-    
-        <span class="flag static">static</span>
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Static Configurations</p>
-
-<p>These can be set onto the Monitor.SyncProbe class after it's loaded.</p>
-
-<p>The SyncProbe will <em>not</em> work until the defaultProbe is defined.</p>
-
-<p>Example:</p>
-
-<pre class="code"><code class="prettyprint">var syncConfig = Monitor.SyncProbe.Config;
-syncConfig.defaultProbe = 'FileSyncProbe';
-syncConfig.classMap = {
-  Book: 'MongoDbSync',
-  Author: 'MongoDbSync'
-}
-</code></pre>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-            </div>
         
 
         

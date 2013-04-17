@@ -57,6 +57,8 @@
             
                 <li><a href="..&#x2F;classes/Log.html">Log</a></li>
             
+                <li><a href="..&#x2F;classes/LogProbe.html">LogProbe</a></li>
+            
                 <li><a href="..&#x2F;classes/LogTest.html">LogTest</a></li>
             
                 <li><a href="..&#x2F;classes/Monitor.html">Monitor</a></li>
@@ -83,7 +85,11 @@
             
                 <li><a href="..&#x2F;classes/Stat.html">Stat</a></li>
             
+                <li><a href="..&#x2F;classes/StatProbe.html">StatProbe</a></li>
+            
                 <li><a href="..&#x2F;classes/StatTest.html">StatTest</a></li>
+            
+                <li><a href="..&#x2F;classes/StreamProbe.html">StreamProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Sync.html">Sync</a></li>
             
@@ -354,6 +360,7 @@
     * @param callback {Function(error)} - (optional) Called when connected
     *&#x2F;
     connectMonitor: function(monitor, callback) {
+
       callback = callback || function(){};
       var t = this, monitorJSON = monitor.toMonitorJSON(), probeJSON = null,
           probeClass = monitorJSON.probeClass;
@@ -758,7 +765,13 @@
         }
         var initOptions = {asyncInit: false, callback: whenDone};
         try {
-          probeImpl = new ProbeClass(initParams, initOptions);
+          &#x2F;&#x2F; Deep copy the init params, because Backbone mutates them.  This
+          &#x2F;&#x2F; is bad if the init params came in from defaults of another object,
+          &#x2F;&#x2F; because those defaults will get mutated.
+          var paramCopy = Monitor.deepCopy(initParams);
+
+          &#x2F;&#x2F; Instantiate a new probe
+          probeImpl = new ProbeClass(paramCopy, initOptions);
           probeImpl.set({id: Monitor.generateUniqueId()});
           probeImpl.refCount = 0;
           probeImpl.probeKey = probeKey;

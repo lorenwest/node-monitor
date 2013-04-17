@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>test&#x2F;ConnectionTest.js - monitor-min</title>
+    <title>lib&#x2F;probes&#x2F;StatProbe.js - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -137,89 +137,71 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: test&#x2F;ConnectionTest.js</h1>
+                        <h1 class="file-heading">File: lib&#x2F;probes&#x2F;StatProbe.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-&#x2F;&#x2F; ConnectionTest.js (c) 2010-2013 Loren West and other contributors
+&#x2F;&#x2F; StatProbe.js (c) 2010-2013 Loren West and other contributors
 &#x2F;&#x2F; May be freely distributed under the MIT license.
 &#x2F;&#x2F; For further details and documentation:
 &#x2F;&#x2F; http:&#x2F;&#x2F;lorenwest.github.com&#x2F;monitor-min
-(function(root){
+(function(root) {
 
-  &#x2F;&#x2F; Dependencies
-  var Monitor = require(&#x27;..&#x2F;lib&#x2F;index&#x27;),
-      Connection = Monitor.Connection, Backbone = Monitor.Backbone,
-      server, serverPort;
+  &#x2F;&#x2F; Module loading - this runs server-side only
+  var Monitor = root.Monitor || require(&#x27;..&#x2F;Monitor&#x27;),
+      _ = Monitor._,
+      StreamProbe = Monitor.StreamProbe,
+      Stat = Monitor.Stat;
+
+  &#x2F;&#x2F; Constants
+  var DEFAULT_PATTERN = &#x27;*&#x27;;
 
   &#x2F;**
-  * Unit tests for the &lt;a href=&quot;Connection.html&quot;&gt;Connection&lt;&#x2F;a&gt; class.
-  * @class ConnectionTest
+  * Remote application statistics monitoring
+  *
+  * This probe forwards application statistics to the monitor.
+  *
+  * @class StatProbe
+  * @extends StreamProbe
+  * @constructor
+  * @param [initParams] {Object} Probe initialization parameters
+  *     @param [initParams.pattern=*] {String} Stat name pattern to monitor (see &lt;a href=&quot;Stat.html&quot;&gt;Stat&lt;&#x2F;a&gt;)
+  *     @param [initParams.interval=1000] {Numeric} Queue interval (see &lt;a href=&quot;StreamProbe.html&quot;&gt;StreamProbe&lt;&#x2F;a&gt;)
+  * @param model {Object} Monitor data model elements
+  *     @param model.bundle {Stat array} Array of Stat elements.
+  *         @param model.bundle.module {String} Stat module
+  *         @param model.bundle.name {String} Stat name
+  *         @param model.bundle.value {Numeric} Stat value
+  *         @param model.bundle.type {String} &#x27;c&#x27;ounter, &#x27;g&#x27;ague, or &#x27;ms&#x27;timer
+  *     @param model.sequence {Integer} A numeric incrementer causing a change event
   *&#x2F;
+  var StatProbe = Monitor.StatProbe = StreamProbe.extend({
 
-  &#x2F;**
-  * Test group for connection functionality
-  * @method Connection
-  *&#x2F;
-  module.exports[&#x27;Connection&#x27;] = {
+    probeClass: &#x27;Stat&#x27;,
 
-    &#x2F;**
-    * Create a &lt;a href=&quot;Server.html&quot;&gt;Server&lt;&#x2F;a&gt; to test connections with
-    * @method Connection-setUp
-    *&#x2F;
-    setUp: function(callback) {
-      server = new Monitor.Server();
-      server.start(callback);
+    defaults: _.extend({}, StreamProbe.prototype.defaults, {
+      pattern: DEFAULT_PATTERN
+    }),
+
+    initialize: function(){
+      var t = this;
+
+      &#x2F;&#x2F; Call parent constructor
+      StreamProbe.prototype.initialize.apply(t, arguments);
+
+      &#x2F;&#x2F; The watcher just forwards all args to queueItem as an array
+      t.watcher = function() {
+        t.queueItem.call(t, _.toArray(arguments));
+      };
+      Stat.on(t.get(&#x27;pattern&#x27;), t.watcher);
     },
 
-    &#x2F;**
-    * Tests that the Connection classes are available
-    * @method Connection-Classes
-    *&#x2F;
-    Classes: function(test) {
-      test.ok(Connection.prototype instanceof Backbone.Model, &#x27;The Connection data model is in place&#x27;);
-      test.ok(Connection.List.prototype instanceof Backbone.Collection, &#x27;The Connection.List collection is in place&#x27;);
-      test.done();
-    },
-
-    &#x2F;**
-    * Assure that a connect &#x2F; disconnect to the server host&#x2F;port works
-    * @method Connection-ConnectDisconnect
-    *&#x2F;
-    ConnectDisconnect: function(test) {
-      var port = server.get(&#x27;port&#x27;), conn = new Monitor.Connection({hostName:&#x27;localhost&#x27;, hostPort:port});
-      conn.on(&#x27;connect&#x27;, function() {
-        test.ok(conn.get(&#x27;remoteHostName&#x27;), &#x27;The remote host name is known&#x27;);
-        conn.on(&#x27;disconnect&#x27;, test.done);
-        conn.disconnect();
-      });
-    },
-
-    &#x2F;**
-    * Test pinging the remote connection
-    * @method Connection-PingPong
-    *&#x2F;
-    PingPong: function(test) {
-      var port = server.get(&#x27;port&#x27;), conn = new Monitor.Connection({hostName:&#x27;localhost&#x27;, hostPort:port});
-      conn.on(&#x27;connect&#x27;, function() {
-        test.ok(conn.get(&#x27;remoteHostName&#x27;), &#x27;The remote host name is known&#x27;);
-        conn.ping(function(){
-          test.ok(true, &#x27;Ping made its way to and from the remote server&#x27;);
-          conn.on(&#x27;disconnect&#x27;, test.done);
-          conn.disconnect();
-        });
-      });
-    },
-
-    &#x2F;**
-    * Tear down the test Server
-    * @method Connection-tearDown
-    *&#x2F;
-    tearDown: function(callback) {
-      server.stop(callback);
+    release: function() {
+      var t = this;
+      Stat.off(t.get(&#x27;pattern&#x27;), t.watcher);
     }
 
-  };
+  });
 
 }(this));
 

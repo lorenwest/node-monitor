@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.1 - 2013-04-13 */
+/* monitor-min - v0.5.1 - 2013-04-17 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -140,6 +140,10 @@
         // in order for the connect event to fire before the first
         // change event.  Fire the connect / change in the proper order.
         if (!error) {
+
+          // An unfortunate side effect is any change listeners registered during
+          // connect will get triggered with the same values as during connect.
+          // To get around this, add change listeners from connect on nextTick.
           t.trigger('connect', t);
           t.trigger('change', t);
         }
@@ -1679,6 +1683,7 @@
     * @param callback {Function(error)} - (optional) Called when connected
     */
     connectMonitor: function(monitor, callback) {
+
       callback = callback || function(){};
       var t = this, monitorJSON = monitor.toMonitorJSON(), probeJSON = null,
           probeClass = monitorJSON.probeClass;
@@ -2083,7 +2088,13 @@
         }
         var initOptions = {asyncInit: false, callback: whenDone};
         try {
-          probeImpl = new ProbeClass(initParams, initOptions);
+          // Deep copy the init params, because Backbone mutates them.  This
+          // is bad if the init params came in from defaults of another object,
+          // because those defaults will get mutated.
+          var paramCopy = Monitor.deepCopy(initParams);
+
+          // Instantiate a new probe
+          probeImpl = new ProbeClass(paramCopy, initOptions);
           probeImpl.set({id: Monitor.generateUniqueId()});
           probeImpl.refCount = 0;
           probeImpl.probeKey = probeKey;
@@ -3238,6 +3249,129 @@
 
 }(this));
 
+// StreamProbe.js (c) 2010-2013 Loren West and other contributors
+// May be freely distributed under the MIT license.
+// For further details and documentation:
+// http://lorenwest.github.com/monitor-min
+(function(root){
+
+  // Module loading
+  var Monitor = root.Monitor || require('../Monitor'),
+      Probe = Monitor.Probe,
+      _ = Monitor._;
+
+  // Constants
+  var DEFAULT_BUNDLE_INTERVAL = 1000;
+
+  /**
+  * Base class for probes that stream data
+  *
+  * Offering real time data streaming can result in degraded performance due
+  * to the I/O overhead of sending individual stream elements to remote monitors.
+  *
+  * This class eases that overhead by bundling stream elements, and sending those
+  * bundles in scheduled intervals.  The monitor gets to decide the interval based
+  * on the stream volume, and their needs.
+  *
+  * Derived classes output their stream data as elements of the ```bundle```
+  * attribute.
+  *
+  * A ```sequence``` attribute is incremented sequentially to assure change
+  * events are fired, and to allow clients to insure stream ordering and
+  * completeness.
+  *
+  * @class StreamProbe
+  * @extends Probe
+  * @constructor
+  * @param [initParams] {Object} Probe initialization parameters
+  *     @param [initParams.interval=1000] {Numeric} Number of milliseconds
+  *         to wait between bundles.
+  */
+  var StreamProbe = Monitor.StreamProbe = Probe.extend({
+
+
+    defaults: _.extend({}, Probe.prototype.defaults, {
+      bundle: [],
+      interval: DEFAULT_BUNDLE_INTERVAL,
+      sequence: 0
+    }),
+
+    initialize: function(){
+      var t = this;
+
+      // Initialize parent
+      Probe.prototype.initialize.apply(t, arguments);
+
+      // Moving the interval into an instance variable for performance
+      t.interval = t.get('interval');
+
+      // Set up for the first bundle
+      t.queue = [];
+      t.timer = null;
+      t.lastSendTime = 0;
+    },
+
+    /**
+    * Queue an item in the stream
+    *
+    * This method places the item into the stream and outputs it to the
+    * monitor, or queues it up for the next bundle.
+    *
+    * @method queueItem
+    * @param item {Any} Item to place into the queue
+    */
+    queueItem: function(item) {
+      var t = this,
+          now = Date.now(),
+          msSinceLastSend = now - t.lastSendTime;
+
+      // Queue the item
+      t.queue.push(item);
+
+      // Send the bundle?
+      if (msSinceLastSend > t.interval) {
+        // It's been a while since the last send.  Send it now.
+        t._send();
+      }
+      else {
+        // Start the timer if it's not already running
+        if (!t.timer) {
+          t.timer = setTimeout(function(){
+            t._send();
+          }, t.interval - msSinceLastSend);
+        }
+      }
+    },
+
+    /**
+    * Send the bundle to the montitor
+    *
+    * @private
+    * @method _send
+    */
+    _send: function() {
+      var t = this,
+          now = Date.now();
+
+      // This kicks off the send
+      t.lastSendTime = now;
+      t.set({
+        bundle: t.queue,
+        sequence: t.get('sequence') + 1
+      });
+
+      // Reset
+      t.queue = [];
+      if (t.timer) {
+        clearTimeout(t.timer);
+        t.timer = null;
+      }
+    }
+
+  });
+
+}(this));
+
 // InspectProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
@@ -3397,6 +3531,134 @@
         t.set({value: newValue});
       }
     }
+  });
+
+}(this));
+
+// StatProbe.js (c) 2010-2013 Loren West and other contributors
+// May be freely distributed under the MIT license.
+// For further details and documentation:
+// http://lorenwest.github.com/monitor-min
+(function(root) {
+
+  // Module loading - this runs server-side only
+  var Monitor = root.Monitor || require('../Monitor'),
+      _ = Monitor._,
+      StreamProbe = Monitor.StreamProbe,
+      Stat = Monitor.Stat;
+
+  // Constants
+  var DEFAULT_PATTERN = '*';
+
+  /**
+  * Remote application statistics monitoring
+  *
+  * This probe forwards application statistics to the monitor.
+  *
+  * @class StatProbe
+  * @extends StreamProbe
+  * @constructor
+  * @param [initParams] {Object} Probe initialization parameters
+  *     @param [initParams.pattern=*] {String} Stat name pattern to monitor (see <a href="Stat.html">Stat</a>)
+  *     @param [initParams.interval=1000] {Numeric} Queue interval (see <a href="StreamProbe.html">StreamProbe</a>)
+  * @param model {Object} Monitor data model elements
+  *     @param model.bundle {Stat array} Array of Stat elements.
+  *         @param model.bundle.module {String} Stat module
+  *         @param model.bundle.name {String} Stat name
+  *         @param model.bundle.value {Numeric} Stat value
+  *         @param model.bundle.type {String} 'c'ounter, 'g'ague, or 'ms'timer
+  *     @param model.sequence {Integer} A numeric incrementer causing a change event
+  */
+  var StatProbe = Monitor.StatProbe = StreamProbe.extend({
+
+    probeClass: 'Stat',
+
+    defaults: _.extend({}, StreamProbe.prototype.defaults, {
+      pattern: DEFAULT_PATTERN
+    }),
+
+    initialize: function(){
+      var t = this;
+
+      // Call parent constructor
+      StreamProbe.prototype.initialize.apply(t, arguments);
+
+      // The watcher just forwards all args to queueItem as an array
+      t.watcher = function() {
+        t.queueItem.call(t, _.toArray(arguments));
+      };
+      Stat.on(t.get('pattern'), t.watcher);
+    },
+
+    release: function() {
+      var t = this;
+      Stat.off(t.get('pattern'), t.watcher);
+    }
+
+  });
+
+}(this));
+
+// LogProbe.js (c) 2010-2013 Loren West and other contributors
+// May be freely distributed under the MIT license.
+// For further details and documentation:
+// http://lorenwest.github.com/monitor-min
+(function(root) {
+
+  // Module loading - this runs server-side only
+  var Monitor = root.Monitor || require('../Monitor'),
+      _ = Monitor._,
+      StreamProbe = Monitor.StreamProbe,
+      Log = Monitor.Log;
+
+  // Constants
+  var DEFAULT_PATTERN = '*';
+
+  /**
+  * Remote application log monitoring
+  *
+  * This probe forwards application logs to the monitor.
+  *
+  * @class LogProbe
+  * @extends Probe
+  * @constructor
+  * @param [initParams] {Object} Probe initialization parameters
+  *     @param [initParams.pattern=*] {String} Log name pattern to monitor (see <a href="Log.html">Log</a>)
+  *     @param [initParams.interval=1000] {Numeric} Queue interval (see <a href="StreamProbe.html">StreamProbe</a>)
+  * @param model {Object} Monitor data model elements
+  *     @param model.bundle {Log array} Array of Log elements.
+  *         @param model.bundle.module {String} Log module
+  *         @param model.bundle.name {String} Log name
+  *         @param model.bundle.value {Numeric} Log value
+  *         @param model.bundle.type {String} 'c'ounter, 'g'ague, or 'ms'timer
+  *     @param model.sequence {Integer} A numeric incrementer causing a change event
+  */
+  var LogProbe = Monitor.LogProbe = StreamProbe.extend({
+
+    probeClass: 'Log',
+
+    defaults: _.extend({}, StreamProbe.prototype.defaults, {
+      pattern: DEFAULT_PATTERN
+    }),
+
+    initialize: function(){
+      var t = this;
+
+      // Call parent constructor
+      StreamProbe.prototype.initialize.apply(t, arguments);
+
+      // The watcher just forwards all args to queueItem as an array
+      t.watcher = function() {
+        t.queueItem.call(t, _.toArray(arguments));
+      };
+      Log.on(t.get('pattern'), t.watcher);
+    },
+
+    release: function() {
+      var t = this;
+      Log.off(t.get('pattern'), t.watcher);
+    }
+
   });
 
 }(this));

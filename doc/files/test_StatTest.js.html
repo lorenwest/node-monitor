@@ -57,6 +57,8 @@
             
                 <li><a href="..&#x2F;classes/Log.html">Log</a></li>
             
+                <li><a href="..&#x2F;classes/LogProbe.html">LogProbe</a></li>
+            
                 <li><a href="..&#x2F;classes/LogTest.html">LogTest</a></li>
             
                 <li><a href="..&#x2F;classes/Monitor.html">Monitor</a></li>
@@ -83,7 +85,11 @@
             
                 <li><a href="..&#x2F;classes/Stat.html">Stat</a></li>
             
+                <li><a href="..&#x2F;classes/StatProbe.html">StatProbe</a></li>
+            
                 <li><a href="..&#x2F;classes/StatTest.html">StatTest</a></li>
+            
+                <li><a href="..&#x2F;classes/StreamProbe.html">StreamProbe</a></li>
             
                 <li><a href="..&#x2F;classes/Sync.html">Sync</a></li>
             
@@ -313,7 +319,76 @@
         stat.decrement(&#x27;decr2&#x27;, 29344);
       });
       stat.decrement(&#x27;decr1&#x27;);
+    },
+
+    &#x2F;**
+    * Tests the stat probe
+    * @method Stat-ProbeTest
+    *&#x2F;
+    ProbeTest: function(test) {
+      var statMonitor = new Monitor({probeClass:&#x27;Stat&#x27;, initParams:{interval:10}});
+      statMonitor.connect(function(error) {
+        test.ok(!error, &#x27;Stat monitor error: &#x27; + JSON.stringify(error));
+        statMonitor.on(&#x27;change&#x27;, function() {
+          var bundle = statMonitor.get(&#x27;bundle&#x27;);
+
+          &#x2F;&#x2F; Omit the initial state of the monitor
+          if (bundle.length === 0) {
+            return;
+          }
+
+          test.ok(bundle, &#x27;The stat bundle is available&#x27;);
+          test.equals(bundle.length, 1, &#x27;There is a single stat in the bundle&#x27;);
+          var statArgs = bundle[0];
+          test.equals(statArgs.length, 4, &#x27;There are 4 stat arguments&#x27;);
+          test.equals(statArgs[0], &#x27;stat-test&#x27;, &#x27;The module is correct&#x27;);
+          test.equals(statArgs[1], &#x27;probeTest&#x27;, &#x27;The stat name is correct&#x27;);
+          test.equals(statArgs[2], 1, &#x27;The value is correct&#x27;);
+          test.equals(statArgs[3], &#x27;c&#x27;, &#x27;There stat type is correct&#x27;);
+          statMonitor.off(&#x27;change&#x27;);
+          test.done();
+        });
+        stat.increment(&#x27;probeTest&#x27;);
+      });
+    },
+
+    &#x2F;**
+    * Tests the probe streams multiple items at once
+    * @method Stat-ProbeStream
+    *&#x2F;
+    ProbeStream: function(test) {
+
+      &#x2F;&#x2F; This relies on the fact that the monitor was created in the prior
+      &#x2F;&#x2F; function, and it just emitted a single item.
+      var statMonitor = new Monitor({probeClass:&#x27;Stat&#x27;, initParams:{interval:10}});
+      statMonitor.connect(function(error) {
+        test.ok(!error, &#x27;Stat monitor error: &#x27; + JSON.stringify(error));
+        statMonitor.on(&#x27;change&#x27;, function() {
+          var bundle = statMonitor.get(&#x27;bundle&#x27;);
+
+          &#x2F;&#x2F; Omit the current state of the probe (first change event)
+          if (bundle.length &lt; 4) {
+            return;
+          }
+
+          test.ok(bundle, &#x27;The stat bundle is available&#x27;);
+          test.equals(bundle.length, 4, &#x27;There were the correct number of items in the stream&#x27;);
+          var statArgs = bundle[2];
+          test.equals(statArgs.length, 4, &#x27;There are 4 stat arguments&#x27;);
+          test.equals(statArgs[0], &#x27;stat-test&#x27;, &#x27;The module is correct&#x27;);
+          test.equals(statArgs[1], &#x27;statGauge&#x27;, &#x27;The stat name is correct&#x27;);
+          test.equals(statArgs[2], 420, &#x27;The value is correct&#x27;);
+          test.equals(statArgs[3], &#x27;g&#x27;, &#x27;There stat type is correct&#x27;);
+          statMonitor.off(&#x27;change&#x27;);
+          test.done();
+        });
+        stat.increment(&#x27;probeTestr&#x27;);
+        stat.decrement(&#x27;probeTest&#x27;);
+        stat.gauge(&#x27;statGauge&#x27;, 420);
+        stat.time(&#x27;statTimer&#x27;, 2840);
+      });
     }
+
 
   };
 

@@ -181,6 +181,76 @@
         test.done();
       });
       log.info('Checking for stat emission');
+    },
+
+    /**
+    * Tests the Log probe
+    * @method Log-ProbeTest
+    */
+    ProbeTest: function(test) {
+      var logMonitor = new Monitor({probeClass:'Log', initParams:{interval:10}});
+      logMonitor.connect(function(error) {
+        test.ok(!error, 'Log monitor error: ' + JSON.stringify(error));
+        logMonitor.on('change', function() {
+          var bundle = logMonitor.get('bundle');
+
+          // Omit the initial state of the monitor
+          if (bundle.length === 0) {
+            return;
+          }
+
+          test.ok(bundle, 'The log bundle is available');
+          test.equals(bundle.length, 1, 'There is a single log in the bundle');
+          var logArgs = bundle[0];
+          test.equals(logArgs.length, 4, 'There are 4 log arguments');
+          test.equals(logArgs[0], 'info', 'There log type is correct');
+          test.equals(logArgs[1], 'log-test', 'Ther module is correct');
+          test.equals(logArgs[2], 'probeTest', 'There log name is correct');
+          test.equals(logArgs[3], 22, 'The value is correct');
+          logMonitor.off('change');
+          test.done();
+        });
+        log.info('probeTest', 22);
+      });
+    },
+
+    /**
+    * Tests the probe streams multiple items at once
+    * @method Log-ProbeStream
+    */
+    ProbeStream: function(test) {
+
+      // This relies on the fact that the monitor was created in the prior
+      // function, and it just emitted a single item.
+      var logMonitor = new Monitor({probeClass:'Log', initParams:{interval:10}});
+      logMonitor.connect(function(error) {
+        test.ok(!error, 'Log monitor error: ' + JSON.stringify(error));
+        logMonitor.on('change', function() {
+          var bundle = logMonitor.get('bundle');
+
+          // Omit the current state of the probe (first change event)
+          if (bundle.length < 4) {
+            return;
+          }
+
+          test.ok(bundle, 'The log bundle is available');
+          test.equals(bundle.length, 4, 'There were the correct number of items in the stream');
+          var logArgs = bundle[2];
+          test.equals(logArgs.length, 6, 'There are 6 log arguments');
+          test.equals(logArgs[0], 'error', 'The log name is correct');
+          test.equals(logArgs[1], 'log-test', 'The module is correct');
+          test.equals(logArgs[2], 'probeTest3', 'The log name is correct');
+          test.equals(logArgs[3], 420, 'The value is correct');
+          test.equals(logArgs[4], 'hello', 'The next arg is correct');
+          test.equals(logArgs[5].a, 'world', 'Objects are correctly represented');
+          logMonitor.off('change');
+          test.done();
+        });
+        log.info('probeTest1');
+        log.warn('probeTest2');
+        log.error('probeTest3', 420, "hello", {a:"world"});
+        log.fatal('probeTest4', 2840);
+      });
     }
 
   };

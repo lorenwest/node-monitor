@@ -18,7 +18,10 @@ var MODULE_DEF = {
     "lib/Stat.js",
     "lib/Log.js",
     "lib/probes/PollingProbe.js",
-    "lib/probes/InspectProbe.js"
+    "lib/probes/StreamProbe.js",
+    "lib/probes/InspectProbe.js",
+    "lib/probes/StatProbe.js",
+    "lib/probes/LogProbe.js"
   ],
   ext: [
     "node_modules/underscore/underscore.js",

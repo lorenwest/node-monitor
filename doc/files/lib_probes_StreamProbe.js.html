@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>test&#x2F;ConnectionTest.js - monitor-min</title>
+    <title>lib&#x2F;probes&#x2F;StreamProbe.js - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -137,89 +137,130 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: test&#x2F;ConnectionTest.js</h1>
+                        <h1 class="file-heading">File: lib&#x2F;probes&#x2F;StreamProbe.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-&#x2F;&#x2F; ConnectionTest.js (c) 2010-2013 Loren West and other contributors
+&#x2F;&#x2F; StreamProbe.js (c) 2010-2013 Loren West and other contributors
 &#x2F;&#x2F; May be freely distributed under the MIT license.
 &#x2F;&#x2F; For further details and documentation:
 &#x2F;&#x2F; http:&#x2F;&#x2F;lorenwest.github.com&#x2F;monitor-min
 (function(root){
 
-  &#x2F;&#x2F; Dependencies
-  var Monitor = require(&#x27;..&#x2F;lib&#x2F;index&#x27;),
-      Connection = Monitor.Connection, Backbone = Monitor.Backbone,
-      server, serverPort;
+  &#x2F;&#x2F; Module loading
+  var Monitor = root.Monitor || require(&#x27;..&#x2F;Monitor&#x27;),
+      Probe = Monitor.Probe,
+      _ = Monitor._;
+
+  &#x2F;&#x2F; Constants
+  var DEFAULT_BUNDLE_INTERVAL = 1000;
 
   &#x2F;**
-  * Unit tests for the &lt;a href=&quot;Connection.html&quot;&gt;Connection&lt;&#x2F;a&gt; class.
-  * @class ConnectionTest
+  * Base class for probes that stream data
+  *
+  * Offering real time data streaming can result in degraded performance due
+  * to the I&#x2F;O overhead of sending individual stream elements to remote monitors.
+  *
+  * This class eases that overhead by bundling stream elements, and sending those
+  * bundles in scheduled intervals.  The monitor gets to decide the interval based
+  * on the stream volume, and their needs.
+  *
+  * Derived classes output their stream data as elements of the &#x60;&#x60;&#x60;bundle&#x60;&#x60;&#x60;
+  * attribute.
+  *
+  * A &#x60;&#x60;&#x60;sequence&#x60;&#x60;&#x60; attribute is incremented sequentially to assure change
+  * events are fired, and to allow clients to insure stream ordering and
+  * completeness.
+  *
+  * @class StreamProbe
+  * @extends Probe
+  * @constructor
+  * @param [initParams] {Object} Probe initialization parameters
+  *     @param [initParams.interval=1000] {Numeric} Number of milliseconds
+  *         to wait between bundles.
   *&#x2F;
+  var StreamProbe = Monitor.StreamProbe = Probe.extend({
 
-  &#x2F;**
-  * Test group for connection functionality
-  * @method Connection
-  *&#x2F;
-  module.exports[&#x27;Connection&#x27;] = {
 
-    &#x2F;**
-    * Create a &lt;a href=&quot;Server.html&quot;&gt;Server&lt;&#x2F;a&gt; to test connections with
-    * @method Connection-setUp
-    *&#x2F;
-    setUp: function(callback) {
-      server = new Monitor.Server();
-      server.start(callback);
+    defaults: _.extend({}, Probe.prototype.defaults, {
+      bundle: [],
+      interval: DEFAULT_BUNDLE_INTERVAL,
+      sequence: 0
+    }),
+
+    initialize: function(){
+      var t = this;
+
+      &#x2F;&#x2F; Initialize parent
+      Probe.prototype.initialize.apply(t, arguments);
+
+      &#x2F;&#x2F; Moving the interval into an instance variable for performance
+      t.interval = t.get(&#x27;interval&#x27;);
+
+      &#x2F;&#x2F; Set up for the first bundle
+      t.queue = [];
+      t.timer = null;
+      t.lastSendTime = 0;
     },
 
     &#x2F;**
-    * Tests that the Connection classes are available
-    * @method Connection-Classes
+    * Queue an item in the stream
+    *
+    * This method places the item into the stream and outputs it to the
+    * monitor, or queues it up for the next bundle.
+    *
+    * @method queueItem
+    * @param item {Any} Item to place into the queue
     *&#x2F;
-    Classes: function(test) {
-      test.ok(Connection.prototype instanceof Backbone.Model, &#x27;The Connection data model is in place&#x27;);
-      test.ok(Connection.List.prototype instanceof Backbone.Collection, &#x27;The Connection.List collection is in place&#x27;);
-      test.done();
+    queueItem: function(item) {
+      var t = this,
+          now = Date.now(),
+          msSinceLastSend = now - t.lastSendTime;
+
+      &#x2F;&#x2F; Queue the item
+      t.queue.push(item);
+
+      &#x2F;&#x2F; Send the bundle?
+      if (msSinceLastSend &gt; t.interval) {
+        &#x2F;&#x2F; It&#x27;s been a while since the last send.  Send it now.
+        t._send();
+      }
+      else {
+        &#x2F;&#x2F; Start the timer if it&#x27;s not already running
+        if (!t.timer) {
+          t.timer = setTimeout(function(){
+            t._send();
+          }, t.interval - msSinceLastSend);
+        }
+      }
     },
 
     &#x2F;**
-    * Assure that a connect &#x2F; disconnect to the server host&#x2F;port works
-    * @method Connection-ConnectDisconnect
+    * Send the bundle to the montitor
+    *
+    * @private
+    * @method _send
     *&#x2F;
-    ConnectDisconnect: function(test) {
-      var port = server.get(&#x27;port&#x27;), conn = new Monitor.Connection({hostName:&#x27;localhost&#x27;, hostPort:port});
-      conn.on(&#x27;connect&#x27;, function() {
-        test.ok(conn.get(&#x27;remoteHostName&#x27;), &#x27;The remote host name is known&#x27;);
-        conn.on(&#x27;disconnect&#x27;, test.done);
-        conn.disconnect();
+    _send: function() {
+      var t = this,
+          now = Date.now();
+
+      &#x2F;&#x2F; This kicks off the send
+      t.lastSendTime = now;
+      t.set({
+        bundle: t.queue,
+        sequence: t.get(&#x27;sequence&#x27;) + 1
       });
-    },
 
-    &#x2F;**
-    * Test pinging the remote connection
-    * @method Connection-PingPong
-    *&#x2F;
-    PingPong: function(test) {
-      var port = server.get(&#x27;port&#x27;), conn = new Monitor.Connection({hostName:&#x27;localhost&#x27;, hostPort:port});
-      conn.on(&#x27;connect&#x27;, function() {
-        test.ok(conn.get(&#x27;remoteHostName&#x27;), &#x27;The remote host name is known&#x27;);
-        conn.ping(function(){
-          test.ok(true, &#x27;Ping made its way to and from the remote server&#x27;);
-          conn.on(&#x27;disconnect&#x27;, test.done);
-          conn.disconnect();
-        });
-      });
-    },
-
-    &#x2F;**
-    * Tear down the test Server
-    * @method Connection-tearDown
-    *&#x2F;
-    tearDown: function(callback) {
-      server.stop(callback);
+      &#x2F;&#x2F; Reset
+      t.queue = [];
+      if (t.timer) {
+        clearTimeout(t.timer);
+        t.timer = null;
+      }
     }
 
-  };
+  });
 
 }(this));
 

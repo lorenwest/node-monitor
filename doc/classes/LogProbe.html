@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>FileSyncProbe - monitor-min</title>
+    <title>LogProbe - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -137,7 +137,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>FileSyncProbe Class</h1>
+                        <h1>LogProbe Class</h1>
 <div class="box meta">
     
 
@@ -149,7 +149,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l19"><code>lib&#x2F;probes&#x2F;FileSyncProbe.js:19</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;lib_probes_LogProbe.js.html#l16"><code>lib&#x2F;probes&#x2F;LogProbe.js:16</code></a>
         </div>
     
 
@@ -165,151 +165,17 @@
 
 
 <div class="box intro">
-    <p>Probe for synchronizing a Backbone data model with a file on the O/S</p>
+    <p>Remote application log monitoring</p>
 
-<p>Probe parameters are listed under <a href="SyncProbe.html">SyncProbe</a>.</p>
+<p>This probe forwards application logs to the monitor.</p>
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_FileSyncProbe" class="method item">
+        <div id="method_LogProbe" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l19" title="lib/probes/FileSyncProbe.js:19">FileSyncProbe</a>
-    </code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-    </div>
-
-
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-        
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-        
-        
-        
-        
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
-            
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods">
-                        
-                            <li class="index-item method">
-                                <a href="#method_getFullPath">getFullPath</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_getRootPath">getRootPath</a>
-
-                                
-                                    <span class="flag static">static</span>
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_initialize">initialize</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_onControl">onControl</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_ping_control">ping_control</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_release">release</a>
-
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_setRootPath">setRootPath</a>
-
-                                
-                                    <span class="flag static">static</span>
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
-            
-
-            
-
-            
-
-            
-        </div>
-
-        
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method_getFullPath" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l257" title="lib/probes/FileSyncProbe.js:257">getFullPath</a>
+      <a href="..&#x2F;files&#x2F;lib_probes_LogProbe.js.html#l16" title="lib/probes/LogProbe.js:16">LogProbe</a>
     </code></h3>
 
     
@@ -318,13 +184,13 @@
             
                 <li class="arg">
                     
-                        <code>modelId</code>
+                        <code class="optional">[initParams]</code>
                     
                 </li>
             
                 <li class="arg">
                     
-                        <code>callback</code>
+                        <code>model</code>
                     
                 </li>
             
@@ -360,10 +226,7 @@
     </div>
 
     <div class="description">
-        <p>Get the full path to the file</p>
-
-<p>This builds the full pathname to the file, and performs an fs.sync()
-on that pathname, providing the pathname and sync object in the callback.</p>
+        
     </div>
 
     
@@ -374,29 +237,15 @@ on that pathname, providing the pathname and sync object in the callback.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">modelId</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                        <code class="param-name optional">[initParams]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>ID of the data model to sync</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function(error, return)</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
+                        <p>Probe initialization parameters</p>
                     </div>
 
                     
@@ -404,12 +253,13 @@ on that pathname, providing the pathname and sync object in the callback.</p>
                             
                             <li class="param">
                                 
-                                    <code class="param-name">error</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                                    <code class="param-name optional">[pattern=*]</code>
+                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
                                 
 
                                 <div class="param-description">
-                                    <p>Error object (null if no error)</p>
+                                    <p>Log name pattern to monitor (see <a href="Log.html">Log</a>)</p>
                                 </div>
 
                                 
@@ -417,12 +267,45 @@ on that pathname, providing the pathname and sync object in the callback.</p>
                             
                             <li class="param">
                                 
-                                    <code class="param-name">return</code>
-                                    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                                    <code class="param-name optional">[interval=1000]</code>
+                                    <span class="type">Numeric</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
                                 
 
                                 <div class="param-description">
-                                    <p>return object</p>
+                                    <p>Queue interval (see <a href="StreamProbe.html">StreamProbe</a>)</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">model</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Monitor data model elements</p>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">bundle</code>
+                                    <span class="type">Log array</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Array of Log elements.</p>
                                 </div>
 
                                 
@@ -430,27 +313,62 @@ on that pathname, providing the pathname and sync object in the callback.</p>
                                         
                                         <li class="param">
                                             
-                                                <code class="param-name">path</code>
+                                                <code class="param-name">module</code>
                                                 <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
                                             
 
                                             <div class="param-description">
-                                                Full pathname to the file
+                                                Log module
                                             </div>
                                         </li>
                                         
                                         <li class="param">
                                             
-                                                <code class="param-name">stat</code>
-                                                <span class="type">Fs.stats</span>
+                                                <code class="param-name">name</code>
+                                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
                                             
 
                                             <div class="param-description">
-                                                Stats object (null if the file doesn't esixt)
+                                                Log name
+                                            </div>
+                                        </li>
+                                        
+                                        <li class="param">
+                                            
+                                                <code class="param-name">value</code>
+                                                <span class="type">Numeric</span>
+                                            
+
+                                            <div class="param-description">
+                                                Log value
+                                            </div>
+                                        </li>
+                                        
+                                        <li class="param">
+                                            
+                                                <code class="param-name">type</code>
+                                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                            
+
+                                            <div class="param-description">
+                                                'c'ounter, 'g'ague, or 'ms'timer
                                             </div>
                                         </li>
                                         
                                     </ul>
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">sequence</code>
+                                    <span class="type">Integer</span>
+                                
+
+                                <div class="param-description">
+                                    <p>A numeric incrementer causing a change event</p>
+                                </div>
+
                                 
                             </li>
                             
@@ -467,75 +385,69 @@ on that pathname, providing the pathname and sync object in the callback.</p>
     
 </div>
 
-                
-                    <div id="method_getRootPath" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l329" title="lib/probes/FileSyncProbe.js:329">getRootPath</a>
-    </code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-        <span class="flag static">static</span>
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
     </div>
 
-    <div class="description">
-        <p>Get the current root path.</p>
 
-<p>As a static method, this is only available on the server running the probe.
-For security purposes, this is not exposed in the FileSyncProbe data model.</p>
-    </div>
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-    
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
 
-    
-        <div class="returns">
-            <h4>Returns:</h4>
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
 
-            <div class="returns-description">
-                
-                    
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>:
-                    
-                    The path to the root directory for the FilePath probe
-                
-            </div>
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_initialize">initialize</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_onControl">onControl</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_ping_control">ping_control</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_release">release</a>
+
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
         </div>
-    
 
-    
-</div>
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
 
                 
                     <div id="method_initialize" class="method item inherited">
@@ -999,92 +911,6 @@ they are to be shut down.</p>
 event listeners.</p>
     </div>
 
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_setRootPath" class="method item">
-    <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_probes_FileSyncProbe.js.html#l311" title="lib/probes/FileSyncProbe.js:311">setRootPath</a>
-    </code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>rootPath</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <span class="flag static">static</span>
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-            
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Set the server root path for objects stored with this probe</p>
-
-<p>For security purposes, this must be set before the SyncFileProbe
-will operate.  It will not accept any changes once set.</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">rootPath</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>A path to the root directory for model object storage</p>
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     

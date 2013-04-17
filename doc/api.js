@@ -11,6 +11,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "InspectProbe",
         "InspectTest",
         "Log",
+        "LogProbe",
         "LogTest",
         "Monitor",
         "MonitorTest",
@@ -24,7 +25,9 @@ YUI.add("yuidoc-meta", function(Y) {
         "Server",
         "ServerTest",
         "Stat",
+        "StatProbe",
         "StatTest",
+        "StreamProbe",
         "Sync",
         "SyncProbe",
         "SyncProbeTest"

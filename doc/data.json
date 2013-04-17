@@ -47,6 +47,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "lib/probes/LogProbe.js": {
+            "name": "lib/probes/LogProbe.js",
+            "modules": {},
+            "classes": {
+                "LogProbe": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "lib/probes/PollingProbe.js": {
             "name": "lib/probes/PollingProbe.js",
             "modules": {},
@@ -70,6 +79,24 @@
             "modules": {},
             "classes": {
                 "ReplProbe": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/probes/StatProbe.js": {
+            "name": "lib/probes/StatProbe.js",
+            "modules": {},
+            "classes": {
+                "StatProbe": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/probes/StreamProbe.js": {
+            "name": "lib/probes/StreamProbe.js",
+            "modules": {},
+            "classes": {
+                "StreamProbe": 1
             },
             "fors": {},
             "namespaces": {}
@@ -268,9 +295,12 @@
                 "FileProbe": 1,
                 "FileSyncProbe": 1,
                 "InspectProbe": 1,
+                "LogProbe": 1,
                 "PollingProbe": 1,
                 "ProcessProbe": 1,
                 "ReplProbe": 1,
+                "StatProbe": 1,
+                "StreamProbe": 1,
                 "SyncProbe": 1
             },
             "fors": {},
@@ -483,6 +513,85 @@
                         {
                             "name": "isModel",
                             "description": "- Is the value a Backbone.Model?"
+                        }
+                    ]
+                }
+            ]
+        },
+        "LogProbe": {
+            "name": "LogProbe",
+            "shortname": "LogProbe",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Probes",
+            "namespace": "",
+            "file": "lib/probes/LogProbe.js",
+            "line": 16,
+            "description": "Remote application log monitoring\n\nThis probe forwards application logs to the monitor.",
+            "extends": "Probe",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "initParams",
+                    "description": "Probe initialization parameters",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "pattern",
+                            "description": "Log name pattern to monitor (see <a href=\"Log.html\">Log</a>)",
+                            "type": "String",
+                            "optional": true,
+                            "optdefault": "*"
+                        },
+                        {
+                            "name": "interval",
+                            "description": "Queue interval (see <a href=\"StreamProbe.html\">StreamProbe</a>)",
+                            "type": "Numeric",
+                            "optional": true,
+                            "optdefault": "1000"
+                        }
+                    ]
+                },
+                {
+                    "name": "model",
+                    "description": "Monitor data model elements",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "bundle",
+                            "description": "Array of Log elements.",
+                            "type": "Log array",
+                            "props": [
+                                {
+                                    "name": "module",
+                                    "description": "Log module",
+                                    "type": "String"
+                                },
+                                {
+                                    "name": "name",
+                                    "description": "Log name",
+                                    "type": "String"
+                                },
+                                {
+                                    "name": "value",
+                                    "description": "Log value",
+                                    "type": "Numeric"
+                                },
+                                {
+                                    "name": "type",
+                                    "description": "'c'ounter, 'g'ague, or 'ms'timer",
+                                    "type": "String"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "sequence",
+                            "description": "A numeric incrementer causing a change event",
+                            "type": "Integer"
                         }
                     ]
                 }
@@ -761,6 +870,118 @@
                             "name": "sequence",
                             "description": "Increasing sequence number - to enforce unique line output",
                             "type": "Integer"
+                        }
+                    ]
+                }
+            ]
+        },
+        "StatProbe": {
+            "name": "StatProbe",
+            "shortname": "StatProbe",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Probes",
+            "namespace": "",
+            "file": "lib/probes/StatProbe.js",
+            "line": 16,
+            "description": "Remote application statistics monitoring\n\nThis probe forwards application statistics to the monitor.",
+            "extends": "StreamProbe",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "initParams",
+                    "description": "Probe initialization parameters",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "pattern",
+                            "description": "Stat name pattern to monitor (see <a href=\"Stat.html\">Stat</a>)",
+                            "type": "String",
+                            "optional": true,
+                            "optdefault": "*"
+                        },
+                        {
+                            "name": "interval",
+                            "description": "Queue interval (see <a href=\"StreamProbe.html\">StreamProbe</a>)",
+                            "type": "Numeric",
+                            "optional": true,
+                            "optdefault": "1000"
+                        }
+                    ]
+                },
+                {
+                    "name": "model",
+                    "description": "Monitor data model elements",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "bundle",
+                            "description": "Array of Stat elements.",
+                            "type": "Stat array",
+                            "props": [
+                                {
+                                    "name": "module",
+                                    "description": "Stat module",
+                                    "type": "String"
+                                },
+                                {
+                                    "name": "name",
+                                    "description": "Stat name",
+                                    "type": "String"
+                                },
+                                {
+                                    "name": "value",
+                                    "description": "Stat value",
+                                    "type": "Numeric"
+                                },
+                                {
+                                    "name": "type",
+                                    "description": "'c'ounter, 'g'ague, or 'ms'timer",
+                                    "type": "String"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "sequence",
+                            "description": "A numeric incrementer causing a change event",
+                            "type": "Integer"
+                        }
+                    ]
+                }
+            ]
+        },
+        "StreamProbe": {
+            "name": "StreamProbe",
+            "shortname": "StreamProbe",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Probes",
+            "namespace": "",
+            "file": "lib/probes/StreamProbe.js",
+            "line": 15,
+            "description": "Base class for probes that stream data\n\nOffering real time data streaming can result in degraded performance due\nto the I/O overhead of sending individual stream elements to remote monitors.\n\nThis class eases that overhead by bundling stream elements, and sending those\nbundles in scheduled intervals.  The monitor gets to decide the interval based\non the stream volume, and their needs.\n\nDerived classes output their stream data as elements of the ```bundle```\nattribute.\n\nA ```sequence``` attribute is incremented sequentially to assure change\nevents are fired, and to allow clients to insure stream ordering and\ncompleteness.",
+            "extends": "Probe",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "initParams",
+                    "description": "Probe initialization parameters",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "interval",
+                            "description": "Number of milliseconds\n        to wait between bundles.",
+                            "type": "Numeric",
+                            "optional": true,
+                            "optdefault": "1000"
                         }
                     ]
                 }
@@ -1743,6 +1964,33 @@
             "module": "Probes"
         },
         {
+            "file": "lib/probes/StreamProbe.js",
+            "line": 63,
+            "description": "Queue an item in the stream\n\nThis method places the item into the stream and outputs it to the\nmonitor, or queues it up for the next bundle.",
+            "itemtype": "method",
+            "name": "queueItem",
+            "params": [
+                {
+                    "name": "item",
+                    "description": "Item to place into the queue",
+                    "type": "Any"
+                }
+            ],
+            "class": "StreamProbe",
+            "module": "Probes"
+        },
+        {
+            "file": "lib/probes/StreamProbe.js",
+            "line": 95,
+            "description": "Send the bundle to the montitor",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_send",
+            "class": "StreamProbe",
+            "module": "Probes"
+        },
+        {
             "file": "lib/probes/SyncProbe.js",
             "line": 67,
             "description": "Create and save a new instance of the class into storage\n\nThis probe control requests a new instance of a data model to be\npersisted onto storage.  It is invoked when a data model that has\nthe Sync probe attached calls ```save()``` on a new object.",
@@ -2341,7 +2589,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 147,
+            "line": 151,
             "description": "Get the connection to the remote probe\n\nThis method returns the Connection object that represents the remote\nserver used for communicating with the connected probe.\n\nIf the probe is running internally or the monitor isn't currently\nconnected, this will return null.",
             "itemtype": "method",
             "name": "getConnection",
@@ -2354,7 +2602,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 164,
+            "line": 168,
             "description": "Is the monitor currently connected?",
             "itemtype": "method",
             "name": "isConnected",
@@ -2367,7 +2615,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 175,
+            "line": 179,
             "description": "Disconnect from the remote probe\n\nThis should be called when the monitor is no longer needed.\nIt releases resources associated with monitoring the probe.\n\nIf this was the last object monitoring the probe, the probe will be\nstopped, releasing resources associated with running the probe.",
             "itemtype": "method",
             "name": "disconnect",
@@ -2383,7 +2631,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 187,
+            "line": 191,
             "description": "The monitor has disconnected from the probe",
             "itemtype": "event",
             "name": "disconnect",
@@ -2399,7 +2647,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 205,
+            "line": 209,
             "description": "Send a control message to the probe.\n\nMonitors can use this method to send a message and receive a response\nfrom a connected probe.\n\nThe probe must implement the specified control method.  All probes are\nderived from the base <a href=\"Probe.html\">Probe</a> class, which offers\na ping control.\n\nTo send a ping message to a probe and log the results:\n\n    var myMonitor.control('ping', console.log);",
             "itemtype": "method",
             "name": "control",
@@ -2427,7 +2675,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 243,
+            "line": 247,
             "description": "Produce an object without monitor attributes\n\nA Monitor object contains a union of the connection attributes required for\na Monitor, and the additional attributes defined by the probe it's monitoring.\n\nThis method produces an object containing only the probe portion of\nthose attributes.\n\nThe id attribute of the returned JSON is set to the probeId from\nthe monitor.",
             "itemtype": "method",
             "name": "toProbeJSON",
@@ -2448,7 +2696,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 272,
+            "line": 276,
             "description": "Produce an object with the monitor only attributes.\n\nA Monitor object contains a union of the connection attributes required for\na Monitor, and the additional attributes defined by the probe it's monitoring.\n\nThis method produces an object containing only the monitor portion of\nthose attributes.",
             "itemtype": "method",
             "name": "toMonitorJSON",
@@ -2469,7 +2717,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 298,
+            "line": 302,
             "description": "Produce a server string representation of the hostName:appName:appInstance\n\nDepending on the presence of the appName and appInstance, this will produce\none of the following:\n\n    hostName\n    hostName:appName\n    hostName:appName:appInstance",
             "itemtype": "method",
             "name": "toServerString",
@@ -2482,7 +2730,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 321,
+            "line": 325,
             "description": "Generate a unique UUID-v4 style string\n\nThis is a cross-platform UUID implementation used to uniquely identify\nmodel instances.  It is a random number based UUID, and as such can't be\nguaranteed unique.",
             "static": 1,
             "access": "protected",
@@ -2498,7 +2746,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 339,
+            "line": 343,
             "description": "Generate a unique ID for a collection\n\nThis generates an ID to be used for new elements of the collection,\nassuring they don't clash with other elements in the collection.",
             "itemtype": "method",
             "name": "Monitor.generateUniqueCollectionId",
@@ -2524,7 +2772,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 369,
+            "line": 373,
             "description": "Get the default router (an application singleton)\n\nThis instantiates a Router on first call.",
             "static": 1,
             "access": "protected",
@@ -2540,7 +2788,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 399,
+            "line": 403,
             "description": "Start a monitor server in this process\n\nThis is a shortand for the following:\n\n    var Monitor = require('monitor-min');\n    var server = new Monitor.Server();\n    server.start();\n\nFor more fine-tuned starting, see the <a href=\"Server.html\">Server</a> api.",
             "static": 1,
             "itemtype": "method",
@@ -2569,7 +2817,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 421,
+            "line": 425,
             "description": "Stop a started monitor server in this process",
             "static": 1,
             "itemtype": "method",
@@ -2586,7 +2834,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 432,
+            "line": 436,
             "description": "Produce a server string representation of the hostName:appName:appInstance\n\nDepending on the presence of the appName and appInstance, this will produce\none of the following:\n\n    hostName\n    hostName:appName\n    hostName:appName:appInstance",
             "itemtype": "method",
             "name": "toServerString",
@@ -2622,7 +2870,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 460,
+            "line": 464,
             "description": "Produce a depth-limited copy of the specified object\n\nFunctions are copied for visual inspection purposes - the fact that\nthey are a function, and any prototype members.  This is so a JSON.stringify\nof the result will show the functions (normally JSON.stringify doesn't output\nfunctions).\n\nThis method is mostly for debugging - for producing a human-readable stream\nrepresentation of the object.  It is an exact copy, except for elements of\ntype function.",
             "itemtype": "method",
             "name": "deepCopy",
@@ -2649,7 +2897,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 532,
+            "line": 536,
             "description": "Produce a recursion-safe JSON string.\n\nThis method recurses the specified object to a maximum specified depth\n(default 4).\n\nIt also indents sub-objects for debugging output.  The indent level can be\nspecified, or set to 0 for no indentation.\n\nThis is mostly useful in debugging when the standard JSON.stringify\nreturns an error.",
             "itemtype": "method",
             "name": "stringify",
@@ -2683,7 +2931,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 560,
+            "line": 564,
             "description": "Constructor for a list of Monitor objects\n\n    var myList = new Monitor.List(initialElements);",
             "static": 1,
             "itemtype": "method",
@@ -3037,7 +3285,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 263,
+            "line": 264,
             "description": "Disconnect a monitor\n\nThis accepts an instance of a connected monitor, and disconnects it from\nthe remote probe.\n\nThe probe implementation will be released if this is the only monitor\nobject watching it.",
             "itemtype": "method",
             "name": "disconnectMonitor",
@@ -3065,7 +3313,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 304,
+            "line": 305,
             "description": "Build a probe key from the probe data",
             "itemtype": "method",
             "name": "buildProbeKey",
@@ -3099,7 +3347,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 324,
+            "line": 325,
             "description": "Determine the connection to use for a probe\n\nThis uses the connection parameters of the specified monitor to determine\n(or create) the connection to use for the probe.\n\nIf the probe can be instantiated internally, a null is returned as the\nconnection.\n\nThis attempts to use an existing connection if available.  If not, a\nconnection attempt will be made with the host. If the host cannot be\nreached directly, it returns a connection with the gateway.",
             "itemtype": "method",
             "name": "determineConnection",
@@ -3127,7 +3375,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 462,
+            "line": 463,
             "description": "Find an existing connection to use\n\nThis method looks into the existing known connections to find one\nthat matches the specified parameters.\n\nFirewalled connections are not returned.",
             "itemtype": "method",
             "name": "findConnection",
@@ -3159,7 +3407,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 492,
+            "line": 493,
             "description": "Find all connections matching the selection criteria\n\nThis method looks into the existing known connections to find all\nthat match the specified parameters.\n\nFirewalled connections are not returned.",
             "itemtype": "method",
             "name": "findConnections",
@@ -3186,7 +3434,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 520,
+            "line": 521,
             "description": "Add connections for the specified host\n\nThis performs a scan of monitor ports on the server, and adds connections\nfor newly discovered servers.",
             "itemtype": "method",
             "name": "addHostConnections",
@@ -3209,7 +3457,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 564,
+            "line": 565,
             "description": "Connect to an internal probe implementation\n\nThis connects with a probe running in this process.  It will instantiate\nthe probe if it isn't currently running.",
             "itemtype": "method",
             "name": "connectInternal",
@@ -3244,7 +3492,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 647,
+            "line": 654,
             "description": "Disconnect with an internal probe implementation.",
             "itemtype": "method",
             "name": "disconnectInternal",
@@ -3267,7 +3515,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 669,
+            "line": 676,
             "description": "Connect to an external probe implementation.\n\nThis connects with a probe running in another process.  It will\ncoordinate the remote instantiation of the probe if it's not running.",
             "itemtype": "method",
             "name": "connectExternal",
@@ -3307,7 +3555,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 726,
+            "line": 733,
             "description": "Disconnect with an external probe implementation.",
             "itemtype": "method",
             "name": "disconnectExternal",
@@ -4170,6 +4418,24 @@
             "module": "UnitTests"
         },
         {
+            "file": "test/LogTest.js",
+            "line": 186,
+            "description": "Tests the Log probe",
+            "itemtype": "method",
+            "name": "Log-ProbeTest",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/LogTest.js",
+            "line": 217,
+            "description": "Tests the probe streams multiple items at once",
+            "itemtype": "method",
+            "name": "Log-ProbeStream",
+            "class": "LogTest",
+            "module": "UnitTests"
+        },
+        {
             "file": "test/MonitorTest.js",
             "line": 36,
             "description": "Tests for verifying modules are loaded and exposed properly",
@@ -4652,6 +4918,24 @@
             "description": "Tests the decrement stat",
             "itemtype": "method",
             "name": "Stat-Decrement",
+            "class": "StatTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/StatTest.js",
+            "line": 181,
+            "description": "Tests the stat probe",
+            "itemtype": "method",
+            "name": "Stat-ProbeTest",
+            "class": "StatTest",
+            "module": "UnitTests"
+        },
+        {
+            "file": "test/StatTest.js",
+            "line": 212,
+            "description": "Tests the probe streams multiple items at once",
+            "itemtype": "method",
+            "name": "Stat-ProbeStream",
             "class": "StatTest",
             "module": "UnitTests"
         },
