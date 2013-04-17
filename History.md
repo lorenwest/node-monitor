@@ -1,4 +1,4 @@
-0.5.1 / 2013-04-17
+0.5.2 / 2013-04-17
 ==================
 
   * Revved the major version to match node-monitor major version
