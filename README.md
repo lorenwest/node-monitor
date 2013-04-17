@@ -14,7 +14,7 @@ Think of it as a supercharged [JMX](http://www.google.com/search?q=jmx&btnI) for
 
 * **Easy to embed** - Add to your app with 1 line of code
 * **Auto discovery** - Finds all instances of your app on a server
-* **Remote REPL** - Remote login into your running apps
+* **Remote REPL** - Remote login to your running apps
 * **Process information** - CPU load, memory usage, uptime, etc.
 * **Backbone.js integration** - Remotely monitor Backbone.js models, with active updates
 * **Configuration control** - Inspect and tune your [app configurations](https://github.com/lorenwest/node-config) while running
