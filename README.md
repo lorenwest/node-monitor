@@ -17,10 +17,10 @@ Think of it as a supercharged [JMX](http://www.google.com/search?q=jmx&btnI) for
 * **Remote REPL** - Remote login into your running apps
 * **Process information** - CPU load, memory usage, uptime, etc.
 * **Backbone.js integration** - Remotely monitor Backbone.js models, with active updates
-* **Configuration control** - Inspect and tune your [app configurations](http://lorenwest.github.com/node-config) while running
+* **Configuration control** - Inspect and tune your [app configurations](https://github.com/lorenwest/node-config) while running
 * **Powerful** - Enterprise grade for multi-node deployments
 * **Lightweight** - Trim enough to run in a [Raspberry Pi](http://www.raspberrypi.org/faqs)
-* **Extensible** - With a [plugin directory](https://github.com/lorenwest/monitor/wiki) for specialized monitoring
+* **Hackable** - With a [plugin directory](https://github.com/lorenwest/monitor/wiki) for specialized monitoring
 
 Quick Start
 -----------

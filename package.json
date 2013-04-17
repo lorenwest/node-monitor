@@ -34,6 +34,6 @@
   "engines": { "node": ">= 0.6.0" },
   "scripts": {
     "test": "grunt test",
-    "start": "node server"
+    "start": "node monitor"
   }
 }
