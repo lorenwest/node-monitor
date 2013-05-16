@@ -10,7 +10,7 @@ Introduction
 
 This is a PRE-release of node-monitor 0.5, a web application for monitoring and controlling node.js applications.
 
-It is in active development, so documentation is sparse and upgrades may be painful.  This version will not be released to the NPM repository until it is suitable for use in production environments.
+It is in active development, so documentation is sparse and upgrades may be painful.
 
 
 Quick Start
