@@ -1,3 +1,8 @@
+0.5.3 / 2013-05-16
+==================
+
+  * Fixed a dependency issue in the monitor.js bootstrap
+
 0.5.2 / 2013-04-17
 ==================
 
