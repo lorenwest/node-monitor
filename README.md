@@ -8,7 +8,10 @@ Remote Monitoring and Control Panels for Node.js
 Introduction
 ------------
 
-...coming soon
+This is a PRE-release of node-monitor 0.5, a web application for monitoring and controlling node.js applications.
+
+It is in active development, so documentation is sparse and upgrades may be painful.  This version will not be released to the NPM repository until it is suitable for use in production environments.
+
 
 Quick Start
 -----------
@@ -21,7 +24,8 @@ Quick Start
 See Also
 --------
 
-* [Monitor](http://lorenwest.github.com/monitor) Core library for runtime monitoring
+* [Monitor Min](http://lorenwest.github.com/monitor-min) - Minimum library for runtime monitoring
+* [Core Monitor](http://lorenwest.github.com/core-monitor) - Essential views and monitors
 
 License
 -------
