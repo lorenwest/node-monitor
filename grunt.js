@@ -16,7 +16,7 @@ var MODULE_DEF = {
     "lib/js/ToursProbe.js"
   ],
   client_js: [
-    "lib/js/MonitorUI.js",
+    "lib/js/UI.js",
     "lib/js/Template.js",
     "lib/js/Site.js",
     "lib/js/Component.js",
@@ -40,7 +40,7 @@ var MODULE_DEF = {
     "lib/js/TourSettingsView.js"
   ],
   templates: [
-    "lib/template/MonitorUI.html",
+    "lib/template/UI.html",
     "lib/template/PageView.html",
     "lib/template/PageSettings.html",
     "lib/template/PageCopy.html",
@@ -52,13 +52,12 @@ var MODULE_DEF = {
     "lib/template/NewComponentView.html",
     "lib/template/NewPage.html",
     "lib/template/NewTourPage.html",
-    "lib/template/ComponentIcon.html",
-    "lib/template/About.html"
+    "lib/template/ComponentIcon.html"
   ],
   client_css: [
     "lib/css/default/bootstrap.min.css",
     "lib/css/default/font-awesome.css",
-    "lib/css/default/MonitorUI.css",
+    "lib/css/default/UI.css",
     "lib/css/default/MonitorPicker.css",
     "lib/css/default/ComponentView.css",
     "lib/css/default/ComponentSettings.css",
@@ -81,12 +80,9 @@ var MODULE_DEF = {
     "lib/ext/bootstrap-tooltip.js",
     "lib/ext/bootstrap-dropdown.js",
     "lib/ext/bootstrap-modal.js",
-    "lib/ext/bootstrap-popover.js",
     "lib/ext/bootstrap-alert.js",
-    "lib/ext/bootstrap-collapse.js",
     "lib/ext/mustache-0.7.0-dev.js",
-    "lib/ext/jquery.miniColors.min.js",
-    "lib/ext/d3.v2.min.js"
+    "lib/ext/jquery.miniColors.min.js"
   ]
 };
 

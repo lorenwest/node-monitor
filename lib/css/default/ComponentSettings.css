@@ -15,7 +15,7 @@
 
 .nm-cs-form h4:hover {
   color: #333;
-  cursor: default;
+  cursor: pointer;
 }
 
 .nm-cs-form h4+div  {
@@ -27,6 +27,7 @@
 
 .nm-cs-form h4.closed+div {
   height:0px;
+  display:none;
 }
 
 /* Change margins to account for different width icons */
