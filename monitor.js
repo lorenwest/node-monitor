@@ -5,7 +5,8 @@
 (function(root){
 
   // Load dependencies
-  var Monitor = require('./lib/index');
+  var Monitor = require('./lib/index'),
+      OS = require('os');
 
   /**
   * Bootstrap for a standalone monitor server
