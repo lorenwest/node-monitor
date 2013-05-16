@@ -24,8 +24,8 @@ Quick Start
 See Also
 --------
 
-* [Monitor Min](http://lorenwest.github.com/monitor-min) - Minimum library for runtime monitoring
-* [Core Monitor](http://lorenwest.github.com/core-monitor) - Essential views and monitors
+* [Monitor Min](https://github.com/lorenwest/monitor-min) - Minimum library for runtime monitoring
+* [Core Monitor](https://github.com/lorenwest/core-monitor) - Essential views and monitors
 
 License
 -------
