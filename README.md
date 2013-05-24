@@ -19,7 +19,7 @@ Think of it as a supercharged [JMX](http://www.google.com/search?q=jmx&btnI) for
 * **Backbone.js integration** - Remotely monitor Backbone.js models, with active updates
 * **Configuration control** - Inspect and tune your [app configurations](https://github.com/lorenwest/node-config) while running
 * **Powerful** - Enterprise grade for multi-node deployments
-* **Lightweight** - Trim enough to run in a [Raspberry Pi](http://www.raspberrypi.org/faqs) or [BeagleBone](http://www.beaglebone.org)
+* **Lightweight** - Trim enough to run in a [Raspberry Pi](http://www.raspberrypi.org/faqs) or [BeagleBoard](http://beagleboard.org)
 * **Hackable** - For specialized monitoring, and a [plugin directory](https://github.com/lorenwest/monitor/wiki) (tbd)
 
 Quick Start
