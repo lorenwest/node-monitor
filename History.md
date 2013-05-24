@@ -1,3 +1,9 @@
+0.5.4 / 2013-05-23
+==================
+
+  * Exported documentation to a public site
+  * Updated links in README.txt
+
 0.5.3 / 2013-05-16
 ==================
 

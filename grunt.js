@@ -105,10 +105,17 @@ module.exports = function(grunt) {
   grunt.registerTask('doc', 'Generate documentation files', function() {
     var t = this, done = t.async(), child, version = grunt.config.get('pkg').version;
     var cmd = 'yuidoc --project-version ' + version;
+    console.log(cmd);
     child = exec(cmd, function (error, stdout, stderr) {
       console.log(stderr);
       console.log(stdout);
-      done();
+      cmd = 'cp -R doc/* ../lorenwest.github.com/monitor-min';
+      console.log(cmd);
+      child = exec(cmd, function (error, stdout, stderr) {
+        console.log(stderr);
+        console.log(stdout);
+        done();
+      });
     });
   });
 
