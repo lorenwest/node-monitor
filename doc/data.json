@@ -531,7 +531,7 @@
             "file": "lib/probes/LogProbe.js",
             "line": 16,
             "description": "Remote application log monitoring\n\nThis probe forwards application logs to the monitor.",
-            "extends": "Probe",
+            "extends": "StreamProbe",
             "is_constructor": 1,
             "params": [
                 {
