@@ -39,7 +39,7 @@ Remotely Connect
 ----------------
 
 The best way to monitor and control the app is with the
-[Monitor Dashboard](http://lorenwest.github.com/node-monitor), but for this
+[Monitor Dashboard](https://github.com/lorenwest/node-monitor), but for this
 example we'll go <i>headless</i>, driving it from another node.js process.
 
 With the above server running in another window...
