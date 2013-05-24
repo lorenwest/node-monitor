@@ -20,7 +20,7 @@ Think of it as a supercharged [JMX](http://www.google.com/search?q=jmx&btnI) for
 * **Configuration control** - Inspect and tune your [app configurations](https://github.com/lorenwest/node-config) while running
 * **Powerful** - Enterprise grade for multi-node deployments
 * **Lightweight** - Trim enough to run in a [Raspberry Pi](http://www.raspberrypi.org/faqs) or [BeagleBoard](http://beagleboard.org)
-* **Hackable** - For specialized monitoring, and a [plugin directory](https://github.com/lorenwest/monitor/wiki) (tbd)
+* **Hackable** - For specialized monitoring, and a [plugin directory](https://github.com/lorenwest/monitor-min/wiki)
 
 Quick Start
 -----------
