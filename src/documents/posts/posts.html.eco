@@ -1,0 +1,13 @@
+---
+title: Posts
+layout: page
+pageOrder: 2
+---
+
+<nav class="linklist">
+	<% for document in @getCollection('posts').toJSON(): %>
+		<li><span><%= document.date.toShortDateString() %></span>
+		&raquo;
+		<a href="<%= document.url %>"><%= document.title %></a></li>
+	<% end %>
+</nav>

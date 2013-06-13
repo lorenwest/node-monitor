@@ -1,0 +1,69 @@
+---
+layout: default
+title: Node Monitor
+---
+
+<div class="hero-unit">
+  <h1>
+     Node Monitor
+  </h1>
+  <h1>
+     Remote Monitoring & Control
+  </h1>
+</div>
+
+  <p class="message">
+    Site development
+    <ul>
+      <li>Site layout, menu structure, placeholder pages</li>
+      <li>Describe the meaning and suggested content for each page</li>
+      <li>Getting Started (installation & setup)</li>
+      <li>Overview = End User Documentation</li>
+      <li>Overview / Site</li>
+      <li>Overview / Page</li>
+      <li>Overview / Tours</li>
+      <li>Overview / Apps</li>
+      <li>Developers / Adding data probes</li>
+      <li>Developers / Adding monitor views</li>
+      <li>Developers / Packaging Your App</li>
+      <li>Blog (blog setup)</li>
+      <li>First blog post (announcement)</li>
+      <li>Home Page (first impressions)</li>
+    </ul>
+  </p>
+
+  <p class="message">
+    A little more about it.  Maybe a paragraph or two.
+  </p>
+
+  <p class="message">
+    Some cute slogan here.
+  </p>
+
+<!-- Bottom row of columns -->
+<div class="row">
+  <div class="span4">
+    <h2>Play.</h2>
+    <p>
+      ONE
+    </p>
+    <p>
+      <a class="btn" href="/console.html">View details &raquo;</a>
+    </p>
+  </div>
+  <div class="span4">
+    <h2>Connect.</h2>
+    <p>
+      TWO
+      <br>
+    </p>
+    <p><a class="btn" href="/v1/register.html">View details &raquo;</a></p>
+ </div>
+  <div class="span4">
+    <h2>Profit.</h2>
+    <p>
+      THREE
+    </p>
+    <p><a class="btn" href="/examples.html">View details &raquo;</a></p>
+  </div>
+</div>

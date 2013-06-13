@@ -1,0 +1,12 @@
+---
+layout: 'default'
+title: '404 Not Found'
+dynamic: true
+---
+
+<div class="hero-unit">
+	<h1>404 Not Found</h1>
+	<p>
+		Ooops! It looks like the document at <code><%= @req.url %></code> has gone missing...
+	</p>
+</div>
