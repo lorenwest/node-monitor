@@ -151,6 +151,7 @@
   var commonJS = (typeof exports !== &#x27;undefined&#x27;),
       Backbone = commonJS ? require(&#x27;backbone&#x27;) : root.Backbone,
       _ = commonJS ? require(&#x27;underscore&#x27;)._ : root._,
+      log = null, stat = null,
       Cron = commonJS ? require(&#x27;cron&#x27;) : null;
 
   &#x2F;&#x2F; Constants
@@ -254,7 +255,9 @@
       appName: &#x27;&#x27;,
       appInstance: &#x27;&#x27;
     },
-    initialize: function(params, options) {},
+    initialize: function(params, options) {
+      log.info(&#x27;init&#x27;, params);
+    },
 
     &#x2F;**
     * Connect the monitor to the remote probe
@@ -270,7 +273,8 @@
     * @event connect
     *&#x2F;
     connect: function(callback) {
-      var t = this;
+      var t = this, startTime = Date.now();
+      log.info(&#x27;connect&#x27;, t.toMonitorJSON());
       Monitor.getRouter().connectMonitor(t, function(error) {
 
         &#x2F;&#x2F; Give the caller first crack at knowing we&#x27;re connected,
@@ -280,13 +284,19 @@
         &#x2F;&#x2F; Initial data setting into the model was done silently
         &#x2F;&#x2F; in order for the connect event to fire before the first
         &#x2F;&#x2F; change event.  Fire the connect &#x2F; change in the proper order.
-        if (!error) {
+        if (error) {
+          log.error(&#x27;connect&#x27;, error);
+        }
+        else {
 
           &#x2F;&#x2F; An unfortunate side effect is any change listeners registered during
           &#x2F;&#x2F; connect will get triggered with the same values as during connect.
           &#x2F;&#x2F; To get around this, add change listeners from connect on nextTick.
           t.trigger(&#x27;connect&#x27;, t);
           t.trigger(&#x27;change&#x27;, t);
+
+          log.info(&#x27;connected&#x27;, t.toMonitorJSON());
+          stat.time(&#x27;connect&#x27;, Date.now() - startTime);
         }
       });
     },
@@ -342,10 +352,19 @@
     * &lt;&#x2F;ul&gt;
     *&#x2F;
     disconnect: function(callback) {
-      var t = this, reason = &#x27;manual_disconnect&#x27;;
+      var t = this, reason = &#x27;manual_disconnect&#x27;, startTime = Date.now();
+      log.info(&#x27;disconnect&#x27;, reason, t.get(&#x27;id&#x27;));
       Monitor.getRouter().disconnectMonitor(t, reason, function(error, reason) {
         if (callback) {callback(error);}
-        if (!error) {t.trigger(&#x27;disconnect&#x27;, reason);}
+        if (error) {
+          log.error(&#x27;disconnect&#x27;, error);
+        }
+        else {
+          t.trigger(&#x27;disconnect&#x27;, reason);
+
+          log.info(&#x27;disconnected&#x27;, t.toMonitorJSON());
+          stat.time(&#x27;disconnect&#x27;, Date.now() - startTime);
+        }
       });
     },
 
@@ -373,17 +392,42 @@
     * &lt;&#x2F;ul&gt;
     *&#x2F;
     control: function(name, params, callback) {
+      var t = this,
+          probe = t.probe,
+          logId = &#x27;control.&#x27; + t.get(&#x27;probeClass&#x27;) + &#x27;.&#x27; + name + &#x27;.&#x27; + t.get(&#x27;id&#x27;),
+          startTime = Date.now();
+
+      &#x2F;&#x2F; Switch callback if sent in 2nd arg
       if (typeof params === &#x27;function&#x27;) {
         callback = params;
         params = null;
       }
-      callback = callback || function(){};
-      var t = this, probe = t.probe;
-      if (!probe) {return callback(&#x27;Probe not connected&#x27;);}
-      if (probe &amp;&amp; probe.connection) {
-        probe.connection.emit(&#x27;probe:control&#x27;, {probeId: t.get(&#x27;probeId&#x27;), name: name, params:params}, callback);
+
+      log.info(logId, params);
+
+      var whenDone = function(error, args) {
+        if (error) {
+          log.error(logId, error);
+        }
+        else {
+          log.info(&#x27;return.&#x27; + logId, args);
+          stat.time(logId, Date.now() - startTime);
+        }
+
+        if (callback) {
+          callback.apply(t, arguments);
+        }
+      };
+
+      if (!probe) {
+        return whenDone(&#x27;Probe not connected&#x27;);
+      }
+
+      &#x2F;&#x2F; Send the message internally or to the probe connection
+      if (probe.connection) {
+        probe.connection.emit(&#x27;probe:control&#x27;, {probeId: t.get(&#x27;probeId&#x27;), name: name, params:params}, whenDone);
       } else {
-        probe.onControl(name, params, callback);
+        probe.onControl(name, params, whenDone);
       }
     },
 
@@ -479,6 +523,7 @@
   *&#x2F;
   Monitor.generateUniqueId = function() {
     &#x2F;&#x2F; Generate a 4 digit random hex string
+    stat.increment(&#x27;generateUniqueId&#x27;);
     function rhs4() {return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);}
     return (rhs4()+rhs4()+&quot;-&quot;+rhs4()+&quot;-&quot;+rhs4()+&quot;-&quot;+rhs4()+&quot;-&quot;+rhs4()+rhs4()+rhs4());
   };
@@ -561,6 +606,7 @@
   * @param callback {Function(error)} - Called when the server is accepting connections.
   *&#x2F;
   Monitor.start = function(options, callback) {
+    log.info(&#x27;start&#x27;, options);
     Monitor.defaultServer = new Monitor.Server();
     Monitor.defaultServer.start(options, callback);
   };
@@ -573,6 +619,7 @@
   * @param callback {Function(error)} - Called when the server is accepting connections.
   *&#x2F;
   Monitor.stop = function(callback) {
+    log.info(&#x27;stop&#x27;);
     Monitor.defaultServer.stop(callback);
   };
 
@@ -702,6 +749,42 @@
 
     &#x2F;&#x2F; Return a stringified depth-limited deep copy
     return JSON.stringify(Monitor.deepCopy(value, depth), null, indent);
+  };
+
+  &#x2F;**
+  * Expose the stat logger class
+  *
+  * @protected
+  * @method setStatLoggerClass
+  * @param statLoggerClass {Function} Stat logger class to expose
+  *&#x2F;
+  Monitor.setStatLoggerClass = function(StatLoggerClass) {
+
+    &#x2F;&#x2F; Build the getStatLogger function
+    Monitor.getStatLogger = function(module) {
+      return new StatLoggerClass(module);
+    };
+
+    &#x2F;&#x2F; Get the logger for the Monitor module
+    stat = Monitor.getStatLogger(&#x27;Monitor&#x27;);
+  };
+
+  &#x2F;**
+  * Expose the logger class
+  *
+  * @protected
+  * @method setLoggerClass
+  * @param loggerClass {Function} Logger class to expose
+  *&#x2F;
+  Monitor.setLoggerClass = function(LoggerClass) {
+
+    &#x2F;&#x2F; Build the getLogger function
+    Monitor.getLogger = function(module) {
+      return new LoggerClass(module);
+    };
+
+    &#x2F;&#x2F; Get the logger for the Monitor module
+    log = Monitor.getLogger(&#x27;Monitor&#x27;);
   };
 
   &#x2F;**

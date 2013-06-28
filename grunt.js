@@ -10,13 +10,13 @@ var exec = require('child_process').exec;
 var MODULE_DEF = {
   lib: [
     "lib/Monitor.js",
+    "lib/Stat.js",
+    "lib/Log.js",
     "lib/Probe.js",
     "lib/Connection.js",
     "lib/Server.js",
     "lib/Router.js",
     "lib/Sync.js",
-    "lib/Stat.js",
-    "lib/Log.js",
     "lib/probes/PollingProbe.js",
     "lib/probes/StreamProbe.js",
     "lib/probes/InspectProbe.js",

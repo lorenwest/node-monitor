@@ -188,7 +188,7 @@
     * @method Log-ProbeTest
     */
     ProbeTest: function(test) {
-      var logMonitor = new Monitor({probeClass:'Log', initParams:{interval:10}});
+      var logMonitor = new Monitor({probeClass:'Log', initParams:{interval:10, pattern:'*.log-test.*'}});
       logMonitor.connect(function(error) {
         test.ok(!error, 'Log monitor error: ' + JSON.stringify(error));
         logMonitor.on('change', function() {
@@ -222,7 +222,7 @@
 
       // This relies on the fact that the monitor was created in the prior
       // function, and it just emitted a single item.
-      var logMonitor = new Monitor({probeClass:'Log', initParams:{interval:10}});
+      var logMonitor = new Monitor({probeClass:'Log', initParams:{interval:10, pattern:'*.log-test.*'}});
       logMonitor.connect(function(error) {
         test.ok(!error, 'Log monitor error: ' + JSON.stringify(error));
         logMonitor.on('change', function() {

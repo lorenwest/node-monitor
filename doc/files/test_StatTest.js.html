@@ -326,7 +326,7 @@
     * @method Stat-ProbeTest
     *&#x2F;
     ProbeTest: function(test) {
-      var statMonitor = new Monitor({probeClass:&#x27;Stat&#x27;, initParams:{interval:10}});
+      var statMonitor = new Monitor({probeClass:&#x27;Stat&#x27;, initParams:{interval:10, pattern:&#x27;stat-test.*&#x27;}});
       statMonitor.connect(function(error) {
         test.ok(!error, &#x27;Stat monitor error: &#x27; + JSON.stringify(error));
         statMonitor.on(&#x27;change&#x27;, function() {
@@ -360,7 +360,7 @@
 
       &#x2F;&#x2F; This relies on the fact that the monitor was created in the prior
       &#x2F;&#x2F; function, and it just emitted a single item.
-      var statMonitor = new Monitor({probeClass:&#x27;Stat&#x27;, initParams:{interval:10}});
+      var statMonitor = new Monitor({probeClass:&#x27;Stat&#x27;, initParams:{interval:10, pattern:&#x27;stat-test.*&#x27;}});
       statMonitor.connect(function(error) {
         test.ok(!error, &#x27;Stat monitor error: &#x27; + JSON.stringify(error));
         statMonitor.on(&#x27;change&#x27;, function() {

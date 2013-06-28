@@ -149,6 +149,8 @@
 
   &#x2F;&#x2F; Module loading
   var Monitor = root.Monitor || require(&#x27;.&#x2F;Monitor&#x27;),
+      log = Monitor.getLogger(&#x27;Probe&#x27;),
+      stat = Monitor.getStatLogger(&#x27;Probe&#x27;),
       Cron = Monitor.Cron, _ = Monitor._, Backbone = Monitor.Backbone;
 
   &#x2F;**
@@ -217,7 +219,10 @@
     *         if asyncInit is set to true.  If an error is passed, the probe
     *         will not be used.
     *&#x2F;
-    initialize: function(attributes, options) {},
+    initialize: function(attributes, options) {
+      var t = this;
+      log.info(&#x27;init&#x27;, t.toJSON(), attributes, options);
+    },
 
     &#x2F;**
     * Release any resources consumed by this probe.
@@ -230,7 +235,10 @@
     *
     * @method release
     *&#x2F;
-    release: function(){},
+    release: function(){
+      var t = this;
+      log.info(&#x27;release&#x27;, t.toJSON());
+    },
 
     &#x2F;**
     * Dispatch a control message to the appropriate control function.
@@ -261,6 +269,7 @@
       params = params || {};
       callback = callback || function(){};
       var t = this, controlFn = t[name + &#x27;_control&#x27;], errMsg;
+      log.info(&#x27;onControl&#x27;, t.toJSON(), name, params);
       if (!controlFn) {return callback({msg:&#x27;No control function: &#x27; + name});}
       try {
         controlFn.call(t, params, callback);

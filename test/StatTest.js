@@ -183,7 +183,7 @@
     * @method Stat-ProbeTest
     */
     ProbeTest: function(test) {
-      var statMonitor = new Monitor({probeClass:'Stat', initParams:{interval:10}});
+      var statMonitor = new Monitor({probeClass:'Stat', initParams:{interval:10, pattern:'stat-test.*'}});
       statMonitor.connect(function(error) {
         test.ok(!error, 'Stat monitor error: ' + JSON.stringify(error));
         statMonitor.on('change', function() {
@@ -217,7 +217,7 @@
 
       // This relies on the fact that the monitor was created in the prior
       // function, and it just emitted a single item.
-      var statMonitor = new Monitor({probeClass:'Stat', initParams:{interval:10}});
+      var statMonitor = new Monitor({probeClass:'Stat', initParams:{interval:10, pattern:'stat-test.*'}});
       statMonitor.connect(function(error) {
         test.ok(!error, 'Stat monitor error: ' + JSON.stringify(error));
         statMonitor.on('change', function() {

@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.3 - 2013-05-16 */
+/* monitor-min - v0.5.4 - 2013-06-28 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -10,6 +10,7 @@
   var commonJS = (typeof exports !== 'undefined'),
       Backbone = commonJS ? require('backbone') : root.Backbone,
       _ = commonJS ? require('underscore')._ : root._,
+      log = null, stat = null,
       Cron = commonJS ? require('cron') : null;
 
   // Constants
@@ -113,7 +114,9 @@
       appName: '',
       appInstance: ''
     },
-    initialize: function(params, options) {},
+    initialize: function(params, options) {
+      log.info('init', params);
+    },
 
     /**
     * Connect the monitor to the remote probe
@@ -129,7 +132,8 @@
     * @event connect
     */
     connect: function(callback) {
-      var t = this;
+      var t = this, startTime = Date.now();
+      log.info('connect', t.toMonitorJSON());
       Monitor.getRouter().connectMonitor(t, function(error) {
 
         // Give the caller first crack at knowing we're connected,
@@ -139,13 +143,19 @@
         // Initial data setting into the model was done silently
         // in order for the connect event to fire before the first
         // change event.  Fire the connect / change in the proper order.
-        if (!error) {
+        if (error) {
+          log.error('connect', error);
+        }
+        else {
 
           // An unfortunate side effect is any change listeners registered during
           // connect will get triggered with the same values as during connect.
           // To get around this, add change listeners from connect on nextTick.
           t.trigger('connect', t);
           t.trigger('change', t);
+
+          log.info('connected', t.toMonitorJSON());
+          stat.time('connect', Date.now() - startTime);
         }
       });
     },
@@ -201,10 +211,19 @@
     * </ul>
     */
     disconnect: function(callback) {
-      var t = this, reason = 'manual_disconnect';
+      var t = this, reason = 'manual_disconnect', startTime = Date.now();
+      log.info('disconnect', reason, t.get('id'));
       Monitor.getRouter().disconnectMonitor(t, reason, function(error, reason) {
         if (callback) {callback(error);}
-        if (!error) {t.trigger('disconnect', reason);}
+        if (error) {
+          log.error('disconnect', error);
+        }
+        else {
+          t.trigger('disconnect', reason);
+
+          log.info('disconnected', t.toMonitorJSON());
+          stat.time('disconnect', Date.now() - startTime);
+        }
       });
     },
 
@@ -232,17 +251,42 @@
     * </ul>
     */
     control: function(name, params, callback) {
+      var t = this,
+          probe = t.probe,
+          logId = 'control.' + t.get('probeClass') + '.' + name + '.' + t.get('id'),
+          startTime = Date.now();
+
+      // Switch callback if sent in 2nd arg
       if (typeof params === 'function') {
         callback = params;
         params = null;
       }
-      callback = callback || function(){};
-      var t = this, probe = t.probe;
-      if (!probe) {return callback('Probe not connected');}
-      if (probe && probe.connection) {
-        probe.connection.emit('probe:control', {probeId: t.get('probeId'), name: name, params:params}, callback);
+
+      log.info(logId, params);
+
+      var whenDone = function(error, args) {
+        if (error) {
+          log.error(logId, error);
+        }
+        else {
+          log.info('return.' + logId, args);
+          stat.time(logId, Date.now() - startTime);
+        }
+
+        if (callback) {
+          callback.apply(t, arguments);
+        }
+      };
+
+      if (!probe) {
+        return whenDone('Probe not connected');
+      }
+
+      // Send the message internally or to the probe connection
+      if (probe.connection) {
+        probe.connection.emit('probe:control', {probeId: t.get('probeId'), name: name, params:params}, whenDone);
       } else {
-        probe.onControl(name, params, callback);
+        probe.onControl(name, params, whenDone);
       }
     },
 
@@ -338,6 +382,7 @@
   */
   Monitor.generateUniqueId = function() {
     // Generate a 4 digit random hex string
+    stat.increment('generateUniqueId');
     function rhs4() {return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);}
     return (rhs4()+rhs4()+"-"+rhs4()+"-"+rhs4()+"-"+rhs4()+"-"+rhs4()+rhs4()+rhs4());
   };
@@ -420,6 +465,7 @@
   * @param callback {Function(error)} - Called when the server is accepting connections.
   */
   Monitor.start = function(options, callback) {
+    log.info('start', options);
     Monitor.defaultServer = new Monitor.Server();
     Monitor.defaultServer.start(options, callback);
   };
@@ -432,6 +478,7 @@
   * @param callback {Function(error)} - Called when the server is accepting connections.
   */
   Monitor.stop = function(callback) {
+    log.info('stop');
     Monitor.defaultServer.stop(callback);
   };
 
@@ -564,6 +611,42 @@
   };
 
   /**
+  * Expose the stat logger class
+  *
+  * @protected
+  * @method setStatLoggerClass
+  * @param statLoggerClass {Function} Stat logger class to expose
+  */
+  Monitor.setStatLoggerClass = function(StatLoggerClass) {
+
+    // Build the getStatLogger function
+    Monitor.getStatLogger = function(module) {
+      return new StatLoggerClass(module);
+    };
+
+    // Get the logger for the Monitor module
+    stat = Monitor.getStatLogger('Monitor');
+  };
+
+  /**
+  * Expose the logger class
+  *
+  * @protected
+  * @method setLoggerClass
+  * @param loggerClass {Function} Logger class to expose
+  */
+  Monitor.setLoggerClass = function(LoggerClass) {
+
+    // Build the getLogger function
+    Monitor.getLogger = function(module) {
+      return new LoggerClass(module);
+    };
+
+    // Get the logger for the Monitor module
+    log = Monitor.getLogger('Monitor');
+  };
+
+  /**
   * Constructor for a list of Monitor objects
   *
   *     var myList = new Monitor.List(initialElements);
@@ -605,6 +688,523 @@
 
 }(this));
 
+/*jslint browser: true */
+// Stat.js (c) 2010-2013 Loren West and other contributors
+// May be freely distributed under the MIT license.
+// For further details and documentation:
+// http://lorenwest.github.com/monitor-min
+(function(root){
+
+  // Module loading
+  var Monitor = root.Monitor || require('./Monitor'),
+      // Raw events on the server (for speed), backbone events on the browser (for functionality)
+      EventEmitter = Monitor.commonJS ? require('events').EventEmitter : Monitor.Backbone.Events,
+      _ = Monitor._;
+
+
+  /**
+  * A lightweight component for gathering and emitting application statistics
+  *
+  * This is both a collector and emitter for application stats.
+  *
+  * It's designed with low development and runtime cost in mind, encouraging
+  * usage with minimum concern for overhead.
+  *
+  * Stat Collector
+  * --------------
+  *
+  * As a collector, it's a place to send application stats as they're discovered.
+  *
+  * Example for incrementing a stat in your application:
+  *
+  *     var stat = require('monitor-min').getStatLogger('myModule');
+  *     ...
+  *     stat.increment('requests.inbound');
+  *
+  * The above is a request to increment the ```myModule.requests.inbound``` stat.
+  * It peforms work only if someone is listening for that event.
+  *
+  * Stat Emitter
+  * -------------
+  * As an emitter, Stat is a place to gather stats as they're collected.
+  *
+  * When listening for stats, wildcards can be used to register for many stats
+  * within a group. For example, the following call:
+  *
+  *     var Stat = require('monitor-min').Stat;
+  *     Stat.on('myModule.*.timer', myFunction);
+  *
+  * Will call ```myFunction``` when all ```myModule.*.timer``` stats are emitted.
+  *
+  * Listeners are invoked with 4 arguments:
+  *
+  * - module - The statLogger module name
+  * - name - The name of the stat that just fired
+  * - value - The numeric value passed
+  * - type - An enumeration of the types of stats:<br/>
+  *   'c'  - Counter.  Add (or subtract) the value to (or from) the prior value<br/>
+  *   'g'  - Gague.  Value is to be recorded as provided<br/>
+  *   'ms' - Timer.  Millisecond amount of time something took.
+  *
+  * <h2 id="wildcards">Wildcards</h2>
+  *
+  * The following wildcards are allowed for registering events.  They're
+  * modeled after the graphite wildcard syntax (from the
+  * <a href="https://graphite.readthedocs.org/en/latest/render_api.html#paths-and-wildcards">graphite docs</a>):
+  *
+  * #### Delimiter
+  * The period (.) character is literal, and matches name segment separators.
+  *
+  * #### Asterisk
+  * The asterisk (*) matches zero or more characters. It is non-greedy, so you
+  * can have more than one within a single path element.
+  *
+  * Example: servers.ix\*ehssvc\*v.cpu.total.\* will return all total CPU metrics
+  * for all servers matching the given name pattern.
+  *
+  * An asterisk at the far right of the pattern matches everything to the right,
+  * including all path segments.  For example, ```servers.*``` matches all
+  * names beginning with ```servers.```.
+  *
+  * #### Character list or range
+  * Characters in square brackets ([...]) specify a single character position in
+  * the path string, and match if the character in that position matches one of
+  * the characters in the list or range.
+  *
+  * A character range is indicated by 2 characters separated by a dash (-), and
+  * means that any character between those 2 characters (inclusive) will match.
+  * More than one range can be included within the square brackets, e.g. foo[a-z0-9]bar
+  * will match foopbar, foo7bar etc..
+  *
+  * If the characters cannot be read as a range, they are treated as a
+  * list - any character in the list will match, e.g. foo[bc]ar will match
+  * foobar and foocar. If you want to include a dash (-) in your list, put
+  * it at the beginning or end, so it's not interpreted as a range.
+  *
+  * #### Value list
+  * Comma-separated values within curly braces ({foo,bar,...}) are treated as
+  * value lists, and match if any of the values matches the current point in
+  * the path. For example, servers.ix01ehssvc04v.cpu.total.{user,system,iowait}
+  * will match the user, system and I/O wait total CPU metrics for the specified
+  * server.
+  *
+  * #### Javascript Regex
+  * For finer grained expression matching, a javascript style regex can be
+  * specified using the ```/.../``` syntax.  This style spans the entire identifier.
+  * You can ignore case using the ```/.../i``` syntax.  If the first character of the
+  * string is a slash, it considers the string a javascript regular expression.
+  *
+  * Choosing Good Names
+  * -------------------
+  * It's a good idea to pick a good naming scheme with each dot-delimited segment
+  * having a consistent, well-defined purpose.  Volatile segments should be as deep
+  * into the hierarchy (furthest right) as possible.  Keeping the names less
+  * volatile makes it easier to turn recording on for all statistics.
+  *
+  * @class Stat
+  * @constructor
+  */
+  var Stat = Monitor.Stat = function(module) {
+    var t = this;
+    t.module = module;
+  };
+  var proto = Stat.prototype;
+
+  // This is a map of registered event names to compiled regexs, for
+  // quickly testing if a statistic needs to be emitted.
+  Stat.eventRegex = {};
+
+  /**
+  * Increment a counter by a specified value
+  *
+  * Assuming someone is listening to this stat, this is an instruction for that
+  * listener to add the specified value (usually 1) to their prior value for this stat.
+  *
+  * This is known as server-side setting, as the server (listener) is responsible
+  * for maintaining the prior and new value for the stat.
+  *
+  * @method increment
+  * @param name {String} Dot.separated name of the counter to increment
+  * @param [value=1] {Number} Amount to increment the counter by.
+  */
+  proto.increment = function(name, value){
+    value = _.isNumber(value) ? value : 1;
+    Stat._emit(this.module, name, value, 'c');
+  };
+
+  /**
+  * Decrement a counter by a specified value
+  *
+  * Assuming someone is listening to this stat, this is an instruction for that
+  * listener to subtract the specified value (usually 1) to their prior value for this stat.
+  *
+  * This is known as server-side setting, as the server (listener) is responsible
+  * for maintaining the prior and new value for the stat.
+  *
+  * @method decrement
+  * @param name {String} Dot.separated name of the counter to decrement
+  * @param [value=1] {Number} Amount to decrement the counter by.
+  */
+  proto.decrement = function(name, value){
+    value = _.isNumber(value) ? value : 1;
+    Stat._emit(this.module, name, value * -1, 'c');
+  };
+
+  /**
+  * Set the stat to the specified value
+  *
+  * This is an instruction to any (all) listener(s) to set the stat to a
+  * specific value.
+  *
+  * This is known as client-side setting, because the client determines the value
+  * of the stat.
+  *
+  * @method gauge
+  * @param name {String} Dot.separated name of the stat
+  * @param value {Number} Number to set the gauge to
+  */
+  proto.gauge = function(name, value){
+    Stat._emit(this.module, name, value, 'g');
+  };
+
+  /**
+  * Record the specified duration (in milliseconds) for the stat
+  *
+  * This is like Stat.gauge() in that it is a client-side setting of a
+  * specified value.  The difference is the scale of the value is specified
+  * as milliseconds.
+  *
+  * This may be one of the most widely used stat methods.  It can (should?) be
+  * used upon callback from asynchronous methods.
+  *
+  * Pattern:
+  *
+  *     var stat = require('monitor-min').getStatLogger('myModule');
+  *     ...
+  *     var stamp = Date.now();
+  *     SomeAsyncFunction(arg1, function(error) {
+  *       stat.time('SomeAsyncFunction.time', Date.Now() - stamp);
+  *       ...continue with error handling & callback handling
+  *     });
+  *
+  * @method time
+  * @param name {String} Dot.separated name of the stat
+  * @param duration {Integer} Number of milliseconds this stat took to complete
+  */
+  proto.time = function(name, duration){
+    Stat._emit(this.module, name, duration, 'ms');
+  };
+
+  /**
+  * Send the stat to all registered listeners
+  *
+  * @private
+  * @static
+  * @method emit
+  * @param module {String} Module name
+  * @param name {String} Stat name
+  * @param value {Numeric} Stat value
+  * @param type {String} Enumeration.  One of the following:
+  *   'c'  - Counter.  + values increment, - values decrement
+  *   'g'  - Gague.  Statistic is recorded as provided
+  *   'ms' - Timer.  Millisecond amount of time something took
+  */
+  Stat._emit = function(module, name, value, type) {
+    var eventName,
+        fullName;
+
+    // Test the name against all registered events
+    for (eventName in Stat._events) {
+
+      // Build the full name only if someone is listening
+      if (!fullName) {
+        fullName = module + '.' + name;
+      }
+
+      // Get the regex associated with the name
+      var regex = Stat.eventRegex[eventName];
+      if (!regex) {
+        regex = Stat.eventRegex[eventName] = Stat._buildRegex(eventName);
+      }
+
+      // Test the name with the regex, and emit if it matches
+      if (regex.test(fullName)) {
+        Stat.emit(eventName, module, name, value, type);
+      }
+    }
+  };
+
+  /**
+  * Build a regex from a user entered string following the pattern described
+  * in the class definition.  Loosely:
+  *
+  *    If it looks like a JS regexp, process it as a regexp
+  *    Change all '.' to '\.'
+  *    Change all '*' to '[^\.]*' (unless it's at the end, then convert to '.*')
+  *    Change all {one,two} to (one|two)
+  *    Leave all [...] alone - they work as-is
+  *
+  *  If an error occurs, throw an exception
+  *
+  * @private
+  * @static
+  * @method _buildRegex
+  * @param str {String} String to build the regular expression from
+  * @return {RegExp}The regular expression object
+  *
+  */
+  Stat._buildRegex = function(str) {
+    var regexStr = '',
+        modifier = '',
+        lastIdx = str.length - 1,
+        inSquiggly = false;
+
+    // Javascript regular expressions
+    if (/^\/[^\/]*\/i*$/.test(str)) {
+      if (/i$/.test(str)) {
+        modifier = 'i';
+        str = str.replace(/i$/,'');
+      }
+      regexStr = '^' + str.replace(/^\//,'').replace(/\/$/,'') + '$';
+    }
+
+    // Process character by character
+    else {
+      for (var i = 0, l = str.length; i < l; i++) {
+        var c = str.substr(i,1);
+        switch (c) {
+          case '.':
+            c = '\\.';
+            break;
+          case '*':
+            c = (i === lastIdx ? '.*' : '[^\\.]*');
+            break;
+          case '{':
+            c = '(';
+            inSquiggly = true;
+            break;
+          case '}':
+            c = ')';
+            inSquiggly = false;
+            break;
+          case ',':
+            if (inSquiggly) {
+              c = '|';
+            }
+            break;
+        }
+        regexStr += c;
+      }
+
+      // Force it to match the full string
+      regexStr = '^' + regexStr + '$';
+    }
+
+    // Now build the regex.  This throws an exception if poorly formed.
+    return new RegExp(regexStr, modifier);
+  };
+
+  // Mixin event processing for the Stat class
+  _.extend(Stat, EventEmitter.prototype);
+
+  // Expose this class from the Monitor module
+  Monitor.setStatLoggerClass(Stat);
+
+}(this));
+
+/*jslint browser: true */
+// Log.js (c) 2010-2013 Loren West and other contributors
+// May be freely distributed under the MIT license.
+// For further details and documentation:
+// http://lorenwest.github.com/monitor-min
+(function(root){
+
+  // Module loading
+  var Monitor = root.Monitor || require('./Monitor'),
+      // Raw events on the server (for speed), backbone events on the browser (for functionality)
+      EventEmitter = Monitor.commonJS ? require('events').EventEmitter : Monitor.Backbone.Events,
+      Stat = Monitor.Stat,
+      stat = new Stat('Log'),
+      _ = Monitor._;
+
+  /**
+  * A lightweight component for gathering and emitting application logs
+  *
+  * It's designed with low development and runtime cost in mind, encouraging
+  * usage with minimum concern for overhead.  Runtime monitoring can be as chatty
+  * as desired, outputting every log statement of every type, or finely tuned
+  * with regular expressions to monitor specific log statements.
+  *
+  * Log Collector
+  * -------------
+  *
+  * As a collector, it's a place to send application logs.
+  *
+  * Example for outputting a log in your application:
+  *
+  *     var log = require('monitor-min').getLogger('myModule');
+  *     ...
+  *     log.info('Credit limit accepted', limit, requestedAmount);
+  *
+  * The above is a request to output an ```info``` log for ```myModule``` named
+  * ```Credit limit accepted```.  The log entry includes all additional parameters,
+  * in this case the customer credit limit and the reqeusted amount.
+  *
+  * The full name for this log entry is: ```"info.myModule.Credit limit accepted"```
+  * The name is important, as monitors can be configured to output logs based
+  * on this name.
+  *
+  * Best practices are to include dynamic parameters in extra arguments
+  * vs. concatenating strings.  This reduces logging overhead, especially
+  * for log statements that aren't currently being watched.
+  *
+  * Log Emitter
+  * -----------
+  * As an emitter, the Log module is a place to capture logging output.
+  *
+  * When listening for log entries, wildcards can be used to register for
+  * particular log types and entries.
+  *
+  *     var Log = require('monitor-min').Log;
+  *     ...
+  *     Log.on('info.myModule.*', myFunction);
+  *
+  * Will call ```myFunction``` when all ```info.myModule.*``` logs are emitted.
+  *
+  * Listeners are invoked with the following arguments:
+  *
+  * - type - The log type (info, trace, warn, etc.)
+  * - module - The logger module name
+  * - name - The log entry name
+  * - args... - Additional arguments passed into the log entry are passed on
+  *             as additional args to the event listener.
+  *
+  * Wildcards
+  * ---------
+  * A flexible and user-oriented wildcard pattern is used for monitoring
+  * logs.  The pattern is described in the <a href="Stat.html#wildcards">Wildcard secttion of the Stats class</a>.
+  *
+  * Choosing Good Names
+  * -------------------
+  * It's a good idea to pick a good naming scheme with each dot-delimited segment
+  * having a consistent, well-defined purpose.  Volatile segments should be as deep
+  * into the hierarchy (furthest right) as possible.  Keeping the names less
+  * volatile makes it easier to turn statistics recording on for all logs.
+  *
+  * @class Log
+  * @constructor
+  */
+  var Log = Monitor.Log = function(module) {
+    var t = this;
+    t.module = module;
+  };
+  var proto = Log.prototype;
+
+  // This is a map of registered event names to compiled regexs, for
+  // quickly testing if a log needs to be emitted.
+  Log.eventRegex = {};
+
+  /**
+  * Output a ```trace``` log entry
+  *
+  * @method trace
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  */
+
+  /**
+  * Output a ```debug``` log entry
+  *
+  * @method debug
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  */
+
+  /**
+  * Output a ```info``` log entry
+  *
+  * @method info
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  */
+
+  /**
+  * Output a ```warn``` log entry
+  *
+  * @method warn
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  */
+
+  /**
+  * Output a ```error``` log entry
+  *
+  * @method error
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  */
+
+  /**
+  * Output a ```fatal``` log entry
+  *
+  * @method fatal
+  * @param name {String} Log entry name
+  * @param [...] {Any} Subsequent arguments to add to the log
+  */
+
+  // Add a method for each log type
+  ['trace','debug','info','warn','error','fatal'].forEach(function(method) {
+    proto[method] = function(name) {
+      Log._emit(method, this.module, name, arguments);
+    };
+  });
+
+  /**
+  * Send the log to all registered listeners
+  *
+  * @private
+  * @static
+  * @method emit
+  * @param type {string} The log type (trace, debug, info, etc)
+  * @param module {String} The log module name
+  * @param name {String} The log entry name
+  * @param args {any[]} All original, starting with the short name
+  */
+  Log._emit = function(type, module, name, args) {
+    var eventName,
+        fullName = type + '.' + module + '.' + name;
+
+    // Output a counter stat for this log
+    stat.increment(fullName);
+
+    // Test the name against all registered events
+    for (eventName in Log._events) {
+
+      // Get the regex associated with the name (using the Stat package)
+      var regex = Log.eventRegex[eventName];
+      if (!regex) {
+        regex = Log.eventRegex[eventName] = Stat._buildRegex(eventName);
+      }
+
+      // Test the long name with the regex, and emit if it matches
+      if (regex.test(fullName)) {
+
+        // Build the arguments as event name, log type, module, name, [other args...]
+        var allArgs = _.toArray(args);
+        allArgs.splice(0, 1, eventName, type, module, name);
+        Log.emit.apply(Log, allArgs);
+      }
+    }
+  };
+
+  // Mixin event processing for the Log class
+  _.extend(Log, EventEmitter.prototype);
+
+  // Expose this class from the Monitor module
+  Monitor.setLoggerClass(Log);
+
+}(this));
+
 // Probe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
@@ -613,6 +1213,8 @@
 
   // Module loading
   var Monitor = root.Monitor || require('./Monitor'),
+      log = Monitor.getLogger('Probe'),
+      stat = Monitor.getStatLogger('Probe'),
       Cron = Monitor.Cron, _ = Monitor._, Backbone = Monitor.Backbone;
 
   /**
@@ -681,7 +1283,10 @@
     *         if asyncInit is set to true.  If an error is passed, the probe
     *         will not be used.
     */
-    initialize: function(attributes, options) {},
+    initialize: function(attributes, options) {
+      var t = this;
+      log.info('init', t.toJSON(), attributes, options);
+    },
 
     /**
     * Release any resources consumed by this probe.
@@ -694,7 +1299,10 @@
     *
     * @method release
     */
-    release: function(){},
+    release: function(){
+      var t = this;
+      log.info('release', t.toJSON());
+    },
 
     /**
     * Dispatch a control message to the appropriate control function.
@@ -725,6 +1333,7 @@
       params = params || {};
       callback = callback || function(){};
       var t = this, controlFn = t[name + '_control'], errMsg;
+      log.info('onControl', t.toJSON(), name, params);
       if (!controlFn) {return callback({msg:'No control function: ' + name});}
       try {
         controlFn.call(t, params, callback);
@@ -783,6 +1392,8 @@
   // Module loading
   var Monitor = root.Monitor || require('./Monitor'),
       Cron = Monitor.Cron, _ = Monitor._, Backbone = Monitor.Backbone,
+      log = Monitor.getLogger('Connection'),
+      stat = Monitor.getStatLogger('Connection'),
       Config = Monitor.Config, SocketIO = root.io || require('socket.io-client'),
       Probe = Monitor.Probe;
 
@@ -871,6 +1482,8 @@
       var t = this, hostName = t.get('hostName'), hostPort = t.get('hostPort'),
       url = t.get('url');
 
+      log.info('connect', t.toJSON());
+
       // Build the URL if not specified
       if (!url) {url = t.attributes.url = 'http://' + hostName + ':' + hostPort;}
 
@@ -925,6 +1538,8 @@
       t.connecting = false;
       t.connected = false;
 
+      log.info('disconnect', t.toJSON());
+
       // Only disconnect once.
       // This method can be called many times during a disconnect (manually,
       // by socketIO disconnect, and/or by the underlying socket disconnect).
@@ -965,6 +1580,7 @@
     */
     emit: function() {
       var t = this, socket = t.get('socket');
+      log.info('emit', t.toJSON(), arguments);
       socket.emit.apply(socket, arguments);
     },
 
@@ -1103,6 +1719,8 @@
           gateway = t.get('gateway'),
           firewall = t.get('firewall');
 
+      log.info('probeConnect', t.toJSON(), monitorJSON);
+
       // Don't allow inbound requests if this connection is firewalled
       if (firewall) {return callback('firewalled');}
 
@@ -1151,6 +1769,8 @@
           monitorProxy = t.incomingMonitorsById[probeId],
           firewall = t.get('firewall');
 
+      log.info('probeDisconnect', t.toJSON(), params);
+
       // Don't allow inbound requests if this connection is firewalled
       if (firewall) {return callback('firewalled');}
 
@@ -1191,6 +1811,8 @@
       var t = this,
           router = Monitor.getRouter(),
           firewall = t.get('firewall');
+
+      log.info('probeControl', t.toJSON(), params);
 
       // Don't allow inbound requests if this connection is firewalled
       if (firewall) {return callback('firewalled');}
@@ -1472,6 +2094,8 @@
 
   // Module loading
   var Monitor = root.Monitor || require('./Monitor'),
+      log = Monitor.getLogger('Router'),
+      stat = Monitor.getStatLogger('Router'),
       Cron = Monitor.Cron, _ = Monitor._, Backbone = Monitor.Backbone,
       Config = Monitor.Config, Probe = Monitor.Probe,
       Connection = Monitor.Connection, Server = Monitor.Server,
@@ -1624,6 +2248,8 @@
     addConnection: function(options) {
       var t = this;
 
+      log.info('addConnection', t.toJSON(), options);
+
       // Default the firewall value
       if (_.isUndefined(options.firewall)) {
         options = _.extend({},options, {firewall: t.firewall});
@@ -1663,6 +2289,7 @@
     */
     removeConnection: function(connection) {
       var t = this;
+      log.info('removeConnection', t.toJSON(), connection.toJSON());
       connection.disconnect('connection_removed');
       t.connections.remove(connection);
       t.trigger('connection:remove', connection);
@@ -2049,6 +2676,8 @@
           probeClass = monitorJSON.probeClass,
           initParams = monitorJSON.initParams,
           probeImpl = null;
+
+      log.info('connectInternal', monitorJSON);
 
       var whenDone = function(error) {
 
@@ -2637,527 +3266,6 @@
 
 }(this));
 
-/*jslint browser: true */
-// Stat.js (c) 2010-2013 Loren West and other contributors
-// May be freely distributed under the MIT license.
-// For further details and documentation:
-// http://lorenwest.github.com/monitor-min
-(function(root){
-
-  // Module loading
-  var Monitor = root.Monitor || require('./Monitor'),
-      // Raw events on the server (for speed), backbone events on the browser (for functionality)
-      EventEmitter = Monitor.commonJS ? require('events').EventEmitter : Monitor.Backbone.Events,
-      _ = Monitor._;
-
-
-  /**
-  * A lightweight component for gathering and emitting application statistics
-  *
-  * This is both a collector and emitter for application stats.
-  *
-  * It's designed with low development and runtime cost in mind, encouraging
-  * usage with minimum concern for overhead.
-  *
-  * Stat Collector
-  * --------------
-  *
-  * As a collector, it's a place to send application stats as they're discovered.
-  *
-  * Example for incrementing a stat in your application:
-  *
-  *     var stat = require('monitor-min').getStatLogger('myModule');
-  *     ...
-  *     stat.increment('requests.inbound');
-  *
-  * The above is a request to increment the ```myModule.requests.inbound``` stat.
-  * It peforms work only if someone is listening for that event.
-  *
-  * Stat Emitter
-  * -------------
-  * As an emitter, Stat is a place to gather stats as they're collected.
-  *
-  * When listening for stats, wildcards can be used to register for many stats
-  * within a group. For example, the following call:
-  *
-  *     var Stat = require('monitor-min').Stat;
-  *     Stat.on('myModule.*.timer', myFunction);
-  *
-  * Will call ```myFunction``` when all ```myModule.*.timer``` stats are emitted.
-  *
-  * Listeners are invoked with 4 arguments:
-  *
-  * - module - The statLogger module name
-  * - name - The name of the stat that just fired
-  * - value - The numeric value passed
-  * - type - An enumeration of the types of stats:<br/>
-  *   'c'  - Counter.  Add (or subtract) the value to (or from) the prior value<br/>
-  *   'g'  - Gague.  Value is to be recorded as provided<br/>
-  *   'ms' - Timer.  Millisecond amount of time something took.
-  *
-  * <h2 id="wildcards">Wildcards</h2>
-  *
-  * The following wildcards are allowed for registering events.  They're
-  * modeled after the graphite wildcard syntax (from the
-  * <a href="https://graphite.readthedocs.org/en/latest/render_api.html#paths-and-wildcards">graphite docs</a>):
-  *
-  * #### Delimiter
-  * The period (.) character is literal, and matches name segment separators.
-  *
-  * #### Asterisk
-  * The asterisk (*) matches zero or more characters. It is non-greedy, so you
-  * can have more than one within a single path element.
-  *
-  * Example: servers.ix\*ehssvc\*v.cpu.total.\* will return all total CPU metrics
-  * for all servers matching the given name pattern.
-  *
-  * An asterisk at the far right of the pattern matches everything to the right,
-  * including all path segments.  For example, ```servers.*``` matches all
-  * names beginning with ```servers.```.
-  *
-  * #### Character list or range
-  * Characters in square brackets ([...]) specify a single character position in
-  * the path string, and match if the character in that position matches one of
-  * the characters in the list or range.
-  *
-  * A character range is indicated by 2 characters separated by a dash (-), and
-  * means that any character between those 2 characters (inclusive) will match.
-  * More than one range can be included within the square brackets, e.g. foo[a-z0-9]bar
-  * will match foopbar, foo7bar etc..
-  *
-  * If the characters cannot be read as a range, they are treated as a
-  * list - any character in the list will match, e.g. foo[bc]ar will match
-  * foobar and foocar. If you want to include a dash (-) in your list, put
-  * it at the beginning or end, so it's not interpreted as a range.
-  *
-  * #### Value list
-  * Comma-separated values within curly braces ({foo,bar,...}) are treated as
-  * value lists, and match if any of the values matches the current point in
-  * the path. For example, servers.ix01ehssvc04v.cpu.total.{user,system,iowait}
-  * will match the user, system and I/O wait total CPU metrics for the specified
-  * server.
-  *
-  * #### Javascript Regex
-  * For finer grained expression matching, a javascript style regex can be
-  * specified using the ```/.../``` syntax.  This style spans the entire identifier.
-  * You can ignore case using the ```/.../i``` syntax.  If the first character of the
-  * string is a slash, it considers the string a javascript regular expression.
-  *
-  * Choosing Good Names
-  * -------------------
-  * It's a good idea to pick a good naming scheme with each dot-delimited segment
-  * having a consistent, well-defined purpose.  Volatile segments should be as deep
-  * into the hierarchy (furthest right) as possible.  Keeping the names less
-  * volatile makes it easier to turn recording on for all statistics.
-  *
-  * @class Stat
-  * @constructor
-  */
-  var Stat = Monitor.Stat = function(module) {
-    var t = this;
-    t.module = module;
-  };
-  var proto = Stat.prototype;
-
-  // This is a map of registered event names to compiled regexs, for
-  // quickly testing if a statistic needs to be emitted.
-  Stat.eventRegex = {};
-
-  /**
-  * Increment a counter by a specified value
-  *
-  * Assuming someone is listening to this stat, this is an instruction for that
-  * listener to add the specified value (usually 1) to their prior value for this stat.
-  *
-  * This is known as server-side setting, as the server (listener) is responsible
-  * for maintaining the prior and new value for the stat.
-  *
-  * @method increment
-  * @param name {String} Dot.separated name of the counter to increment
-  * @param [value=1] {Number} Amount to increment the counter by.
-  */
-  proto.increment = function(name, value){
-    value = _.isNumber(value) ? value : 1;
-    Stat._emit(this.module, name, value, 'c');
-  };
-
-  /**
-  * Decrement a counter by a specified value
-  *
-  * Assuming someone is listening to this stat, this is an instruction for that
-  * listener to subtract the specified value (usually 1) to their prior value for this stat.
-  *
-  * This is known as server-side setting, as the server (listener) is responsible
-  * for maintaining the prior and new value for the stat.
-  *
-  * @method decrement
-  * @param name {String} Dot.separated name of the counter to decrement
-  * @param [value=1] {Number} Amount to decrement the counter by.
-  */
-  proto.decrement = function(name, value){
-    value = _.isNumber(value) ? value : 1;
-    Stat._emit(this.module, name, value * -1, 'c');
-  };
-
-  /**
-  * Set the stat to the specified value
-  *
-  * This is an instruction to any (all) listener(s) to set the stat to a
-  * specific value.
-  *
-  * This is known as client-side setting, because the client determines the value
-  * of the stat.
-  *
-  * @method gauge
-  * @param name {String} Dot.separated name of the stat
-  * @param value {Number} Number to set the gauge to
-  */
-  proto.gauge = function(name, value){
-    Stat._emit(this.module, name, value, 'g');
-  };
-
-  /**
-  * Record the specified duration (in milliseconds) for the stat
-  *
-  * This is like Stat.gauge() in that it is a client-side setting of a
-  * specified value.  The difference is the scale of the value is specified
-  * as milliseconds.
-  *
-  * This may be one of the most widely used stat methods.  It can (should?) be
-  * used upon callback from asynchronous methods.
-  *
-  * Pattern:
-  *
-  *     var stat = require('monitor-min').getStatLogger('myModule');
-  *     ...
-  *     var stamp = Date.now();
-  *     SomeAsyncFunction(arg1, function(error) {
-  *       stat.time('SomeAsyncFunction.time', Date.Now() - stamp);
-  *       ...continue with error handling & callback handling
-  *     });
-  *
-  * @method time
-  * @param name {String} Dot.separated name of the stat
-  * @param duration {Integer} Number of milliseconds this stat took to complete
-  */
-  proto.time = function(name, duration){
-    Stat._emit(this.module, name, duration, 'ms');
-  };
-
-  /**
-  * Send the stat to all registered listeners
-  *
-  * @private
-  * @static
-  * @method emit
-  * @param module {String} Module name
-  * @param name {String} Stat name
-  * @param value {Numeric} Stat value
-  * @param type {String} Enumeration.  One of the following:
-  *   'c'  - Counter.  + values increment, - values decrement
-  *   'g'  - Gague.  Statistic is recorded as provided
-  *   'ms' - Timer.  Millisecond amount of time something took
-  */
-  Stat._emit = function(module, name, value, type) {
-    var eventName,
-        fullName;
-
-    // Test the name against all registered events
-    for (eventName in Stat._events) {
-
-      // Build the full name only if someone is listening
-      if (!fullName) {
-        fullName = module + '.' + name;
-      }
-
-      // Get the regex associated with the name
-      var regex = Stat.eventRegex[eventName];
-      if (!regex) {
-        regex = Stat.eventRegex[eventName] = Stat._buildRegex(eventName);
-      }
-
-      // Test the name with the regex, and emit if it matches
-      if (regex.test(fullName)) {
-        Stat.emit(eventName, module, name, value, type);
-      }
-    }
-  };
-
-  /**
-  * Build a regex from a user entered string following the pattern described
-  * in the class definition.  Loosely:
-  *
-  *    If it looks like a JS regexp, process it as a regexp
-  *    Change all '.' to '\.'
-  *    Change all '*' to '[^\.]*' (unless it's at the end, then convert to '.*')
-  *    Change all {one,two} to (one|two)
-  *    Leave all [...] alone - they work as-is
-  *
-  *  If an error occurs, throw an exception
-  *
-  * @private
-  * @static
-  * @method _buildRegex
-  * @param str {String} String to build the regular expression from
-  * @return {RegExp}The regular expression object
-  *
-  */
-  Stat._buildRegex = function(str) {
-    var regexStr = '',
-        modifier = '',
-        lastIdx = str.length - 1,
-        inSquiggly = false;
-
-    // Javascript regular expressions
-    if (/^\/[^\/]*\/i*$/.test(str)) {
-      if (/i$/.test(str)) {
-        modifier = 'i';
-        str = str.replace(/i$/,'');
-      }
-      regexStr = '^' + str.replace(/^\//,'').replace(/\/$/,'') + '$';
-    }
-
-    // Process character by character
-    else {
-      for (var i = 0, l = str.length; i < l; i++) {
-        var c = str.substr(i,1);
-        switch (c) {
-          case '.':
-            c = '\\.';
-            break;
-          case '*':
-            c = (i === lastIdx ? '.*' : '[^\\.]*');
-            break;
-          case '{':
-            c = '(';
-            inSquiggly = true;
-            break;
-          case '}':
-            c = ')';
-            inSquiggly = false;
-            break;
-          case ',':
-            if (inSquiggly) {
-              c = '|';
-            }
-            break;
-        }
-        regexStr += c;
-      }
-
-      // Force it to match the full string
-      regexStr = '^' + regexStr + '$';
-    }
-
-    // Now build the regex.  This throws an exception if poorly formed.
-    return new RegExp(regexStr, modifier);
-  };
-
-  // Mixin event processing for the Stat class
-  _.extend(Stat, EventEmitter.prototype);
-
-  // Place the getStatLogger method into the Monitor namespace
-  Monitor.getStatLogger = function(module) {
-    return new Stat(module);
-  };
-
-}(this));
-
-/*jslint browser: true */
-// Log.js (c) 2010-2013 Loren West and other contributors
-// May be freely distributed under the MIT license.
-// For further details and documentation:
-// http://lorenwest.github.com/monitor-min
-(function(root){
-
-  // Module loading
-  var Monitor = root.Monitor || require('./Monitor'),
-      // Raw events on the server (for speed), backbone events on the browser (for functionality)
-      EventEmitter = Monitor.commonJS ? require('events').EventEmitter : Monitor.Backbone.Events,
-      Stat = Monitor.Stat,
-      stat = new Stat('Log'),
-      _ = Monitor._;
-
-  /**
-  * A lightweight component for gathering and emitting application logs
-  *
-  * It's designed with low development and runtime cost in mind, encouraging
-  * usage with minimum concern for overhead.  Runtime monitoring can be as chatty
-  * as desired, outputting every log statement of every type, or finely tuned
-  * with regular expressions to monitor specific log statements.
-  *
-  * Log Collector
-  * -------------
-  *
-  * As a collector, it's a place to send application logs.
-  *
-  * Example for outputting a log in your application:
-  *
-  *     var log = require('monitor-min').getLogger('myModule');
-  *     ...
-  *     log.info('Credit accepted', limit, requestedAmount);
-  *
-  * The above is a request to output an ```info``` log for ```myModule``` named
-  * ```Credit limit accepted```.  The log entry includes all additional parameters,
-  * in this case the customer credit limit and the reqeusted amount.
-  *
-  * The full name for this log entry is: ```"info.myModule.Credit limit accepted"```
-  * The name is important, as monitors can be configured to output logs based
-  * on this name.
-  *
-  * Best practices are to include dynamic parameters in extra arguments
-  * vs. concatenating strings.  This reduces logging overhead, especially
-  * for log statements that aren't currently being watched.
-  *
-  * Log Emitter
-  * -----------
-  * As an emitter, the Log module is a place to capture logging output.
-  *
-  * When listening for log entries, wildcards can be used to register for
-  * particular log types and entries.
-  *
-  *     var Log = require('monitor-min').Log;
-  *     ...
-  *     Log.on('info.myModule.*', myFunction);
-  *
-  * Will call ```myFunction``` when all ```info.myModule.*``` logs are emitted.
-  *
-  * Listeners are invoked with the following arguments:
-  *
-  * - type - The log type (info, trace, warn, etc.)
-  * - module - The logger module name
-  * - name - The log entry name
-  * - args... - Additional arguments passed into the log entry are passed on
-  *             as additional args to the event listener.
-  *
-  * Wildcards
-  * ---------
-  * A flexible and user-oriented wildcard pattern is used for monitoring
-  * logs.  The pattern is described in the <a href="Stat.html#wildcards">Wildcard secttion of the Stats class</a>.
-  *
-  * Choosing Good Names
-  * -------------------
-  * It's a good idea to pick a good naming scheme with each dot-delimited segment
-  * having a consistent, well-defined purpose.  Volatile segments should be as deep
-  * into the hierarchy (furthest right) as possible.  Keeping the names less
-  * volatile makes it easier to turn statistics recording on for all logs.
-  *
-  * @class Log
-  * @constructor
-  */
-  var Log = Monitor.Log = function(module) {
-    var t = this;
-    t.module = module;
-  };
-  var proto = Log.prototype;
-
-  // This is a map of registered event names to compiled regexs, for
-  // quickly testing if a log needs to be emitted.
-  Log.eventRegex = {};
-
-  /**
-  * Output a ```trace``` log entry
-  *
-  * @method trace
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```debug``` log entry
-  *
-  * @method debug
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```info``` log entry
-  *
-  * @method info
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```warn``` log entry
-  *
-  * @method warn
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```error``` log entry
-  *
-  * @method error
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```fatal``` log entry
-  *
-  * @method fatal
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  // Add a method for each log type
-  ['trace','debug','info','warn','error','fatal'].forEach(function(method) {
-    proto[method] = function(name) {
-      Log._emit(method, this.module, name, arguments);
-    };
-  });
-
-  /**
-  * Send the log to all registered listeners
-  *
-  * @private
-  * @static
-  * @method emit
-  * @param type {string} The log type (trace, debug, info, etc)
-  * @param module {String} The log module name
-  * @param name {String} The log entry name
-  * @param args {any[]} All original, starting with the short name
-  */
-  Log._emit = function(type, module, name, args) {
-    var eventName,
-        fullName = type + '.' + module + '.' + name;
-
-    // Output a counter stat for this log
-    stat.increment(fullName);
-
-    // Test the name against all registered events
-    for (eventName in Log._events) {
-
-      // Get the regex associated with the name (using the Stat package)
-      var regex = Log.eventRegex[eventName];
-      if (!regex) {
-        regex = Log.eventRegex[eventName] = Stat._buildRegex(eventName);
-      }
-
-      // Test the long name with the regex, and emit if it matches
-      if (regex.test(fullName)) {
-
-        // Build the arguments as event name, log type, module, name, [other args...]
-        var allArgs = _.toArray(args);
-        allArgs.splice(0, 1, eventName, type, module, name);
-        Log.emit.apply(Log, allArgs);
-      }
-    }
-  };
-
-  // Mixin event processing for the Log class
-  _.extend(Log, EventEmitter.prototype);
-
-  // Place the getLogger method into the Monitor namespace
-  Monitor.getLogger = function(module) {
-    return new Log(module);
-  };
-
-}(this));
-
 // PollingProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
@@ -3620,7 +3728,7 @@
   * This probe forwards application logs to the monitor.
   *
   * @class LogProbe
-  * @extends Probe
+  * @extends StreamProbe
   * @constructor
   * @param [initParams] {Object} Probe initialization parameters
   *     @param [initParams.pattern=*] {String} Log name pattern to monitor (see <a href="Log.html">Log</a>)

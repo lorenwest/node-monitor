@@ -173,7 +173,7 @@
   *
   *     var log = require(&#x27;monitor-min&#x27;).getLogger(&#x27;myModule&#x27;);
   *     ...
-  *     log.info(&#x27;Credit accepted&#x27;, limit, requestedAmount);
+  *     log.info(&#x27;Credit limit accepted&#x27;, limit, requestedAmount);
   *
   * The above is a request to output an &#x60;&#x60;&#x60;info&#x60;&#x60;&#x60; log for &#x60;&#x60;&#x60;myModule&#x60;&#x60;&#x60; named
   * &#x60;&#x60;&#x60;Credit limit accepted&#x60;&#x60;&#x60;.  The log entry includes all additional parameters,
@@ -329,10 +329,8 @@
   &#x2F;&#x2F; Mixin event processing for the Log class
   _.extend(Log, EventEmitter.prototype);
 
-  &#x2F;&#x2F; Place the getLogger method into the Monitor namespace
-  Monitor.getLogger = function(module) {
-    return new Log(module);
-  };
+  &#x2F;&#x2F; Expose this class from the Monitor module
+  Monitor.setLoggerClass(Log);
 
 }(this));
 

@@ -150,6 +150,8 @@
   &#x2F;&#x2F; Module loading
   var Monitor = root.Monitor || require(&#x27;.&#x2F;Monitor&#x27;),
       Cron = Monitor.Cron, _ = Monitor._, Backbone = Monitor.Backbone,
+      log = Monitor.getLogger(&#x27;Connection&#x27;),
+      stat = Monitor.getStatLogger(&#x27;Connection&#x27;),
       Config = Monitor.Config, SocketIO = root.io || require(&#x27;socket.io-client&#x27;),
       Probe = Monitor.Probe;
 
@@ -238,6 +240,8 @@
       var t = this, hostName = t.get(&#x27;hostName&#x27;), hostPort = t.get(&#x27;hostPort&#x27;),
       url = t.get(&#x27;url&#x27;);
 
+      log.info(&#x27;connect&#x27;, t.toJSON());
+
       &#x2F;&#x2F; Build the URL if not specified
       if (!url) {url = t.attributes.url = &#x27;http:&#x2F;&#x2F;&#x27; + hostName + &#x27;:&#x27; + hostPort;}
 
@@ -292,6 +296,8 @@
       t.connecting = false;
       t.connected = false;
 
+      log.info(&#x27;disconnect&#x27;, t.toJSON());
+
       &#x2F;&#x2F; Only disconnect once.
       &#x2F;&#x2F; This method can be called many times during a disconnect (manually,
       &#x2F;&#x2F; by socketIO disconnect, and&#x2F;or by the underlying socket disconnect).
@@ -332,6 +338,7 @@
     *&#x2F;
     emit: function() {
       var t = this, socket = t.get(&#x27;socket&#x27;);
+      log.info(&#x27;emit&#x27;, t.toJSON(), arguments);
       socket.emit.apply(socket, arguments);
     },
 
@@ -470,6 +477,8 @@
           gateway = t.get(&#x27;gateway&#x27;),
           firewall = t.get(&#x27;firewall&#x27;);
 
+      log.info(&#x27;probeConnect&#x27;, t.toJSON(), monitorJSON);
+
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
       if (firewall) {return callback(&#x27;firewalled&#x27;);}
 
@@ -518,6 +527,8 @@
           monitorProxy = t.incomingMonitorsById[probeId],
           firewall = t.get(&#x27;firewall&#x27;);
 
+      log.info(&#x27;probeDisconnect&#x27;, t.toJSON(), params);
+
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
       if (firewall) {return callback(&#x27;firewalled&#x27;);}
 
@@ -558,6 +569,8 @@
       var t = this,
           router = Monitor.getRouter(),
           firewall = t.get(&#x27;firewall&#x27;);
+
+      log.info(&#x27;probeControl&#x27;, t.toJSON(), params);
 
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
       if (firewall) {return callback(&#x27;firewalled&#x27;);}

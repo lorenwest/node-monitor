@@ -149,6 +149,8 @@
 
   &#x2F;&#x2F; Module loading
   var Monitor = root.Monitor || require(&#x27;.&#x2F;Monitor&#x27;),
+      log = Monitor.getLogger(&#x27;Router&#x27;),
+      stat = Monitor.getStatLogger(&#x27;Router&#x27;),
       Cron = Monitor.Cron, _ = Monitor._, Backbone = Monitor.Backbone,
       Config = Monitor.Config, Probe = Monitor.Probe,
       Connection = Monitor.Connection, Server = Monitor.Server,
@@ -301,6 +303,8 @@
     addConnection: function(options) {
       var t = this;
 
+      log.info(&#x27;addConnection&#x27;, t.toJSON(), options);
+
       &#x2F;&#x2F; Default the firewall value
       if (_.isUndefined(options.firewall)) {
         options = _.extend({},options, {firewall: t.firewall});
@@ -340,6 +344,7 @@
     *&#x2F;
     removeConnection: function(connection) {
       var t = this;
+      log.info(&#x27;removeConnection&#x27;, t.toJSON(), connection.toJSON());
       connection.disconnect(&#x27;connection_removed&#x27;);
       t.connections.remove(connection);
       t.trigger(&#x27;connection:remove&#x27;, connection);
@@ -726,6 +731,8 @@
           probeClass = monitorJSON.probeClass,
           initParams = monitorJSON.initParams,
           probeImpl = null;
+
+      log.info(&#x27;connectInternal&#x27;, monitorJSON);
 
       var whenDone = function(error) {
 
