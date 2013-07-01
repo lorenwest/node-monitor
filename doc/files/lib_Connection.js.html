@@ -37,10 +37,6 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/ConfigProbe.html">ConfigProbe</a></li>
-            
-                <li><a href="..&#x2F;classes/ConfigTest.html">ConfigTest</a></li>
-            
                 <li><a href="..&#x2F;classes/Connection.html">Connection</a></li>
             
                 <li><a href="..&#x2F;classes/ConnectionTest.html">ConnectionTest</a></li>
@@ -102,10 +98,6 @@
             <ul id="api-modules" class="apis modules">
             
                 <li><a href="..&#x2F;modules/Monitor.html">Monitor</a></li>
-            
-                <li><a href="..&#x2F;modules/Probes.html">Probes</a></li>
-            
-                <li><a href="..&#x2F;modules/UnitTests.html">UnitTests</a></li>
             
             </ul>
         </div>
@@ -240,10 +232,12 @@
       var t = this, hostName = t.get(&#x27;hostName&#x27;), hostPort = t.get(&#x27;hostPort&#x27;),
       url = t.get(&#x27;url&#x27;);
 
-      log.info(&#x27;connect&#x27;, t.toJSON());
+      &#x2F;&#x2F; Build a logger ID for this connection
+      t.logId = &#x27;.&#x27; + hostName + &#x27;.&#x27; + hostPort;
 
       &#x2F;&#x2F; Build the URL if not specified
       if (!url) {url = t.attributes.url = &#x27;http:&#x2F;&#x2F;&#x27; + hostName + &#x27;:&#x27; + hostPort;}
+      log.info(&#x27;connect&#x27; + t.logId);
 
       &#x2F;&#x2F; Connect with this url
       var opts = {
@@ -296,7 +290,7 @@
       t.connecting = false;
       t.connected = false;
 
-      log.info(&#x27;disconnect&#x27;, t.toJSON());
+      log.info(&#x27;disconnect&#x27; + t.logId, reason);
 
       &#x2F;&#x2F; Only disconnect once.
       &#x2F;&#x2F; This method can be called many times during a disconnect (manually,
@@ -338,7 +332,7 @@
     *&#x2F;
     emit: function() {
       var t = this, socket = t.get(&#x27;socket&#x27;);
-      log.info(&#x27;emit&#x27;, t.toJSON(), arguments);
+      log.info(&#x27;emit&#x27; + t.logId, arguments);
       socket.emit.apply(socket, arguments);
     },
 
@@ -473,14 +467,20 @@
     probeConnect: function(monitorJSON, callback) {
       callback = callback || function(){};
       var t = this,
+          errorText = &#x27;&#x27;,
           router = Monitor.getRouter(),
           gateway = t.get(&#x27;gateway&#x27;),
+          startTime = Date.now(),
           firewall = t.get(&#x27;firewall&#x27;);
 
-      log.info(&#x27;probeConnect&#x27;, t.toJSON(), monitorJSON);
+      log.info(&#x27;probeConnect&#x27; + t.logId, monitorJSON);
 
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
-      if (firewall) {return callback(&#x27;firewalled&#x27;);}
+      if (firewall) {
+        errorText = &#x27;firewalled&#x27;;
+        log.error(&#x27;probeConnect&#x27; + t.logId, errorText);
+        return callback(errorText);
+      }
 
       &#x2F;&#x2F; Determine the connection to use (or internal)
       router.determineConnection(monitorJSON, gateway, function(err, connection) {
@@ -489,7 +489,10 @@
 
         &#x2F;&#x2F; Function to run upon connection (internal or external)
         var onConnect = function(error, probe) {
-          if (error) {return callback(error);}
+          if (error) {
+            log.error(&#x27;probeConnect&#x27; + t.logId, error);
+            return callback(error);
+          }
           var monitorProxy = new Monitor(monitorJSON), probeId = probe.get(&#x27;id&#x27;);
           monitorProxy.set(&#x27;probeId&#x27;, probeId);
           t.incomingMonitorsById[probeId] = monitorProxy;
@@ -497,6 +500,9 @@
           monitorProxy.probeChange = function(){
             t.emit(&#x27;probe:change:&#x27; + probeId, probe.changedAttributes());
           };
+          var duration = Date.now() - startTime;
+          log.info(&#x27;probeConnected&#x27; + t.logId, duration);
+          stat.time(&#x27;probeConnected&#x27; + t.logId, duration);
           callback(null, probe.toJSON());
           probe.on(&#x27;change&#x27;, monitorProxy.probeChange);
         };
@@ -522,25 +528,41 @@
     probeDisconnect: function(params, callback) {
       callback = callback || function(){};
       var t = this,
+          errorText = &#x27;&#x27;,
+          startTime = Date.now(),
           router = Monitor.getRouter(),
           probeId = params.probeId,
           monitorProxy = t.incomingMonitorsById[probeId],
           firewall = t.get(&#x27;firewall&#x27;);
 
-      log.info(&#x27;probeDisconnect&#x27;, t.toJSON(), params);
+      log.info(&#x27;probeDisconnect&#x27; + t.logId, params);
 
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
-      if (firewall) {return callback(&#x27;firewalled&#x27;);}
+      if (firewall) {
+        errorText = &#x27;firewalled&#x27;;
+        log.error(&#x27;probeDisconnect&#x27; + t.logId, errorText);
+        return callback(errorText);
+      }
 
       &#x2F;&#x2F; The probe must be connected
-      if (!monitorProxy || !monitorProxy.probe) {return callback(&#x27;Probe not connected&#x27;);}
+      if (!monitorProxy || !monitorProxy.probe) {
+        errorText = &#x27;Probe not connected&#x27;;
+        log.error(&#x27;probeDisconnect&#x27; + t.logId, errorText);
+        return callback(errorText);
+      }
 
       &#x2F;&#x2F; Called upon disconnect (internal or external)
       var onDisconnect = function(error) {
-        if (error) {return callback(error);}
+        if (error) {
+          log.error(&#x27;probeDisconnect&#x27; + t.logId, error);
+          return callback(error);
+        }
         monitorProxy.probe.off(&#x27;change&#x27;, monitorProxy.probeChange);
         monitorProxy.probe = monitorProxy.probeChange = null;
         delete t.incomingMonitorsById[probeId];
+        var duration = Date.now() - startTime;
+        log.info(&#x27;probeDisconnected&#x27; + t.logId, duration);
+        stat.time(&#x27;probeDisconnected&#x27; + t.logId, duration);
         return callback(null);
       };
 
@@ -567,13 +589,34 @@
     probeControl: function(params, callback) {
       callback = callback || function(){};
       var t = this,
+          errorText = &#x27;&#x27;,
+          logId = &#x27;probeControl&#x27; + t.logId + &#x27;.&#x27; + params.name + &#x27;.&#x27; + params.probeId,
+          startTime = Date.now(),
           router = Monitor.getRouter(),
           firewall = t.get(&#x27;firewall&#x27;);
 
-      log.info(&#x27;probeControl&#x27;, t.toJSON(), params);
+      log.info(logId, params);
 
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
-      if (firewall) {return callback(&#x27;firewalled&#x27;);}
+      if (firewall) {
+        errorText = &#x27;firewalled&#x27;;
+        log.error(logId, errorText);
+        return callback(errorText);
+      }
+
+      &#x2F;&#x2F; Called upon return
+      var onReturn = function(error) {
+        if (error) {
+          log.error(logId, error);
+          return callback(error);
+        }
+        else {
+          var duration = Date.now() - startTime;
+          log.info(logId, duration);
+          stat.time(logId, duration);
+          return callback.apply(null, arguments);
+        }
+      };
 
       &#x2F;&#x2F; Is this an internal probe?
       var probe = router.runningProbesById[params.probeId];
@@ -582,15 +625,17 @@
         &#x2F;&#x2F; Is this a remote (proxied) probe?
         var monitorProxy = t.incomingMonitorsById[params.probeId];
         if (!monitorProxy) {
-          return callback(&#x27;Probe id not found: &#x27; + params.probeId);
+          errorText = &#x27;Probe id not found: &#x27; + params.probeId;
+          log.error(errorText);
+          return callback(errorText);
         }
 
         &#x2F;&#x2F; Proxying requires this form vs. callback as last arg.
         return monitorProxy.control(params.name, params.params, function(err, returnParams) {
-          callback(err, returnParams);
+          onReturn(err, returnParams);
         });
       }
-      return probe.onControl(params.name, params.params, callback);
+      return probe.onControl(params.name, params.params, onReturn);
     }
 
   });

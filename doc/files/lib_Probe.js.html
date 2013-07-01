@@ -37,10 +37,6 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/ConfigProbe.html">ConfigProbe</a></li>
-            
-                <li><a href="..&#x2F;classes/ConfigTest.html">ConfigTest</a></li>
-            
                 <li><a href="..&#x2F;classes/Connection.html">Connection</a></li>
             
                 <li><a href="..&#x2F;classes/ConnectionTest.html">ConnectionTest</a></li>
@@ -102,10 +98,6 @@
             <ul id="api-modules" class="apis modules">
             
                 <li><a href="..&#x2F;modules/Monitor.html">Monitor</a></li>
-            
-                <li><a href="..&#x2F;modules/Probes.html">Probes</a></li>
-            
-                <li><a href="..&#x2F;modules/UnitTests.html">UnitTests</a></li>
             
             </ul>
         </div>
@@ -221,7 +213,7 @@
     *&#x2F;
     initialize: function(attributes, options) {
       var t = this;
-      log.info(&#x27;init&#x27;, t.toJSON(), attributes, options);
+      log.info(&#x27;init&#x27;, t.toJSON(), options);
     },
 
     &#x2F;**
@@ -266,17 +258,38 @@
     * &lt;&#x2F;ul&gt;
     *&#x2F;
     onControl: function(name, params, callback) {
+      var t = this,
+          controlFn = t[name + &#x27;_control&#x27;],
+          startTime = Date.now(),
+          errMsg,
+          logId = &#x27;onControl.&#x27; + t.probeClass + &#x27;.&#x27; + name;
+
       params = params || {};
       callback = callback || function(){};
-      var t = this, controlFn = t[name + &#x27;_control&#x27;], errMsg;
-      log.info(&#x27;onControl&#x27;, t.toJSON(), name, params);
-      if (!controlFn) {return callback({msg:&#x27;No control function: &#x27; + name});}
+      log.info(logId, t.get(&#x27;id&#x27;), params);
+
+      if (!controlFn) {
+        errMsg = &#x27;No control function: &#x27; + name;
+        log.error(logId, errMsg);
+        return callback({msg: errMsg});
+      }
+
+      var whenDone = function(error) {
+        if (error) {
+          log.error(logId, error);
+          return callback(error);
+        }
+        var duration = Date.now() - startTime;
+        log.info(logId, duration);
+        stat.time(t.logId, duration);
+        callback.apply(null, arguments);
+      };
+
       try {
-        controlFn.call(t, params, callback);
+        controlFn.call(t, params, whenDone);
       } catch (e) {
         errMsg = &#x27;Error calling control: &#x27; + t.probeClass + &#x27;:&#x27; + name;
-        console.error(errMsg, e);
-        callback({msg:errMsg});
+        whenDone({msg:errMsg, err: e});
       }
     },
 
