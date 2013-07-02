@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.4 - 2013-06-28 */
+/* monitor-min - v0.5.4 - 2013-07-01 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -8030,7 +8030,7 @@ if (typeof define === "function" && define.amd) {
     */
     initialize: function(attributes, options) {
       var t = this;
-      log.info('init', t.toJSON(), attributes, options);
+      log.info('init', t.toJSON(), options);
     },
 
     /**
@@ -8075,17 +8075,38 @@ if (typeof define === "function" && define.amd) {
     * </ul>
     */
     onControl: function(name, params, callback) {
+      var t = this,
+          controlFn = t[name + '_control'],
+          startTime = Date.now(),
+          errMsg,
+          logId = 'onControl.' + t.probeClass + '.' + name;
+
       params = params || {};
       callback = callback || function(){};
-      var t = this, controlFn = t[name + '_control'], errMsg;
-      log.info('onControl', t.toJSON(), name, params);
-      if (!controlFn) {return callback({msg:'No control function: ' + name});}
+      log.info(logId, t.get('id'), params);
+
+      if (!controlFn) {
+        errMsg = 'No control function: ' + name;
+        log.error(logId, errMsg);
+        return callback({msg: errMsg});
+      }
+
+      var whenDone = function(error) {
+        if (error) {
+          log.error(logId, error);
+          return callback(error);
+        }
+        var duration = Date.now() - startTime;
+        log.info(logId, duration);
+        stat.time(t.logId, duration);
+        callback.apply(null, arguments);
+      };
+
       try {
-        controlFn.call(t, params, callback);
+        controlFn.call(t, params, whenDone);
       } catch (e) {
         errMsg = 'Error calling control: ' + t.probeClass + ':' + name;
-        console.error(errMsg, e);
-        callback({msg:errMsg});
+        whenDone({msg:errMsg, err: e});
       }
     },
 
@@ -8227,10 +8248,12 @@ if (typeof define === "function" && define.amd) {
       var t = this, hostName = t.get('hostName'), hostPort = t.get('hostPort'),
       url = t.get('url');
 
-      log.info('connect', t.toJSON());
+      // Build a logger ID for this connection
+      t.logId = '.' + hostName + '.' + hostPort;
 
       // Build the URL if not specified
       if (!url) {url = t.attributes.url = 'http://' + hostName + ':' + hostPort;}
+      log.info('connect' + t.logId);
 
       // Connect with this url
       var opts = {
@@ -8283,7 +8306,7 @@ if (typeof define === "function" && define.amd) {
       t.connecting = false;
       t.connected = false;
 
-      log.info('disconnect', t.toJSON());
+      log.info('disconnect' + t.logId, reason);
 
       // Only disconnect once.
       // This method can be called many times during a disconnect (manually,
@@ -8325,7 +8348,7 @@ if (typeof define === "function" && define.amd) {
     */
     emit: function() {
       var t = this, socket = t.get('socket');
-      log.info('emit', t.toJSON(), arguments);
+      log.info('emit' + t.logId, arguments);
       socket.emit.apply(socket, arguments);
     },
 
@@ -8460,14 +8483,20 @@ if (typeof define === "function" && define.amd) {
     probeConnect: function(monitorJSON, callback) {
       callback = callback || function(){};
       var t = this,
+          errorText = '',
           router = Monitor.getRouter(),
           gateway = t.get('gateway'),
+          startTime = Date.now(),
           firewall = t.get('firewall');
 
-      log.info('probeConnect', t.toJSON(), monitorJSON);
+      log.info('probeConnect' + t.logId, monitorJSON);
 
       // Don't allow inbound requests if this connection is firewalled
-      if (firewall) {return callback('firewalled');}
+      if (firewall) {
+        errorText = 'firewalled';
+        log.error('probeConnect' + t.logId, errorText);
+        return callback(errorText);
+      }
 
       // Determine the connection to use (or internal)
       router.determineConnection(monitorJSON, gateway, function(err, connection) {
@@ -8476,7 +8505,10 @@ if (typeof define === "function" && define.amd) {
 
         // Function to run upon connection (internal or external)
         var onConnect = function(error, probe) {
-          if (error) {return callback(error);}
+          if (error) {
+            log.error('probeConnect' + t.logId, error);
+            return callback(error);
+          }
           var monitorProxy = new Monitor(monitorJSON), probeId = probe.get('id');
           monitorProxy.set('probeId', probeId);
           t.incomingMonitorsById[probeId] = monitorProxy;
@@ -8484,6 +8516,9 @@ if (typeof define === "function" && define.amd) {
           monitorProxy.probeChange = function(){
             t.emit('probe:change:' + probeId, probe.changedAttributes());
           };
+          var duration = Date.now() - startTime;
+          log.info('probeConnected' + t.logId, duration);
+          stat.time('probeConnected' + t.logId, duration);
           callback(null, probe.toJSON());
           probe.on('change', monitorProxy.probeChange);
         };
@@ -8509,25 +8544,41 @@ if (typeof define === "function" && define.amd) {
     probeDisconnect: function(params, callback) {
       callback = callback || function(){};
       var t = this,
+          errorText = '',
+          startTime = Date.now(),
           router = Monitor.getRouter(),
           probeId = params.probeId,
           monitorProxy = t.incomingMonitorsById[probeId],
           firewall = t.get('firewall');
 
-      log.info('probeDisconnect', t.toJSON(), params);
+      log.info('probeDisconnect' + t.logId, params);
 
       // Don't allow inbound requests if this connection is firewalled
-      if (firewall) {return callback('firewalled');}
+      if (firewall) {
+        errorText = 'firewalled';
+        log.error('probeDisconnect' + t.logId, errorText);
+        return callback(errorText);
+      }
 
       // The probe must be connected
-      if (!monitorProxy || !monitorProxy.probe) {return callback('Probe not connected');}
+      if (!monitorProxy || !monitorProxy.probe) {
+        errorText = 'Probe not connected';
+        log.error('probeDisconnect' + t.logId, errorText);
+        return callback(errorText);
+      }
 
       // Called upon disconnect (internal or external)
       var onDisconnect = function(error) {
-        if (error) {return callback(error);}
+        if (error) {
+          log.error('probeDisconnect' + t.logId, error);
+          return callback(error);
+        }
         monitorProxy.probe.off('change', monitorProxy.probeChange);
         monitorProxy.probe = monitorProxy.probeChange = null;
         delete t.incomingMonitorsById[probeId];
+        var duration = Date.now() - startTime;
+        log.info('probeDisconnected' + t.logId, duration);
+        stat.time('probeDisconnected' + t.logId, duration);
         return callback(null);
       };
 
@@ -8554,13 +8605,34 @@ if (typeof define === "function" && define.amd) {
     probeControl: function(params, callback) {
       callback = callback || function(){};
       var t = this,
+          errorText = '',
+          logId = 'probeControl' + t.logId + '.' + params.name + '.' + params.probeId,
+          startTime = Date.now(),
           router = Monitor.getRouter(),
           firewall = t.get('firewall');
 
-      log.info('probeControl', t.toJSON(), params);
+      log.info(logId, params);
 
       // Don't allow inbound requests if this connection is firewalled
-      if (firewall) {return callback('firewalled');}
+      if (firewall) {
+        errorText = 'firewalled';
+        log.error(logId, errorText);
+        return callback(errorText);
+      }
+
+      // Called upon return
+      var onReturn = function(error) {
+        if (error) {
+          log.error(logId, error);
+          return callback(error);
+        }
+        else {
+          var duration = Date.now() - startTime;
+          log.info(logId, duration);
+          stat.time(logId, duration);
+          return callback.apply(null, arguments);
+        }
+      };
 
       // Is this an internal probe?
       var probe = router.runningProbesById[params.probeId];
@@ -8569,15 +8641,17 @@ if (typeof define === "function" && define.amd) {
         // Is this a remote (proxied) probe?
         var monitorProxy = t.incomingMonitorsById[params.probeId];
         if (!monitorProxy) {
-          return callback('Probe id not found: ' + params.probeId);
+          errorText = 'Probe id not found: ' + params.probeId;
+          log.error(errorText);
+          return callback(errorText);
         }
 
         // Proxying requires this form vs. callback as last arg.
         return monitorProxy.control(params.name, params.params, function(err, returnParams) {
-          callback(err, returnParams);
+          onReturn(err, returnParams);
         });
       }
-      return probe.onControl(params.name, params.params, callback);
+      return probe.onControl(params.name, params.params, onReturn);
     }
 
   });
@@ -8889,6 +8963,7 @@ if (typeof define === "function" && define.amd) {
       t.connections = new Connection.List();
       t.runningProbesByKey = {}; // key=probeKey, data=probeImpl
       t.runningProbesById = {};  // key=probeId, data=probeImpl
+      log.info('init', 'Router initialized');
     },
 
     /**
@@ -8911,6 +8986,7 @@ if (typeof define === "function" && define.amd) {
     setFirewall: function(firewall) {
       var t = Monitor.getRouter(); // This is a static method
       t.firewall = firewall;
+      log.info('setFirewall', firewall);
     },
 
     /**
@@ -8974,6 +9050,7 @@ if (typeof define === "function" && define.amd) {
     */
     setHostName: function(name) {
       hostName = name;
+      log.info('setHostName', name);
     },
 
     /**
@@ -8991,9 +9068,8 @@ if (typeof define === "function" && define.amd) {
     * @return connection {Connection} - The added connection
     */
     addConnection: function(options) {
-      var t = this;
-
-      log.info('addConnection', t.toJSON(), options);
+      var t = this,
+          startTime = Date.now();
 
       // Default the firewall value
       if (_.isUndefined(options.firewall)) {
@@ -9003,17 +9079,22 @@ if (typeof define === "function" && define.amd) {
       // Generate a unique ID for the connection
       options.id = Monitor.generateUniqueCollectionId(t.connections);
 
+      var connStr = 'Conn_' + options.id + ' - ' + options.hostName + ':' + options.hostPort;
+      log.info('addConnection', connStr);
+
       // Instantiate and add the connection for use, once connected
       var connection = new Connection(options);
 
       // Add a connect and disconnect function
       var onConnect = function(){
         t.trigger('connection:add', connection);
+        log.info('connected', connStr, (Date.now() - startTime) + 'ms');
       };
       var onDisconnect = function(){
         t.removeConnection(connection);
         connection.off('connect', onConnect);
         connection.off('disconnect', onConnect);
+        log.info('disconnected', connStr, (Date.now() - startTime) + 'ms');
       };
       connection.on('connect', onConnect);
       connection.on('disconnect', onDisconnect);
@@ -9034,7 +9115,7 @@ if (typeof define === "function" && define.amd) {
     */
     removeConnection: function(connection) {
       var t = this;
-      log.info('removeConnection', t.toJSON(), connection.toJSON());
+      log.info('removeConnection', 'Conn_' + connection.id);
       connection.disconnect('connection_removed');
       t.connections.remove(connection);
       t.trigger('connection:remove', connection);
@@ -9057,11 +9138,20 @@ if (typeof define === "function" && define.amd) {
     connectMonitor: function(monitor, callback) {
 
       callback = callback || function(){};
-      var t = this, monitorJSON = monitor.toMonitorJSON(), probeJSON = null,
-          probeClass = monitorJSON.probeClass;
+      var t = this,
+          logStr = '',
+          monitorJSON = monitor.toMonitorJSON(),
+          probeJSON = null,
+          probeClass = monitorJSON.probeClass,
+          startTime = Date.now(),
+          monitorStr = probeClass + '.' + monitor.toServerString().replace(/:/g, '.');
 
       // Class name must be set
-      if (!probeClass) {return callback('probeClass must be set');}
+      if (!probeClass) {
+        var errStr = 'probeClass must be set';
+        log.error('connectMonitor', errStr);
+        return callback(errStr);
+      }
 
       // Determine the connection (or internal), and listen for change events
       t.determineConnection(monitorJSON, true, function(err, connection) {
@@ -9073,6 +9163,7 @@ if (typeof define === "function" && define.amd) {
           probeJSON = probe.toJSON();
           probeJSON.probeId = probeJSON.id; delete probeJSON.id;
           monitor.probe = probe;
+          log.info('connected.' + logStr);
 
           // Perform the initial set silently.  This assures the initial
           // probe contents are available on the connect event,
@@ -9082,6 +9173,7 @@ if (typeof define === "function" && define.amd) {
           // Watch the probe for changes.
           monitor.probeChange = function(){
             monitor.set(probe.changedAttributes());
+            log.info('probeChange.' + logStr);
           };
           probe.on('change', monitor.probeChange);
 
@@ -9185,6 +9277,7 @@ if (typeof define === "function" && define.amd) {
     */
     determineConnection: function(monitorJSON, makeNewConnections, callback) {
       var t = this, connection = null, probeClass = monitorJSON.probeClass,
+          errStr = '',
           hostName = monitorJSON.hostName,
           appName = monitorJSON.appName,
           appInstance = monitorJSON.appInstance,
@@ -9211,6 +9304,7 @@ if (typeof define === "function" && define.amd) {
         };
         var onError = function(err) {
           removeListeners();
+          log.error('connect.error', err);
           callback({msg: 'connection error', err:err});
         };
         var removeListeners = function() {
@@ -9251,7 +9345,9 @@ if (typeof define === "function" && define.amd) {
         // No probe with that name in this process.
         // Fallback to the default gateway.
         if (!t.defaultGateway) {
-          return callback({err:'Probe class "' + probeClass + '" not available in this process'});
+          errStr = 'Probe class "' + probeClass + '" not available in this process';
+          log.error('connect.internal', errStr);
+          return callback({err:errStr});
         }
         connection = t.defaultGateway;
         return connectedCheck(true);
@@ -9267,6 +9363,7 @@ if (typeof define === "function" && define.amd) {
       if (hostName && makeNewConnections) {
         t.addHostConnections(hostName, function(err) {
           if (err) {
+            log.error('connect.toHost', err);
             return callback(err);
           }
 
@@ -9278,7 +9375,9 @@ if (typeof define === "function" && define.amd) {
 
           // Cant find a direct connection.  Use gateway if available.
           if (!t.defaultGateway) {
-            return callback({err:'No route to host: ' + Monitor.toServerString(monitorJSON)});
+            errStr = 'No route to host: ' + Monitor.toServerString(monitorJSON);
+            log.error('connect.toHost', errStr);
+            return callback({err:errStr});
           }
           connection = t.defaultGateway;
           return connectedCheck(true);
@@ -9291,10 +9390,14 @@ if (typeof define === "function" && define.amd) {
       // We tried...
       if (!hostName) {
         // App name was specified, it wasn't this process, and no hostname
-        return callback({msg:'No host specified for app: ' + appName},null);
+        errStr = 'No host specified for app: ' + appName;
+        log.error('connect', errStr);
+        return callback({msg:errStr},null);
       } else {
         // Not allowed to try remote hosts
-        return callback({msg:'Not a gateway to remote monitors'});
+        errStr = 'Not a gateway to remote monitors';
+        log.error('connect', errStr);
+        return callback({msg:errStr});
       }
     },
 
@@ -9368,7 +9471,10 @@ if (typeof define === "function" && define.amd) {
     * @param callback {Function(error)} - Called when complete
     */
     addHostConnections: function(hostName, callback) {
-      var t = this, connectedPorts = [], portStart = Config.MonitorMin.serviceBasePort,
+      var t = this,
+          errStr = '',
+          connectedPorts = [],
+          portStart = Config.MonitorMin.serviceBasePort,
           portEnd = Config.MonitorMin.serviceBasePort + Config.MonitorMin.portsToScan - 1;
 
       // Build the list of ports already connected
@@ -9383,7 +9489,9 @@ if (typeof define === "function" && define.amd) {
       // Scan non-connected ports
       var portsToScan = Config.MonitorMin.portsToScan - connectedPorts.length;
       if (portsToScan === 0) {
-        return callback();
+        errStr = 'All monitor ports in use.  Increase the Config.MonitorMin.portsToScan configuration';
+        log.error('addHostConnections', errStr);
+        return callback(errStr);
       }
       var callbackWhenDone = function() {
         var conn = this; // called in the context of the connection
@@ -9476,7 +9584,7 @@ if (typeof define === "function" && define.amd) {
           t.runningProbesById[probeImpl.id] = probeImpl;
         } catch (e) {
           var error = {msg: 'Error instantiating probe ' + probeClass, error: e};
-          console.error(error);
+          log.error('connect', error);
           return whenDone(error);
         }
 
@@ -9530,7 +9638,10 @@ if (typeof define === "function" && define.amd) {
     connectExternal: function(monitorJSON, connection, callback) {
 
       // Build a key for this probe from the probeClass and initParams
-      var t = this, probeKey = t.buildProbeKey(monitorJSON);
+      var t = this,
+          errStr = '',
+          probeKey = t.buildProbeKey(monitorJSON);
+
       // Get the probe proxy
       var probeId = connection.remoteProbeIdsByKey[probeKey];
       var probeProxy = connection.remoteProbesById[probeId];
@@ -9540,9 +9651,10 @@ if (typeof define === "function" && define.amd) {
         // Connect with the remote probe
         connection.emit('probe:connect', monitorJSON, function(error, probeJSON){
           if (error) {
-            console.error("Cannot connect to probeClass '" + monitorJSON.probeClass +
-              "' on " + Monitor.toServerString(monitorJSON), monitorJSON, error);
-            return callback(error);
+            errStr = "Cannot connect to probeClass '" + monitorJSON.probeClass +
+              "' on " + Monitor.toServerString(monitorJSON);
+            log.error('connectExternal', errStr, error);
+            return callback({err: error, msg: errStr});
           }
           probeId = probeJSON.id;
 
@@ -9591,7 +9703,7 @@ if (typeof define === "function" && define.amd) {
         connection.removeEvent('probe:change:' + probeId);
         return connection.emit('probe:disconnect', {probeId:probeId}, function(error){
           if (error) {
-            console.log("Probe disconnect error from host : " + connection.get('hostName'), error);
+            log.error('disconnectExternal', 'Probe disconnect error from host : ' + connection.get('hostName'), error);
           }
           return callback(error);
         });
