@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.4 - 2013-07-18 */
+/* monitor-min - v0.5.5 - 2013-07-18 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -1027,7 +1027,7 @@
   // Module loading
   var Monitor = root.Monitor || require('./Monitor'),
       // Raw events on the server (for speed), backbone events on the browser (for functionality)
-      EventEmitter = Monitor.commonJS ? require('events').EventEmitter : Monitor.Backbone.Events,
+      EventEmitter = Monitor.commonJS ? require('events').EventEmitter.prototype : Monitor.Backbone.Events,
       Stat = Monitor.Stat,
       stat = new Stat('Log'),
       _ = Monitor._;
@@ -1203,7 +1203,7 @@
   };
 
   // Mixin event processing for the Log class
-  _.extend(Log, EventEmitter.prototype);
+  _.extend(Log, EventEmitter);
 
   // Expose this class from the Monitor module
   Monitor.setLoggerClass(Log);
