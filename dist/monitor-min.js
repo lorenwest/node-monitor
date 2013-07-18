@@ -703,7 +703,7 @@
   // Module loading
   var Monitor = root.Monitor || require('./Monitor'),
       // Raw events on the server (for speed), backbone events on the browser (for functionality)
-      EventEmitter = Monitor.commonJS ? require('events').EventEmitter : Monitor.Backbone.Events,
+      EventEmitter = Monitor.commonJS ? require('events').EventEmitter.prototype : Monitor.Backbone.Events,
       _ = Monitor._;
 
 
@@ -1010,7 +1010,7 @@
   };
 
   // Mixin event processing for the Stat class
-  _.extend(Stat, EventEmitter.prototype);
+  _.extend(Stat, EventEmitter);
 
   // Expose this class from the Monitor module
   Monitor.setStatLoggerClass(Stat);
