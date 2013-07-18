@@ -280,7 +280,7 @@
           return callback(error);
         }
         var duration = Date.now() - startTime;
-        log.info(logId, duration);
+        log.info(logId, params);
         stat.time(t.logId, duration);
         callback.apply(null, arguments);
       };

@@ -194,7 +194,7 @@
   *
   * Listeners are invoked with the following arguments:
   *
-  * - type - The log type (info, trace, warn, etc.)
+  * - type - The log type (trace, debug, info, warn, error, or fatal)
   * - module - The logger module name
   * - name - The log entry name
   * - args... - Additional arguments passed into the log entry are passed on
@@ -323,6 +323,48 @@
 
   &#x2F;&#x2F; Expose this class from the Monitor module
   Monitor.setLoggerClass(Log);
+
+  &#x2F;**
+  * Output log statements to the console
+  *
+  * This method can be used as a listener to send logs to the console.
+  *
+  * It uses console.error() for error and fatal log types, and console.log()
+  * for all other log types.
+  *
+  * Example:
+  *
+  *     var Log = Monitor.Log;
+  *     Log.on(&#x27;*.MyModule.*&#x27;, Log.console);
+  *
+  * @static
+  * @method consoleLogger
+  * @param type {string} The log type (trace, debug, info, etc)
+  * @param module {String} The log module name
+  * @param name {String} The log entry name
+  * @param args {any[]} All original, starting with the short name
+  *&#x2F;
+  Log.console = function(type, module, name, args) {
+
+    &#x2F;&#x2F; Build the string to log, in log4js format
+    var nowStr = JSON.stringify(new Date()).substr(1,22);
+    var logStr = nowStr + &#x27; [&#x27; + type + &#x27;] [&#x27; + module + &#x27;:&#x27; + name + &#x27;] &#x27; + JSON.stringify(args);
+
+    &#x2F;&#x2F; Log or error
+    if (type === &#x27;error&#x27; || type === &#x27;fatal&#x27;) {
+      console.error(logStr);
+    }
+    else {
+      console.log(logStr);
+    }
+
+  };
+
+  &#x2F;&#x2F; Attach the console log listener
+  var pattern = Monitor.Config.MonitorMin.consoleLogListener.pattern;
+  if (pattern) {
+    Log.on(pattern, Log.console);
+  }
 
 }(this));
 

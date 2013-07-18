@@ -23,6 +23,11 @@ module.exports = {
     // accidental security breaches by requiring you to consider your network
     // security policies before allowing external connections.
     // See the external.js file in this directory for more information.
-    allowExternalConnections: false
+    allowExternalConnections: false,
+
+    // Configure the built-in console log output
+    consoleLogListener: {
+      pattern: "[error,fatal].*"
+    }
   }
 }

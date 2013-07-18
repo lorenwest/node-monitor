@@ -1,3 +1,12 @@
+0.5.5 / 2013-07-18
+==================
+
+  * Added Log & Stat classes
+  * Tests for Stat & Log
+  * Added LogProbe & StatProbe
+  * Added Log.console for console logging
+  * Added log statements & stats gathering
+
 0.5.4 / 2013-05-23
 ==================
 

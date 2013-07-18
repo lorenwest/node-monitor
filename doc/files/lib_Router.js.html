@@ -191,6 +191,7 @@
       t.connections = new Connection.List();
       t.runningProbesByKey = {}; &#x2F;&#x2F; key=probeKey, data=probeImpl
       t.runningProbesById = {};  &#x2F;&#x2F; key=probeId, data=probeImpl
+      log.info(&#x27;init&#x27;, &#x27;Router initialized&#x27;);
     },
 
     &#x2F;**
@@ -213,6 +214,7 @@
     setFirewall: function(firewall) {
       var t = Monitor.getRouter(); &#x2F;&#x2F; This is a static method
       t.firewall = firewall;
+      log.info(&#x27;setFirewall&#x27;, firewall);
     },
 
     &#x2F;**
@@ -276,6 +278,7 @@
     *&#x2F;
     setHostName: function(name) {
       hostName = name;
+      log.info(&#x27;setHostName&#x27;, name);
     },
 
     &#x2F;**
@@ -293,9 +296,8 @@
     * @return connection {Connection} - The added connection
     *&#x2F;
     addConnection: function(options) {
-      var t = this;
-
-      log.info(&#x27;addConnection&#x27;, t.toJSON(), options);
+      var t = this,
+          startTime = Date.now();
 
       &#x2F;&#x2F; Default the firewall value
       if (_.isUndefined(options.firewall)) {
@@ -305,17 +307,25 @@
       &#x2F;&#x2F; Generate a unique ID for the connection
       options.id = Monitor.generateUniqueCollectionId(t.connections);
 
+      var connStr = &#x27;Conn_&#x27; + options.id;
+      if (options.hostName) {
+        connStr += &#x27; - &#x27; + options.hostName + &#x27;:&#x27; + options.hostPort;
+      }
+      log.info(&#x27;addConnection&#x27;, connStr);
+
       &#x2F;&#x2F; Instantiate and add the connection for use, once connected
       var connection = new Connection(options);
 
       &#x2F;&#x2F; Add a connect and disconnect function
       var onConnect = function(){
         t.trigger(&#x27;connection:add&#x27;, connection);
+        log.info(&#x27;connected&#x27;, connStr, (Date.now() - startTime) + &#x27;ms&#x27;);
       };
       var onDisconnect = function(){
         t.removeConnection(connection);
         connection.off(&#x27;connect&#x27;, onConnect);
         connection.off(&#x27;disconnect&#x27;, onConnect);
+        log.info(&#x27;disconnected&#x27;, connStr, (Date.now() - startTime) + &#x27;ms&#x27;);
       };
       connection.on(&#x27;connect&#x27;, onConnect);
       connection.on(&#x27;disconnect&#x27;, onDisconnect);
@@ -336,7 +346,7 @@
     *&#x2F;
     removeConnection: function(connection) {
       var t = this;
-      log.info(&#x27;removeConnection&#x27;, t.toJSON(), connection.toJSON());
+      log.info(&#x27;removeConnection&#x27;, &#x27;Conn_&#x27; + connection.id);
       connection.disconnect(&#x27;connection_removed&#x27;);
       t.connections.remove(connection);
       t.trigger(&#x27;connection:remove&#x27;, connection);
@@ -359,11 +369,19 @@
     connectMonitor: function(monitor, callback) {
 
       callback = callback || function(){};
-      var t = this, monitorJSON = monitor.toMonitorJSON(), probeJSON = null,
-          probeClass = monitorJSON.probeClass;
+      var t = this,
+          monitorJSON = monitor.toMonitorJSON(),
+          probeJSON = null,
+          probeClass = monitorJSON.probeClass,
+          startTime = Date.now(),
+          monitorStr = probeClass + &#x27;.&#x27; + monitor.toServerString().replace(&#x2F;:&#x2F;g, &#x27;.&#x27;);
 
       &#x2F;&#x2F; Class name must be set
-      if (!probeClass) {return callback(&#x27;probeClass must be set&#x27;);}
+      if (!probeClass) {
+        var errStr = &#x27;probeClass must be set&#x27;;
+        log.error(&#x27;connectMonitor&#x27;, errStr);
+        return callback(errStr);
+      }
 
       &#x2F;&#x2F; Determine the connection (or internal), and listen for change events
       t.determineConnection(monitorJSON, true, function(err, connection) {
@@ -384,6 +402,7 @@
           &#x2F;&#x2F; Watch the probe for changes.
           monitor.probeChange = function(){
             monitor.set(probe.changedAttributes());
+            log.info(&#x27;probeChange&#x27;, {probeId: probeJSON.probeId, changed: probe.changedAttributes()});
           };
           probe.on(&#x27;change&#x27;, monitor.probeChange);
 
@@ -487,6 +506,7 @@
     *&#x2F;
     determineConnection: function(monitorJSON, makeNewConnections, callback) {
       var t = this, connection = null, probeClass = monitorJSON.probeClass,
+          errStr = &#x27;&#x27;,
           hostName = monitorJSON.hostName,
           appName = monitorJSON.appName,
           appInstance = monitorJSON.appInstance,
@@ -513,6 +533,7 @@
         };
         var onError = function(err) {
           removeListeners();
+          log.error(&#x27;connect.error&#x27;, err);
           callback({msg: &#x27;connection error&#x27;, err:err});
         };
         var removeListeners = function() {
@@ -553,7 +574,9 @@
         &#x2F;&#x2F; No probe with that name in this process.
         &#x2F;&#x2F; Fallback to the default gateway.
         if (!t.defaultGateway) {
-          return callback({err:&#x27;Probe class &quot;&#x27; + probeClass + &#x27;&quot; not available in this process&#x27;});
+          errStr = &#x27;Probe class &quot;&#x27; + probeClass + &#x27;&quot; not available in this process&#x27;;
+          log.error(&#x27;connect.internal&#x27;, errStr);
+          return callback({err:errStr});
         }
         connection = t.defaultGateway;
         return connectedCheck(true);
@@ -569,6 +592,7 @@
       if (hostName &amp;&amp; makeNewConnections) {
         t.addHostConnections(hostName, function(err) {
           if (err) {
+            log.error(&#x27;connect.toHost&#x27;, err);
             return callback(err);
           }
 
@@ -580,7 +604,9 @@
 
           &#x2F;&#x2F; Cant find a direct connection.  Use gateway if available.
           if (!t.defaultGateway) {
-            return callback({err:&#x27;No route to host: &#x27; + Monitor.toServerString(monitorJSON)});
+            errStr = &#x27;No route to host: &#x27; + Monitor.toServerString(monitorJSON);
+            log.error(&#x27;connect.toHost&#x27;, errStr);
+            return callback({err:errStr});
           }
           connection = t.defaultGateway;
           return connectedCheck(true);
@@ -593,10 +619,14 @@
       &#x2F;&#x2F; We tried...
       if (!hostName) {
         &#x2F;&#x2F; App name was specified, it wasn&#x27;t this process, and no hostname
-        return callback({msg:&#x27;No host specified for app: &#x27; + appName},null);
+        errStr = &#x27;No host specified for app: &#x27; + appName;
+        log.error(&#x27;connect&#x27;, errStr);
+        return callback({msg:errStr},null);
       } else {
         &#x2F;&#x2F; Not allowed to try remote hosts
-        return callback({msg:&#x27;Not a gateway to remote monitors&#x27;});
+        errStr = &#x27;Not a gateway to remote monitors&#x27;;
+        log.error(&#x27;connect&#x27;, errStr);
+        return callback({msg:errStr});
       }
     },
 
@@ -670,7 +700,10 @@
     * @param callback {Function(error)} - Called when complete
     *&#x2F;
     addHostConnections: function(hostName, callback) {
-      var t = this, connectedPorts = [], portStart = Config.MonitorMin.serviceBasePort,
+      var t = this,
+          errStr = &#x27;&#x27;,
+          connectedPorts = [],
+          portStart = Config.MonitorMin.serviceBasePort,
           portEnd = Config.MonitorMin.serviceBasePort + Config.MonitorMin.portsToScan - 1;
 
       &#x2F;&#x2F; Build the list of ports already connected
@@ -685,7 +718,9 @@
       &#x2F;&#x2F; Scan non-connected ports
       var portsToScan = Config.MonitorMin.portsToScan - connectedPorts.length;
       if (portsToScan === 0) {
-        return callback();
+        errStr = &#x27;All monitor ports in use.  Increase the Config.MonitorMin.portsToScan configuration&#x27;;
+        log.error(&#x27;addHostConnections&#x27;, errStr);
+        return callback(errStr);
       }
       var callbackWhenDone = function() {
         var conn = this; &#x2F;&#x2F; called in the context of the connection
@@ -724,8 +759,6 @@
           initParams = monitorJSON.initParams,
           probeImpl = null;
 
-      log.info(&#x27;connectInternal&#x27;, monitorJSON);
-
       var whenDone = function(error) {
 
         &#x2F;&#x2F; Wait one tick before firing the callback.  This simulates a remote
@@ -744,11 +777,13 @@
                 probeImpl.release();
               } catch (e){}
             }
+            log.error(&#x27;connectInternal&#x27;, {error: error, probeKey: probeKey, probeId: probeImpl.id});
             return callback(error);
           }
 
           &#x2F;&#x2F; Probes are released based on reference count
           probeImpl.refCount++;
+          log.info(&#x27;connectInternal&#x27;, {probeKey: probeKey, probeId: probeImpl.id});
           callback(null, probeImpl);
         }, 0);
       };
@@ -778,7 +813,7 @@
           t.runningProbesById[probeImpl.id] = probeImpl;
         } catch (e) {
           var error = {msg: &#x27;Error instantiating probe &#x27; + probeClass, error: e};
-          console.error(error);
+          log.error(&#x27;connect&#x27;, error);
           return whenDone(error);
         }
 
@@ -832,7 +867,10 @@
     connectExternal: function(monitorJSON, connection, callback) {
 
       &#x2F;&#x2F; Build a key for this probe from the probeClass and initParams
-      var t = this, probeKey = t.buildProbeKey(monitorJSON);
+      var t = this,
+          errStr = &#x27;&#x27;,
+          probeKey = t.buildProbeKey(monitorJSON);
+
       &#x2F;&#x2F; Get the probe proxy
       var probeId = connection.remoteProbeIdsByKey[probeKey];
       var probeProxy = connection.remoteProbesById[probeId];
@@ -842,9 +880,10 @@
         &#x2F;&#x2F; Connect with the remote probe
         connection.emit(&#x27;probe:connect&#x27;, monitorJSON, function(error, probeJSON){
           if (error) {
-            console.error(&quot;Cannot connect to probeClass &#x27;&quot; + monitorJSON.probeClass +
-              &quot;&#x27; on &quot; + Monitor.toServerString(monitorJSON), monitorJSON, error);
-            return callback(error);
+            errStr = &quot;Cannot connect to probeClass &#x27;&quot; + monitorJSON.probeClass +
+              &quot;&#x27; on &quot; + Monitor.toServerString(monitorJSON);
+            log.error(&#x27;connectExternal&#x27;, errStr, error);
+            return callback({err: error, msg: errStr});
           }
           probeId = probeJSON.id;
 
@@ -852,6 +891,7 @@
           probeProxy = connection.remoteProbesById[probeId];
           if (probeProxy) {
             probeProxy.refCount++;
+            log.info(&#x27;connectExternal.connected.existingProxy&#x27;, {probeId: probeId, refCount: probeProxy.refCount, whileWaiting: true});
             return callback(null, probeProxy);
           }
 
@@ -862,6 +902,7 @@
           connection.remoteProbeIdsByKey[probeKey] = probeId;
           connection.remoteProbesById[probeId] = probeProxy;
           connection.addEvent(&#x27;probe:change:&#x27; + probeId, function(attrs){probeProxy.set(attrs);});
+          log.info(&#x27;connectExternal.connected.newProxy&#x27;, {probeId: probeId});
           return callback(null, probeProxy);
         });
         return;
@@ -869,6 +910,7 @@
 
       &#x2F;&#x2F; Probes are released based on reference count
       probeProxy.refCount++;
+      log.info(&#x27;connectExternal.connected.existingProxy&#x27;, {probeId: probeId, refCount: probeProxy.refCount});
       return callback(null, probeProxy);
     },
 
@@ -893,7 +935,7 @@
         connection.removeEvent(&#x27;probe:change:&#x27; + probeId);
         return connection.emit(&#x27;probe:disconnect&#x27;, {probeId:probeId}, function(error){
           if (error) {
-            console.log(&quot;Probe disconnect error from host : &quot; + connection.get(&#x27;hostName&#x27;), error);
+            log.error(&#x27;disconnectExternal&#x27;, &#x27;Probe disconnect error from host : &#x27; + connection.get(&#x27;hostName&#x27;), error);
           }
           return callback(error);
         });

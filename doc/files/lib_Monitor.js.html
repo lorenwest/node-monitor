@@ -266,7 +266,6 @@
     *&#x2F;
     connect: function(callback) {
       var t = this, startTime = Date.now();
-      log.info(&#x27;connect&#x27;, t.toMonitorJSON());
       Monitor.getRouter().connectMonitor(t, function(error) {
 
         &#x2F;&#x2F; Give the caller first crack at knowing we&#x27;re connected,
@@ -277,7 +276,7 @@
         &#x2F;&#x2F; in order for the connect event to fire before the first
         &#x2F;&#x2F; change event.  Fire the connect &#x2F; change in the proper order.
         if (error) {
-          log.error(&#x27;connect&#x27;, error);
+          log.error(&#x27;connect&#x27;, {initParams: t.get(&#x27;initParams&#x27;), error: error});
         }
         else {
 
@@ -287,7 +286,7 @@
           t.trigger(&#x27;connect&#x27;, t);
           t.trigger(&#x27;change&#x27;, t);
 
-          log.info(&#x27;connected&#x27;, t.toMonitorJSON());
+          log.info(&#x27;connected&#x27;, {initParams: t.get(&#x27;initParams&#x27;), probeId: t.get(&#x27;probeId&#x27;)});
           stat.time(&#x27;connect&#x27;, Date.now() - startTime);
         }
       });
@@ -344,17 +343,20 @@
     * &lt;&#x2F;ul&gt;
     *&#x2F;
     disconnect: function(callback) {
-      var t = this, reason = &#x27;manual_disconnect&#x27;, startTime = Date.now();
-      log.info(&#x27;disconnect&#x27;, reason, t.get(&#x27;id&#x27;));
+      var t = this,
+          reason = &#x27;manual_disconnect&#x27;,
+          startTime = Date.now(),
+          probeId = t.get(&#x27;probeId&#x27;);
+
       Monitor.getRouter().disconnectMonitor(t, reason, function(error, reason) {
         if (callback) {callback(error);}
         if (error) {
-          log.error(&#x27;disconnect&#x27;, error);
+          log.error(&#x27;disconnect&#x27;, {error: error});
         }
         else {
           t.trigger(&#x27;disconnect&#x27;, reason);
 
-          log.info(&#x27;disconnected&#x27;, t.toMonitorJSON());
+          log.info(&#x27;disconnected&#x27;, {reason: reason, probeId: probeId});
           stat.time(&#x27;disconnect&#x27;, Date.now() - startTime);
         }
       });
@@ -386,7 +388,7 @@
     control: function(name, params, callback) {
       var t = this,
           probe = t.probe,
-          logId = &#x27;control.&#x27; + t.get(&#x27;probeClass&#x27;) + &#x27;.&#x27; + name + &#x27;.&#x27; + t.get(&#x27;id&#x27;),
+          logId = &#x27;control.&#x27; + t.get(&#x27;probeClass&#x27;) + &#x27;.&#x27; + name,
           startTime = Date.now();
 
       &#x2F;&#x2F; Switch callback if sent in 2nd arg
@@ -797,7 +799,10 @@
     appName: &#x27;unknown&#x27;,
     serviceBasePort: 42000,
     portsToScan: 20,
-    allowExternalConnections: false
+    allowExternalConnections: false,
+    consoleLogListener: {
+      pattern: &quot;[error,fatal].*&quot;
+    }
   };
   if (commonJS) {
     Monitor.Config = require(&#x27;config&#x27;);

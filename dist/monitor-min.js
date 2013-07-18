@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.4 - 2013-07-01 */
+/* monitor-min - v0.5.4 - 2013-07-18 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -133,7 +133,6 @@
     */
     connect: function(callback) {
       var t = this, startTime = Date.now();
-      log.info('connect', t.toMonitorJSON());
       Monitor.getRouter().connectMonitor(t, function(error) {
 
         // Give the caller first crack at knowing we're connected,
@@ -144,7 +143,7 @@
         // in order for the connect event to fire before the first
         // change event.  Fire the connect / change in the proper order.
         if (error) {
-          log.error('connect', error);
+          log.error('connect', {initParams: t.get('initParams'), error: error});
         }
         else {
 
@@ -154,7 +153,7 @@
           t.trigger('connect', t);
           t.trigger('change', t);
 
-          log.info('connected', t.toMonitorJSON());
+          log.info('connected', {initParams: t.get('initParams'), probeId: t.get('probeId')});
           stat.time('connect', Date.now() - startTime);
         }
       });
@@ -211,17 +210,20 @@
     * </ul>
     */
     disconnect: function(callback) {
-      var t = this, reason = 'manual_disconnect', startTime = Date.now();
-      log.info('disconnect', reason, t.get('id'));
+      var t = this,
+          reason = 'manual_disconnect',
+          startTime = Date.now(),
+          probeId = t.get('probeId');
+
       Monitor.getRouter().disconnectMonitor(t, reason, function(error, reason) {
         if (callback) {callback(error);}
         if (error) {
-          log.error('disconnect', error);
+          log.error('disconnect', {error: error});
         }
         else {
           t.trigger('disconnect', reason);
 
-          log.info('disconnected', t.toMonitorJSON());
+          log.info('disconnected', {reason: reason, probeId: probeId});
           stat.time('disconnect', Date.now() - startTime);
         }
       });
@@ -253,7 +255,7 @@
     control: function(name, params, callback) {
       var t = this,
           probe = t.probe,
-          logId = 'control.' + t.get('probeClass') + '.' + name + '.' + t.get('id'),
+          logId = 'control.' + t.get('probeClass') + '.' + name,
           startTime = Date.now();
 
       // Switch callback if sent in 2nd arg
@@ -664,7 +666,10 @@
     appName: 'unknown',
     serviceBasePort: 42000,
     portsToScan: 20,
-    allowExternalConnections: false
+    allowExternalConnections: false,
+    consoleLogListener: {
+      pattern: "[error,fatal].*"
+    }
   };
   if (commonJS) {
     Monitor.Config = require('config');
@@ -1073,7 +1078,7 @@
   *
   * Listeners are invoked with the following arguments:
   *
-  * - type - The log type (info, trace, warn, etc.)
+  * - type - The log type (trace, debug, info, warn, error, or fatal)
   * - module - The logger module name
   * - name - The log entry name
   * - args... - Additional arguments passed into the log entry are passed on
@@ -1202,6 +1207,48 @@
 
   // Expose this class from the Monitor module
   Monitor.setLoggerClass(Log);
+
+  /**
+  * Output log statements to the console
+  *
+  * This method can be used as a listener to send logs to the console.
+  *
+  * It uses console.error() for error and fatal log types, and console.log()
+  * for all other log types.
+  *
+  * Example:
+  *
+  *     var Log = Monitor.Log;
+  *     Log.on('*.MyModule.*', Log.console);
+  *
+  * @static
+  * @method consoleLogger
+  * @param type {string} The log type (trace, debug, info, etc)
+  * @param module {String} The log module name
+  * @param name {String} The log entry name
+  * @param args {any[]} All original, starting with the short name
+  */
+  Log.console = function(type, module, name, args) {
+
+    // Build the string to log, in log4js format
+    var nowStr = JSON.stringify(new Date()).substr(1,22);
+    var logStr = nowStr + ' [' + type + '] [' + module + ':' + name + '] ' + JSON.stringify(args);
+
+    // Log or error
+    if (type === 'error' || type === 'fatal') {
+      console.error(logStr);
+    }
+    else {
+      console.log(logStr);
+    }
+
+  };
+
+  // Attach the console log listener
+  var pattern = Monitor.Config.MonitorMin.consoleLogListener.pattern;
+  if (pattern) {
+    Log.on(pattern, Log.console);
+  }
 
 }(this));
 
@@ -1352,7 +1399,7 @@
           return callback(error);
         }
         var duration = Date.now() - startTime;
-        log.info(logId, duration);
+        log.info(logId, params);
         stat.time(t.logId, duration);
         callback.apply(null, arguments);
       };
@@ -1494,8 +1541,12 @@
 
       // Either connect to an URL or with an existing socket
       if (params.socket) {t.bindConnectionEvents();}
-      else if (params.url || (params.hostName && params.hostPort)) {t.connect();}
-      else {console.error('Connection must supply a socket, url, or host name/port');}
+      else if (params.url || (params.hostName && params.hostPort)) {
+        t.connect();
+      }
+      else {
+        log.error('init', 'Connection must supply a socket, url, or host name/port');
+      }
     },
 
     // Initiate a connection with a remote server
@@ -1934,6 +1985,8 @@
   // Module loading
   var Monitor = root.Monitor || require('./Monitor'),
       Config = Monitor.Config, _ = Monitor._, Backbone = Monitor.Backbone,
+      log = Monitor.getLogger('Server'),
+      stat = Monitor.getStatLogger('Server'),
       Connection = Monitor.Connection,
       Http = Monitor.commonJS ? require('http') : null,
       SocketIO = root.io || require('socket.io');
@@ -2018,6 +2071,7 @@
       options = options || {};
       callback = callback || function(){};
       var t = this, server = t.get('server'), error,
+          startTime = Date.now(),
           port = options.port || Config.MonitorMin.serviceBasePort,
           attempt = options.attempt || 1,
           allowExternalConnections = Config.MonitorMin.allowExternalConnections;
@@ -2025,7 +2079,7 @@
       // Recursion detection.  Only scan for so many ports
       if (attempt > Config.MonitorMin.portsToScan) {
         error = {err:'connect:failure', msg: 'no ports available'};
-        console.error('Server start', error);
+        log.error('start', error);
         return callback(error);
       }
 
@@ -2054,6 +2108,7 @@
           // Record the server & port, and bind incoming events
           t.set({server: server, port: port});
           t.bindEvents(callback);
+          log.info('listening', {NODE_APP_INSTANCE: process.env.NODE_APP_INSTANCE});
         });
       }
     },
@@ -2073,11 +2128,12 @@
       // Detect server errors
       var t = this, server = t.get('server');
       server.on('clientError', function(err){
-        console.error('Client error detected on server', err);
+        log.error('bindEvents', 'clientError detected on server', err);
         t.trigger('error', err);
       });
       server.on('close', function(err){
         server.hasEmittedClose = true;
+        log.info('bindEvents.serverClose', 'Server has closed', err);
         t.stop();
       });
 
@@ -2095,8 +2151,10 @@
           t.connections.remove(connection);
           Monitor.getRouter().removeConnection(connection);
           connection.off('disconnect', onDisconnect);
+          log.info('client.disconnect', 'Disconnected client socket');
         };
         connection.on('disconnect', onDisconnect);
+        log.info('client.connect', 'Connected client socket');
       });
 
       // Notify that we've started
@@ -2334,7 +2392,10 @@
       // Generate a unique ID for the connection
       options.id = Monitor.generateUniqueCollectionId(t.connections);
 
-      var connStr = 'Conn_' + options.id + ' - ' + options.hostName + ':' + options.hostPort;
+      var connStr = 'Conn_' + options.id;
+      if (options.hostName) {
+        connStr += ' - ' + options.hostName + ':' + options.hostPort;
+      }
       log.info('addConnection', connStr);
 
       // Instantiate and add the connection for use, once connected
@@ -2394,7 +2455,6 @@
 
       callback = callback || function(){};
       var t = this,
-          logStr = '',
           monitorJSON = monitor.toMonitorJSON(),
           probeJSON = null,
           probeClass = monitorJSON.probeClass,
@@ -2418,7 +2478,6 @@
           probeJSON = probe.toJSON();
           probeJSON.probeId = probeJSON.id; delete probeJSON.id;
           monitor.probe = probe;
-          log.info('connected.' + logStr);
 
           // Perform the initial set silently.  This assures the initial
           // probe contents are available on the connect event,
@@ -2428,7 +2487,7 @@
           // Watch the probe for changes.
           monitor.probeChange = function(){
             monitor.set(probe.changedAttributes());
-            log.info('probeChange.' + logStr);
+            log.info('probeChange', {probeId: probeJSON.probeId, changed: probe.changedAttributes()});
           };
           probe.on('change', monitor.probeChange);
 
@@ -2785,8 +2844,6 @@
           initParams = monitorJSON.initParams,
           probeImpl = null;
 
-      log.info('connectInternal', monitorJSON);
-
       var whenDone = function(error) {
 
         // Wait one tick before firing the callback.  This simulates a remote
@@ -2805,11 +2862,13 @@
                 probeImpl.release();
               } catch (e){}
             }
+            log.error('connectInternal', {error: error, probeKey: probeKey, probeId: probeImpl.id});
             return callback(error);
           }
 
           // Probes are released based on reference count
           probeImpl.refCount++;
+          log.info('connectInternal', {probeKey: probeKey, probeId: probeImpl.id});
           callback(null, probeImpl);
         }, 0);
       };
@@ -2917,6 +2976,7 @@
           probeProxy = connection.remoteProbesById[probeId];
           if (probeProxy) {
             probeProxy.refCount++;
+            log.info('connectExternal.connected.existingProxy', {probeId: probeId, refCount: probeProxy.refCount, whileWaiting: true});
             return callback(null, probeProxy);
           }
 
@@ -2927,6 +2987,7 @@
           connection.remoteProbeIdsByKey[probeKey] = probeId;
           connection.remoteProbesById[probeId] = probeProxy;
           connection.addEvent('probe:change:' + probeId, function(attrs){probeProxy.set(attrs);});
+          log.info('connectExternal.connected.newProxy', {probeId: probeId});
           return callback(null, probeProxy);
         });
         return;
@@ -2934,6 +2995,7 @@
 
       // Probes are released based on reference count
       probeProxy.refCount++;
+      log.info('connectExternal.connected.existingProxy', {probeId: probeId, refCount: probeProxy.refCount});
       return callback(null, probeProxy);
     },
 

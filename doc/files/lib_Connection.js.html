@@ -223,8 +223,12 @@
 
       &#x2F;&#x2F; Either connect to an URL or with an existing socket
       if (params.socket) {t.bindConnectionEvents();}
-      else if (params.url || (params.hostName &amp;&amp; params.hostPort)) {t.connect();}
-      else {console.error(&#x27;Connection must supply a socket, url, or host name&#x2F;port&#x27;);}
+      else if (params.url || (params.hostName &amp;&amp; params.hostPort)) {
+        t.connect();
+      }
+      else {
+        log.error(&#x27;init&#x27;, &#x27;Connection must supply a socket, url, or host name&#x2F;port&#x27;);
+      }
     },
 
     &#x2F;&#x2F; Initiate a connection with a remote server

@@ -1,4 +1,4 @@
-// server.js (c) 2010-2013 Loren West and other contributors
+// monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/monitor-min
@@ -6,6 +6,8 @@
 
   // Load dependencies
   var Monitor = require('./lib/index'),
+      log = Monitor.getLogger('monitor'),
+      stat = Monitor.getStatLogger('monitor'),
       OS = require('os');
 
   /**
@@ -28,12 +30,12 @@
   var server = new Monitor.Server();
   server.start(function(error) {
     if (error) {
-      console.error("Problem starting the monitor server: ", error);
+      log.error('monitor-min.start', error);
       return;
     }
 
     var connectTo = Monitor.Config.MonitorMin.allowExternalConnections ? OS.hostname() : 'localhost';
-    console.log("Headless monitor service started on host: " + connectTo);
+    console.log('Headless monitor service started on host: ' + connectTo);
 
     // Output security concerns
     if (!Monitor.Config.MonitorMin.allowExternalConnections) {
@@ -54,8 +56,8 @@
     }
 
     // Don't allow the process to continue in an unknown state.
-    console.error("Uncaught Exception: " + err.message);
-    console.error(err.stack);
+    log.fatal('moniotor-min.uncaught', 'Uncaught Exception: ' + err.message);
+    log.fatal('moniotor-min.uncaught', err.stack);
     server.stop(function(){
       process.exit(1);
     });

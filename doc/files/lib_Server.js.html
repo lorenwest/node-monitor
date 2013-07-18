@@ -142,6 +142,8 @@
   &#x2F;&#x2F; Module loading
   var Monitor = root.Monitor || require(&#x27;.&#x2F;Monitor&#x27;),
       Config = Monitor.Config, _ = Monitor._, Backbone = Monitor.Backbone,
+      log = Monitor.getLogger(&#x27;Server&#x27;),
+      stat = Monitor.getStatLogger(&#x27;Server&#x27;),
       Connection = Monitor.Connection,
       Http = Monitor.commonJS ? require(&#x27;http&#x27;) : null,
       SocketIO = root.io || require(&#x27;socket.io&#x27;);
@@ -226,6 +228,7 @@
       options = options || {};
       callback = callback || function(){};
       var t = this, server = t.get(&#x27;server&#x27;), error,
+          startTime = Date.now(),
           port = options.port || Config.MonitorMin.serviceBasePort,
           attempt = options.attempt || 1,
           allowExternalConnections = Config.MonitorMin.allowExternalConnections;
@@ -233,7 +236,7 @@
       &#x2F;&#x2F; Recursion detection.  Only scan for so many ports
       if (attempt &gt; Config.MonitorMin.portsToScan) {
         error = {err:&#x27;connect:failure&#x27;, msg: &#x27;no ports available&#x27;};
-        console.error(&#x27;Server start&#x27;, error);
+        log.error(&#x27;start&#x27;, error);
         return callback(error);
       }
 
@@ -262,6 +265,7 @@
           &#x2F;&#x2F; Record the server &amp; port, and bind incoming events
           t.set({server: server, port: port});
           t.bindEvents(callback);
+          log.info(&#x27;listening&#x27;, {NODE_APP_INSTANCE: process.env.NODE_APP_INSTANCE});
         });
       }
     },
@@ -281,11 +285,12 @@
       &#x2F;&#x2F; Detect server errors
       var t = this, server = t.get(&#x27;server&#x27;);
       server.on(&#x27;clientError&#x27;, function(err){
-        console.error(&#x27;Client error detected on server&#x27;, err);
+        log.error(&#x27;bindEvents&#x27;, &#x27;clientError detected on server&#x27;, err);
         t.trigger(&#x27;error&#x27;, err);
       });
       server.on(&#x27;close&#x27;, function(err){
         server.hasEmittedClose = true;
+        log.info(&#x27;bindEvents.serverClose&#x27;, &#x27;Server has closed&#x27;, err);
         t.stop();
       });
 
@@ -303,8 +308,10 @@
           t.connections.remove(connection);
           Monitor.getRouter().removeConnection(connection);
           connection.off(&#x27;disconnect&#x27;, onDisconnect);
+          log.info(&#x27;client.disconnect&#x27;, &#x27;Disconnected client socket&#x27;);
         };
         connection.on(&#x27;disconnect&#x27;, onDisconnect);
+        log.info(&#x27;client.connect&#x27;, &#x27;Connected client socket&#x27;);
       });
 
       &#x2F;&#x2F; Notify that we&#x27;ve started
