@@ -1,3 +1,8 @@
+0.5.6 / 2013-07-19
+==================
+
+  * Added a timestamp to logProbe/statProbe bundles
+
 0.5.5 / 2013-07-18
 ==================
 
