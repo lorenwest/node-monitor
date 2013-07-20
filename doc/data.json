@@ -2,7 +2,7 @@
     "project": {
         "name": "monitor-min",
         "description": "Monitor Min",
-        "version": "0.5.5",
+        "version": "0.5.6",
         "year": "2013",
         "url": "http://lorenwest.github.com/monitor-min",
         "logo": "",
@@ -844,6 +844,11 @@
                             "description": "Array of Stat elements.",
                             "type": "Stat array",
                             "props": [
+                                {
+                                    "name": "timestamp",
+                                    "description": "Timestamp of the stat bundle in milliseconds",
+                                    "type": "Long"
+                                },
                                 {
                                     "name": "module",
                                     "description": "Stat module",
@@ -4851,7 +4856,7 @@
         },
         {
             "file": "test/StatTest.js",
-            "line": 212,
+            "line": 213,
             "description": "Tests the probe streams multiple items at once",
             "itemtype": "method",
             "name": "Stat-ProbeStream",

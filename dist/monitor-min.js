@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.5 - 2013-07-19 */
+/* monitor-min - v0.5.6 - 2013-07-19 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -3845,6 +3845,7 @@
   *     @param [initParams.interval=1000] {Numeric} Queue interval (see <a href="StreamProbe.html">StreamProbe</a>)
   * @param model {Object} Monitor data model elements
   *     @param model.bundle {Stat array} Array of Stat elements.
+  *         @param model.bundle.timestamp {long} Timestamp of the stat bundle in milliseconds
   *         @param model.bundle.module {String} Stat module
   *         @param model.bundle.name {String} Stat name
   *         @param model.bundle.value {Numeric} Stat value
@@ -3867,7 +3868,10 @@
 
       // The watcher just forwards all args to queueItem as an array
       t.watcher = function() {
-        t.queueItem.call(t, _.toArray(arguments));
+        // Add timestamp as the first element
+        var logElems = _.toArray(arguments);
+        logElems.splice(0,0,Date.now());
+        t.queueItem.call(t, logElems);
       };
       Stat.on(t.get('pattern'), t.watcher);
     },
@@ -3935,7 +3939,7 @@
         // Add timestamp as the first element
         var logElems = _.toArray(arguments);
         logElems.splice(0,0,Date.now());
-        t.queueItem(logElems);
+        t.queueItem.call(t, logElems);
       };
       Log.on(t.get('pattern'), t.watcher);
     },
