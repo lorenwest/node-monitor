@@ -487,24 +487,29 @@
                             "type": "Log array",
                             "props": [
                                 {
+                                    "name": "timestamp",
+                                    "description": "Timestamp of the log statement in ms",
+                                    "type": "Long"
+                                },
+                                {
+                                    "name": "logType",
+                                    "description": "Log type (error, info, etc)",
+                                    "type": "String"
+                                },
+                                {
                                     "name": "module",
-                                    "description": "Log module",
+                                    "description": "Module that emitted the log",
                                     "type": "String"
                                 },
                                 {
                                     "name": "name",
-                                    "description": "Log name",
+                                    "description": "Log entry name",
                                     "type": "String"
                                 },
                                 {
-                                    "name": "value",
-                                    "description": "Log value",
-                                    "type": "Numeric"
-                                },
-                                {
-                                    "name": "type",
-                                    "description": "'c'ounter, 'g'ague, or 'ms'timer",
-                                    "type": "String"
+                                    "name": "args",
+                                    "description": "Arguments to the log statement",
+                                    "type": "Any[]"
                                 }
                             ]
                         },
@@ -2419,7 +2424,7 @@
                 },
                 {
                     "name": "args",
-                    "description": "All original, starting with the short name",
+                    "description": "Arguments to the log entry",
                     "type": "Any[]"
                 }
             ],
@@ -4342,7 +4347,7 @@
         },
         {
             "file": "test/LogTest.js",
-            "line": 217,
+            "line": 218,
             "description": "Tests the probe streams multiple items at once",
             "itemtype": "method",
             "name": "Log-ProbeStream",

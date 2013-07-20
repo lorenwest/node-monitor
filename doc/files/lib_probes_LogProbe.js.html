@@ -161,10 +161,11 @@
   *     @param [initParams.interval=1000] {Numeric} Queue interval (see &lt;a href=&quot;StreamProbe.html&quot;&gt;StreamProbe&lt;&#x2F;a&gt;)
   * @param model {Object} Monitor data model elements
   *     @param model.bundle {Log array} Array of Log elements.
-  *         @param model.bundle.module {String} Log module
-  *         @param model.bundle.name {String} Log name
-  *         @param model.bundle.value {Numeric} Log value
-  *         @param model.bundle.type {String} &#x27;c&#x27;ounter, &#x27;g&#x27;ague, or &#x27;ms&#x27;timer
+  *         @param model.bundle.timestamp {long} Timestamp of the log statement in ms
+  *         @param model.bundle.logType {String} Log type (error, info, etc)
+  *         @param model.bundle.module {String} Module that emitted the log
+  *         @param model.bundle.name {String} Log entry name
+  *         @param model.bundle.args {any[]} Arguments to the log statement
   *     @param model.sequence {Integer} A numeric incrementer causing a change event
   *&#x2F;
   var LogProbe = Monitor.LogProbe = StreamProbe.extend({
@@ -183,7 +184,10 @@
 
       &#x2F;&#x2F; The watcher just forwards all args to queueItem as an array
       t.watcher = function() {
-        t.queueItem.call(t, _.toArray(arguments));
+        &#x2F;&#x2F; Add timestamp as the first element
+        var logElems = _.toArray(arguments);
+        logElems.splice(0,0,Date.now());
+        t.queueItem(logElems);
       };
       Log.on(t.get(&#x27;pattern&#x27;), t.watcher);
     },

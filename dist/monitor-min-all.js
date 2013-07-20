@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.5 - 2013-07-18 */
+/* monitor-min - v0.5.5 - 2013-07-19 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -7918,7 +7918,7 @@ if (typeof define === "function" && define.amd) {
   * @param type {string} The log type (trace, debug, info, etc)
   * @param module {String} The log module name
   * @param name {String} The log entry name
-  * @param args {any[]} All original, starting with the short name
+  * @param args {any[]} Arguments to the log entry
   */
   Log._emit = function(type, module, name, args) {
     var eventName,
@@ -10654,10 +10654,11 @@ if (typeof define === "function" && define.amd) {
   *     @param [initParams.interval=1000] {Numeric} Queue interval (see <a href="StreamProbe.html">StreamProbe</a>)
   * @param model {Object} Monitor data model elements
   *     @param model.bundle {Log array} Array of Log elements.
-  *         @param model.bundle.module {String} Log module
-  *         @param model.bundle.name {String} Log name
-  *         @param model.bundle.value {Numeric} Log value
-  *         @param model.bundle.type {String} 'c'ounter, 'g'ague, or 'ms'timer
+  *         @param model.bundle.timestamp {long} Timestamp of the log statement in ms
+  *         @param model.bundle.logType {String} Log type (error, info, etc)
+  *         @param model.bundle.module {String} Module that emitted the log
+  *         @param model.bundle.name {String} Log entry name
+  *         @param model.bundle.args {any[]} Arguments to the log statement
   *     @param model.sequence {Integer} A numeric incrementer causing a change event
   */
   var LogProbe = Monitor.LogProbe = StreamProbe.extend({
@@ -10676,7 +10677,10 @@ if (typeof define === "function" && define.amd) {
 
       // The watcher just forwards all args to queueItem as an array
       t.watcher = function() {
-        t.queueItem.call(t, _.toArray(arguments));
+        // Add timestamp as the first element
+        var logElems = _.toArray(arguments);
+        logElems.splice(0,0,Date.now());
+        t.queueItem(logElems);
       };
       Log.on(t.get('pattern'), t.watcher);
     },

@@ -305,12 +305,34 @@
                                         
                                         <li class="param">
                                             
+                                                <code class="param-name">timestamp</code>
+                                                <span class="type">Long</span>
+                                            
+
+                                            <div class="param-description">
+                                                Timestamp of the log statement in ms
+                                            </div>
+                                        </li>
+                                        
+                                        <li class="param">
+                                            
+                                                <code class="param-name">logType</code>
+                                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                            
+
+                                            <div class="param-description">
+                                                Log type (error, info, etc)
+                                            </div>
+                                        </li>
+                                        
+                                        <li class="param">
+                                            
                                                 <code class="param-name">module</code>
                                                 <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
                                             
 
                                             <div class="param-description">
-                                                Log module
+                                                Module that emitted the log
                                             </div>
                                         </li>
                                         
@@ -321,29 +343,18 @@
                                             
 
                                             <div class="param-description">
-                                                Log name
+                                                Log entry name
                                             </div>
                                         </li>
                                         
                                         <li class="param">
                                             
-                                                <code class="param-name">value</code>
-                                                <span class="type">Numeric</span>
+                                                <code class="param-name">args</code>
+                                                <span class="type">Any</span>
                                             
 
                                             <div class="param-description">
-                                                Log value
-                                            </div>
-                                        </li>
-                                        
-                                        <li class="param">
-                                            
-                                                <code class="param-name">type</code>
-                                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                                            
-
-                                            <div class="param-description">
-                                                'c'ounter, 'g'ague, or 'ms'timer
+                                                Arguments to the log statement
                                             </div>
                                         </li>
                                         
