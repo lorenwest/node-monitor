@@ -1,3 +1,8 @@
+0.5.6 / 2013-07-22
+==================
+
+  * Changed log/stat probe timestamp from integer to ISO
+
 0.5.6 / 2013-07-19
 ==================
 

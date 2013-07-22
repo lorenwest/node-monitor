@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.6 - 2013-07-19 */
+/* monitor-min - v0.5.7 - 2013-07-22 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -3870,7 +3870,7 @@
       t.watcher = function() {
         // Add timestamp as the first element
         var logElems = _.toArray(arguments);
-        logElems.splice(0,0,Date.now());
+        logElems.splice(0,0,JSON.stringify(new Date()).substr(1,24));
         t.queueItem.call(t, logElems);
       };
       Stat.on(t.get('pattern'), t.watcher);
@@ -3938,7 +3938,7 @@
       t.watcher = function() {
         // Add timestamp as the first element
         var logElems = _.toArray(arguments);
-        logElems.splice(0,0,Date.now());
+        logElems.splice(0,0,JSON.stringify(new Date()).substr(1,24));
         t.queueItem.call(t, logElems);
       };
       Log.on(t.get('pattern'), t.watcher);

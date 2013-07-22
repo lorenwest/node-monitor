@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.6 - 2013-07-19 */
+/* monitor-min - v0.5.7 - 2013-07-22 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -10615,7 +10615,7 @@ if (typeof define === "function" && define.amd) {
       t.watcher = function() {
         // Add timestamp as the first element
         var logElems = _.toArray(arguments);
-        logElems.splice(0,0,Date.now());
+        logElems.splice(0,0,JSON.stringify(new Date()).substr(1,24));
         t.queueItem.call(t, logElems);
       };
       Stat.on(t.get('pattern'), t.watcher);
@@ -10683,7 +10683,7 @@ if (typeof define === "function" && define.amd) {
       t.watcher = function() {
         // Add timestamp as the first element
         var logElems = _.toArray(arguments);
-        logElems.splice(0,0,Date.now());
+        logElems.splice(0,0,JSON.stringify(new Date()).substr(1,24));
         t.queueItem.call(t, logElems);
       };
       Log.on(t.get('pattern'), t.watcher);
