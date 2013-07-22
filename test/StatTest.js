@@ -198,7 +198,7 @@
           test.equals(bundle.length, 1, 'There is a single stat in the bundle');
           var statArgs = bundle[0];
           test.equals(statArgs.length, 5, 'There are 5 stat arguments');
-          test.ok(Date.now() - statArgs[0] < 1000, 'The first arg is a timestamp');
+          test.ok(Date.now() - (new Date(statArgs[0]).getTime()) < 1000, 'The first arg is a timestamp');
           test.equals(statArgs[1], 'stat-test', 'The module is correct');
           test.equals(statArgs[2], 'probeTest', 'The stat name is correct');
           test.equals(statArgs[3], 1, 'The value is correct');
@@ -233,7 +233,7 @@
           test.equals(bundle.length, 4, 'There were the correct number of items in the stream');
           var statArgs = bundle[2];
           test.equals(statArgs.length, 5, 'There are 5 stat arguments');
-          test.ok(Date.now() - statArgs[0] < 1000, 'The first arg is a timestamp');
+          test.ok(Date.now() - (new Date(statArgs[0]).getTime()) < 1000, 'The first arg is a timestamp');
           test.equals(statArgs[1], 'stat-test', 'The module is correct');
           test.equals(statArgs[2], 'statGauge', 'The stat name is correct');
           test.equals(statArgs[3], 420, 'The value is correct');

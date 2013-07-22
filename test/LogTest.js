@@ -203,7 +203,7 @@
           test.equals(bundle.length, 1, 'There is a single log in the bundle');
           var logArgs = bundle[0];
           test.equals(logArgs.length, 5, 'There are 5 log arguments');
-          test.ok(Date.now() - logArgs[0] < 1000, 'The first arg is a timestamp');
+          test.ok(Date.now() - (new Date(logArgs[0]).getTime()) < 1000, 'The first arg is a timestamp');
           test.equals(logArgs[1], 'info', 'There log type is correct');
           test.equals(logArgs[2], 'log-test', 'Ther module is correct');
           test.equals(logArgs[3], 'probeTest', 'There log name is correct');
@@ -238,7 +238,7 @@
           test.equals(bundle.length, 4, 'There were the correct number of items in the stream');
           var logArgs = bundle[2];
           test.equals(logArgs.length, 7, 'There are 7 log arguments');
-          test.ok(Date.now() - logArgs[0] < 1000, 'The first arg is a timestamp');
+          test.ok(Date.now() - (new Date(logArgs[0]).getTime()) < 1000, 'The first arg is a timestamp');
           test.equals(logArgs[1], 'error', 'The log name is correct');
           test.equals(logArgs[2], 'log-test', 'The module is correct');
           test.equals(logArgs[3], 'probeTest3', 'The log name is correct');
