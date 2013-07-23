@@ -336,7 +336,7 @@
     *&#x2F;
     emit: function() {
       var t = this, socket = t.get(&#x27;socket&#x27;);
-      log.info(&#x27;emit&#x27; + t.logId, arguments);
+      log.info(&#x27;emit&#x27; + t.logId, Monitor.stringify(arguments));
       socket.emit.apply(socket, arguments);
     },
 
@@ -502,7 +502,12 @@
           t.incomingMonitorsById[probeId] = monitorProxy;
           monitorProxy.probe = probe;
           monitorProxy.probeChange = function(){
-            t.emit(&#x27;probe:change:&#x27; + probeId, probe.changedAttributes());
+            try {
+              t.emit(&#x27;probe:change:&#x27; + probeId, probe.changedAttributes());
+            }
+            catch (e) {
+              log.error(&#x27;probeChange&#x27;, e, probe);
+            }
           };
           var duration = Date.now() - startTime;
           log.info(&#x27;probeConnected&#x27; + t.logId, duration);

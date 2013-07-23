@@ -146,7 +146,8 @@
       EventEmitter = Monitor.commonJS ? require(&#x27;events&#x27;).EventEmitter.prototype : Monitor.Backbone.Events,
       Stat = Monitor.Stat,
       stat = new Stat(&#x27;Log&#x27;),
-      _ = Monitor._;
+      _ = Monitor._,
+      emittingNow = false;
 
   &#x2F;**
   * A lightweight component for gathering and emitting application logs
@@ -295,6 +296,15 @@
     var eventName,
         fullName = type + &#x27;.&#x27; + module + &#x27;.&#x27; + name;
 
+    &#x2F;&#x2F; Prevent log recursion. This has the effect of disabling all logging
+    &#x2F;&#x2F; for log handlers (and their downstream effect), but is necessary to
+    &#x2F;&#x2F; prevent infinite recursion.  If it&#x27;s desired to log the output of
+    &#x2F;&#x2F; log handlers, then delay that processing until nextTick.
+    if (emittingNow) {
+      return;
+    }
+    emittingNow = true;
+
     &#x2F;&#x2F; Output a counter stat for this log
     stat.increment(fullName);
 
@@ -316,6 +326,9 @@
         Log.emit.apply(Log, allArgs);
       }
     }
+
+    &#x2F;&#x2F; Turn off recursion prevention
+    emittingNow = false;
   };
 
   &#x2F;&#x2F; Mixin event processing for the Log class

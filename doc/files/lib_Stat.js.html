@@ -144,7 +144,8 @@
   var Monitor = root.Monitor || require(&#x27;.&#x2F;Monitor&#x27;),
       &#x2F;&#x2F; Raw events on the server (for speed), backbone events on the browser (for functionality)
       EventEmitter = Monitor.commonJS ? require(&#x27;events&#x27;).EventEmitter.prototype : Monitor.Backbone.Events,
-      _ = Monitor._;
+      _ = Monitor._,
+      emittingNow = false;
 
 
   &#x2F;**
@@ -358,6 +359,15 @@
     var eventName,
         fullName;
 
+    &#x2F;&#x2F; Prevent stat recursion. This has the effect of disabling all stats
+    &#x2F;&#x2F; for stat handlers (and their downstream effect), but is necessary to
+    &#x2F;&#x2F; prevent infinite recursion.  If it&#x27;s desired to stat the output of
+    &#x2F;&#x2F; stat handlers, then delay that processing until nextTick.
+    if (emittingNow) {
+      return;
+    }
+    emittingNow = true;
+
     &#x2F;&#x2F; Test the name against all registered events
     for (eventName in Stat._events) {
 
@@ -377,6 +387,9 @@
         Stat.emit(eventName, module, name, value, type);
       }
     }
+
+    &#x2F;&#x2F; Turn off recursion prevention
+    emittingNow = false;
   };
 
   &#x2F;**

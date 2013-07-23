@@ -1061,7 +1061,7 @@
             "module": "Monitor",
             "namespace": "",
             "file": "lib/Log.js",
-            "line": 16,
+            "line": 17,
             "description": "A lightweight component for gathering and emitting application logs\n\nIt's designed with low development and runtime cost in mind, encouraging\nusage with minimum concern for overhead.  Runtime monitoring can be as chatty\nas desired, outputting every log statement of every type, or finely tuned\nwith regular expressions to monitor specific log statements.\n\nLog Collector\n-------------\n\nAs a collector, it's a place to send application logs.\n\nExample for outputting a log in your application:\n\n    var log = require('monitor-min').getLogger('myModule');\n    ...\n    log.info('Credit limit accepted', limit, requestedAmount);\n\nThe above is a request to output an ```info``` log for ```myModule``` named\n```Credit limit accepted```.  The log entry includes all additional parameters,\nin this case the customer credit limit and the reqeusted amount.\n\nThe full name for this log entry is: ```\"info.myModule.Credit limit accepted\"```\nThe name is important, as monitors can be configured to output logs based\non this name.\n\nBest practices are to include dynamic parameters in extra arguments\nvs. concatenating strings.  This reduces logging overhead, especially\nfor log statements that aren't currently being watched.\n\nLog Emitter\n-----------\nAs an emitter, the Log module is a place to capture logging output.\n\nWhen listening for log entries, wildcards can be used to register for\nparticular log types and entries.\n\n    var Log = require('monitor-min').Log;\n    ...\n    Log.on('info.myModule.*', myFunction);\n\nWill call ```myFunction``` when all ```info.myModule.*``` logs are emitted.\n\nListeners are invoked with the following arguments:\n\n- type - The log type (trace, debug, info, warn, error, or fatal)\n- module - The logger module name\n- name - The log entry name\n- args... - Additional arguments passed into the log entry are passed on\n            as additional args to the event listener.\n\nWildcards\n---------\nA flexible and user-oriented wildcard pattern is used for monitoring\nlogs.  The pattern is described in the <a href=\"Stat.html#wildcards\">Wildcard secttion of the Stats class</a>.\n\nChoosing Good Names\n-------------------\nIt's a good idea to pick a good naming scheme with each dot-delimited segment\nhaving a consistent, well-defined purpose.  Volatile segments should be as deep\ninto the hierarchy (furthest right) as possible.  Keeping the names less\nvolatile makes it easier to turn statistics recording on for all logs.",
             "is_constructor": 1
         },
@@ -1229,7 +1229,7 @@
             "module": "Monitor",
             "namespace": "",
             "file": "lib/Stat.js",
-            "line": 15,
+            "line": 16,
             "description": "A lightweight component for gathering and emitting application statistics\n\nThis is both a collector and emitter for application stats.\n\nIt's designed with low development and runtime cost in mind, encouraging\nusage with minimum concern for overhead.\n\nStat Collector\n--------------\n\nAs a collector, it's a place to send application stats as they're discovered.\n\nExample for incrementing a stat in your application:\n\n    var stat = require('monitor-min').getStatLogger('myModule');\n    ...\n    stat.increment('requests.inbound');\n\nThe above is a request to increment the ```myModule.requests.inbound``` stat.\nIt peforms work only if someone is listening for that event.\n\nStat Emitter\n-------------\nAs an emitter, Stat is a place to gather stats as they're collected.\n\nWhen listening for stats, wildcards can be used to register for many stats\nwithin a group. For example, the following call:\n\n    var Stat = require('monitor-min').Stat;\n    Stat.on('myModule.*.timer', myFunction);\n\nWill call ```myFunction``` when all ```myModule.*.timer``` stats are emitted.\n\nListeners are invoked with 4 arguments:\n\n- module - The statLogger module name\n- name - The name of the stat that just fired\n- value - The numeric value passed\n- type - An enumeration of the types of stats:<br/>\n  'c'  - Counter.  Add (or subtract) the value to (or from) the prior value<br/>\n  'g'  - Gague.  Value is to be recorded as provided<br/>\n  'ms' - Timer.  Millisecond amount of time something took.\n\n<h2 id=\"wildcards\">Wildcards</h2>\n\nThe following wildcards are allowed for registering events.  They're\nmodeled after the graphite wildcard syntax (from the\n<a href=\"https://graphite.readthedocs.org/en/latest/render_api.html#paths-and-wildcards\">graphite docs</a>):\n\n#### Delimiter\nThe period (.) character is literal, and matches name segment separators.\n\n#### Asterisk\nThe asterisk (*) matches zero or more characters. It is non-greedy, so you\ncan have more than one within a single path element.\n\nExample: servers.ix\\*ehssvc\\*v.cpu.total.\\* will return all total CPU metrics\nfor all servers matching the given name pattern.\n\nAn asterisk at the far right of the pattern matches everything to the right,\nincluding all path segments.  For example, ```servers.*``` matches all\nnames beginning with ```servers.```.\n\n#### Character list or range\nCharacters in square brackets ([...]) specify a single character position in\nthe path string, and match if the character in that position matches one of\nthe characters in the list or range.\n\nA character range is indicated by 2 characters separated by a dash (-), and\nmeans that any character between those 2 characters (inclusive) will match.\nMore than one range can be included within the square brackets, e.g. foo[a-z0-9]bar\nwill match foopbar, foo7bar etc..\n\nIf the characters cannot be read as a range, they are treated as a\nlist - any character in the list will match, e.g. foo[bc]ar will match\nfoobar and foocar. If you want to include a dash (-) in your list, put\nit at the beginning or end, so it's not interpreted as a range.\n\n#### Value list\nComma-separated values within curly braces ({foo,bar,...}) are treated as\nvalue lists, and match if any of the values matches the current point in\nthe path. For example, servers.ix01ehssvc04v.cpu.total.{user,system,iowait}\nwill match the user, system and I/O wait total CPU metrics for the specified\nserver.\n\n#### Javascript Regex\nFor finer grained expression matching, a javascript style regex can be\nspecified using the ```/.../``` syntax.  This style spans the entire identifier.\nYou can ignore case using the ```/.../i``` syntax.  If the first character of the\nstring is a slash, it considers the string a javascript regular expression.\n\nChoosing Good Names\n-------------------\nIt's a good idea to pick a good naming scheme with each dot-delimited segment\nhaving a consistent, well-defined purpose.  Volatile segments should be as deep\ninto the hierarchy (furthest right) as possible.  Keeping the names less\nvolatile makes it easier to turn recording on for all statistics.",
             "is_constructor": 1
         },
@@ -2204,7 +2204,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 388,
+            "line": 393,
             "description": "Process an inbound request to disconnect with a probe",
             "itemtype": "method",
             "name": "probeDisconnect",
@@ -2227,7 +2227,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 447,
+            "line": 452,
             "description": "Process an inbound control request to a probe",
             "itemtype": "method",
             "name": "probeControl",
@@ -2250,7 +2250,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 512,
+            "line": 517,
             "description": "Constructor for a list of Connection objects\n\n    var myList = new Connection.List(initialElements);",
             "static": 1,
             "itemtype": "method",
@@ -2272,7 +2272,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 93,
+            "line": 94,
             "description": "Output a ```trace``` log entry",
             "itemtype": "method",
             "name": "trace",
@@ -2294,7 +2294,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 101,
+            "line": 102,
             "description": "Output a ```debug``` log entry",
             "itemtype": "method",
             "name": "debug",
@@ -2316,7 +2316,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 109,
+            "line": 110,
             "description": "Output a ```info``` log entry",
             "itemtype": "method",
             "name": "info",
@@ -2338,7 +2338,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 117,
+            "line": 118,
             "description": "Output a ```warn``` log entry",
             "itemtype": "method",
             "name": "warn",
@@ -2360,7 +2360,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 125,
+            "line": 126,
             "description": "Output a ```error``` log entry",
             "itemtype": "method",
             "name": "error",
@@ -2382,7 +2382,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 133,
+            "line": 134,
             "description": "Output a ```fatal``` log entry",
             "itemtype": "method",
             "name": "fatal",
@@ -2404,7 +2404,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 148,
+            "line": 149,
             "description": "Send the log to all registered listeners",
             "access": "private",
             "tagname": "",
@@ -2438,7 +2438,7 @@
         },
         {
             "file": "lib/Log.js",
-            "line": 192,
+            "line": 205,
             "description": "Output log statements to the console\n\nThis method can be used as a listener to send logs to the console.\n\nIt uses console.error() for error and fatal log types, and console.log()\nfor all other log types.\n\nExample:\n\n    var Log = Monitor.Log;\n    Log.on('*.MyModule.*', Log.console);",
             "static": 1,
             "itemtype": "method",
@@ -3650,7 +3650,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 127,
+            "line": 128,
             "description": "Increment a counter by a specified value\n\nAssuming someone is listening to this stat, this is an instruction for that\nlistener to add the specified value (usually 1) to their prior value for this stat.\n\nThis is known as server-side setting, as the server (listener) is responsible\nfor maintaining the prior and new value for the stat.",
             "itemtype": "method",
             "name": "increment",
@@ -3673,7 +3673,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 145,
+            "line": 146,
             "description": "Decrement a counter by a specified value\n\nAssuming someone is listening to this stat, this is an instruction for that\nlistener to subtract the specified value (usually 1) to their prior value for this stat.\n\nThis is known as server-side setting, as the server (listener) is responsible\nfor maintaining the prior and new value for the stat.",
             "itemtype": "method",
             "name": "decrement",
@@ -3696,7 +3696,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 163,
+            "line": 164,
             "description": "Set the stat to the specified value\n\nThis is an instruction to any (all) listener(s) to set the stat to a\nspecific value.\n\nThis is known as client-side setting, because the client determines the value\nof the stat.",
             "itemtype": "method",
             "name": "gauge",
@@ -3717,7 +3717,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 180,
+            "line": 181,
             "description": "Record the specified duration (in milliseconds) for the stat\n\nThis is like Stat.gauge() in that it is a client-side setting of a\nspecified value.  The difference is the scale of the value is specified\nas milliseconds.\n\nThis may be one of the most widely used stat methods.  It can (should?) be\nused upon callback from asynchronous methods.\n\nPattern:\n\n    var stat = require('monitor-min').getStatLogger('myModule');\n    ...\n    var stamp = Date.now();\n    SomeAsyncFunction(arg1, function(error) {\n      stat.time('SomeAsyncFunction.time', Date.Now() - stamp);\n      ...continue with error handling & callback handling\n    });",
             "itemtype": "method",
             "name": "time",
@@ -3738,7 +3738,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 208,
+            "line": 209,
             "description": "Send the stat to all registered listeners",
             "access": "private",
             "tagname": "",
@@ -3772,7 +3772,7 @@
         },
         {
             "file": "lib/Stat.js",
-            "line": 247,
+            "line": 260,
             "description": "Build a regex from a user entered string following the pattern described\nin the class definition.  Loosely:\n\n   If it looks like a JS regexp, process it as a regexp\n   Change all '.' to '\\.'\n   Change all '*' to '[^\\.]*' (unless it's at the end, then convert to '.*')\n   Change all {one,two} to (one|two)\n   Leave all [...] alone - they work as-is\n\n If an error occurs, throw an exception",
             "access": "private",
             "tagname": "",

@@ -147,15 +147,15 @@
         test.equals(name, 'incr1', 'incr1 stat emitted');
         test.equals(value, 1, 'default increment of 1 found');
         test.equals(type, 'c', 'incr1 type is correct');
-        Stat.once('stat-test.incr2', function(module, name, value, type) {
-          test.equals(name, 'incr2', 'incr2 stat emitted');
-          test.equals(value, 44, 'incr2 value is correct');
-          test.equals(type, 'c', 'incr2 type is correct');
-          test.done();
-        });
-        stat.increment('incr2', 44);
+      });
+      Stat.once('stat-test.incr2', function(module, name, value, type) {
+        test.equals(name, 'incr2', 'incr2 stat emitted');
+        test.equals(value, 44, 'incr2 value is correct');
+        test.equals(type, 'c', 'incr2 type is correct');
+        test.done();
       });
       stat.increment('incr1');
+      stat.increment('incr2', 44);
     },
 
     /**
@@ -167,15 +167,15 @@
         test.equals(name, 'decr1', 'decr1 stat emitted');
         test.equals(value, -1, 'default decrement of 1 found');
         test.equals(type, 'c', 'decr1 type is correct');
-        Stat.once('stat-test.decr2', function(module, name, value, type) {
-          test.equals(name, 'decr2', 'decr2 stat emitted');
-          test.equals(value, -29344, 'decr2 value is correct');
-          test.equals(type, 'c', 'decr2 type is correct');
-          test.done();
-        });
-        stat.decrement('decr2', 29344);
+      });
+      Stat.once('stat-test.decr2', function(module, name, value, type) {
+        test.equals(name, 'decr2', 'decr2 stat emitted');
+        test.equals(value, -29344, 'decr2 value is correct');
+        test.equals(type, 'c', 'decr2 type is correct');
+        test.done();
       });
       stat.decrement('decr1');
+      stat.decrement('decr2', 29344);
     },
 
     /**
@@ -247,7 +247,6 @@
         stat.time('statTimer', 2840);
       });
     }
-
 
   };
 
