@@ -282,15 +282,15 @@
         test.equals(name, &#x27;incr1&#x27;, &#x27;incr1 stat emitted&#x27;);
         test.equals(value, 1, &#x27;default increment of 1 found&#x27;);
         test.equals(type, &#x27;c&#x27;, &#x27;incr1 type is correct&#x27;);
-        Stat.once(&#x27;stat-test.incr2&#x27;, function(module, name, value, type) {
-          test.equals(name, &#x27;incr2&#x27;, &#x27;incr2 stat emitted&#x27;);
-          test.equals(value, 44, &#x27;incr2 value is correct&#x27;);
-          test.equals(type, &#x27;c&#x27;, &#x27;incr2 type is correct&#x27;);
-          test.done();
-        });
-        stat.increment(&#x27;incr2&#x27;, 44);
+      });
+      Stat.once(&#x27;stat-test.incr2&#x27;, function(module, name, value, type) {
+        test.equals(name, &#x27;incr2&#x27;, &#x27;incr2 stat emitted&#x27;);
+        test.equals(value, 44, &#x27;incr2 value is correct&#x27;);
+        test.equals(type, &#x27;c&#x27;, &#x27;incr2 type is correct&#x27;);
+        test.done();
       });
       stat.increment(&#x27;incr1&#x27;);
+      stat.increment(&#x27;incr2&#x27;, 44);
     },
 
     &#x2F;**
@@ -302,15 +302,15 @@
         test.equals(name, &#x27;decr1&#x27;, &#x27;decr1 stat emitted&#x27;);
         test.equals(value, -1, &#x27;default decrement of 1 found&#x27;);
         test.equals(type, &#x27;c&#x27;, &#x27;decr1 type is correct&#x27;);
-        Stat.once(&#x27;stat-test.decr2&#x27;, function(module, name, value, type) {
-          test.equals(name, &#x27;decr2&#x27;, &#x27;decr2 stat emitted&#x27;);
-          test.equals(value, -29344, &#x27;decr2 value is correct&#x27;);
-          test.equals(type, &#x27;c&#x27;, &#x27;decr2 type is correct&#x27;);
-          test.done();
-        });
-        stat.decrement(&#x27;decr2&#x27;, 29344);
+      });
+      Stat.once(&#x27;stat-test.decr2&#x27;, function(module, name, value, type) {
+        test.equals(name, &#x27;decr2&#x27;, &#x27;decr2 stat emitted&#x27;);
+        test.equals(value, -29344, &#x27;decr2 value is correct&#x27;);
+        test.equals(type, &#x27;c&#x27;, &#x27;decr2 type is correct&#x27;);
+        test.done();
       });
       stat.decrement(&#x27;decr1&#x27;);
+      stat.decrement(&#x27;decr2&#x27;, 29344);
     },
 
     &#x2F;**
@@ -382,7 +382,6 @@
         stat.time(&#x27;statTimer&#x27;, 2840);
       });
     }
-
 
   };
 

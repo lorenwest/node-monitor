@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.7 - 2013-07-22 */
+/* monitor-min - v0.5.7 - 2013-07-26 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -7304,12 +7304,14 @@ if (typeof define === "function" && define.amd) {
 
     // Copy all elements (by reference)
     for (var prop in value) {
-      var elem = value[prop];
-      if (typeof elem === 'object' || typeof elem === 'function') {
-        copy[prop] = Monitor.deepCopy(elem, depth - 1);
-      }
-      else {
-        copy[prop] = elem;
+      if (value.hasOwnProperty(prop)) {
+        var elem = value[prop];
+        if (typeof elem === 'object' || typeof elem === 'function') {
+          copy[prop] = Monitor.deepCopy(elem, depth - 1);
+        }
+        else {
+          copy[prop] = elem;
+        }
       }
     }
 
@@ -7449,7 +7451,8 @@ if (typeof define === "function" && define.amd) {
   var Monitor = root.Monitor || require('./Monitor'),
       // Raw events on the server (for speed), backbone events on the browser (for functionality)
       EventEmitter = Monitor.commonJS ? require('events').EventEmitter.prototype : Monitor.Backbone.Events,
-      _ = Monitor._;
+      _ = Monitor._,
+      emittingNow = false;
 
 
   /**
@@ -7663,6 +7666,15 @@ if (typeof define === "function" && define.amd) {
     var eventName,
         fullName;
 
+    // Prevent stat recursion. This has the effect of disabling all stats
+    // for stat handlers (and their downstream effect), but is necessary to
+    // prevent infinite recursion.  If it's desired to stat the output of
+    // stat handlers, then delay that processing until nextTick.
+    if (emittingNow) {
+      return;
+    }
+    emittingNow = true;
+
     // Test the name against all registered events
     for (eventName in Stat._events) {
 
@@ -7682,6 +7694,9 @@ if (typeof define === "function" && define.amd) {
         Stat.emit(eventName, module, name, value, type);
       }
     }
+
+    // Turn off recursion prevention
+    emittingNow = false;
   };
 
   /**
@@ -7775,7 +7790,8 @@ if (typeof define === "function" && define.amd) {
       EventEmitter = Monitor.commonJS ? require('events').EventEmitter.prototype : Monitor.Backbone.Events,
       Stat = Monitor.Stat,
       stat = new Stat('Log'),
-      _ = Monitor._;
+      _ = Monitor._,
+      emittingNow = false;
 
   /**
   * A lightweight component for gathering and emitting application logs
@@ -7924,6 +7940,15 @@ if (typeof define === "function" && define.amd) {
     var eventName,
         fullName = type + '.' + module + '.' + name;
 
+    // Prevent log recursion. This has the effect of disabling all logging
+    // for log handlers (and their downstream effect), but is necessary to
+    // prevent infinite recursion.  If it's desired to log the output of
+    // log handlers, then delay that processing until nextTick.
+    if (emittingNow) {
+      return;
+    }
+    emittingNow = true;
+
     // Output a counter stat for this log
     stat.increment(fullName);
 
@@ -7945,6 +7970,9 @@ if (typeof define === "function" && define.amd) {
         Log.emit.apply(Log, allArgs);
       }
     }
+
+    // Turn off recursion prevention
+    emittingNow = false;
   };
 
   // Mixin event processing for the Log class
@@ -8208,7 +8236,8 @@ if (typeof define === "function" && define.amd) {
       log = Monitor.getLogger('Connection'),
       stat = Monitor.getStatLogger('Connection'),
       Config = Monitor.Config, SocketIO = root.io || require('socket.io-client'),
-      Probe = Monitor.Probe;
+      Probe = Monitor.Probe,
+      nextConnectionNum = 1;
 
   /**
   * Core monitor classes
@@ -8284,8 +8313,13 @@ if (typeof define === "function" && define.amd) {
       t.remoteProbesById = {};      // Key = probeId, data = {Probe proxy}
       t.incomingMonitorsById = {};  // Key = probeId, data = {Monitor proxy}
 
+      // Create a connection ID for logging
+      t.logId = (nextConnectionNum++) + '.';
+
       // Either connect to an URL or with an existing socket
-      if (params.socket) {t.bindConnectionEvents();}
+      if (params.socket) {
+        t.bindConnectionEvents();
+      }
       else if (params.url || (params.hostName && params.hostPort)) {
         t.connect();
       }
@@ -8299,12 +8333,9 @@ if (typeof define === "function" && define.amd) {
       var t = this, hostName = t.get('hostName'), hostPort = t.get('hostPort'),
       url = t.get('url');
 
-      // Build a logger ID for this connection
-      t.logId = '.' + hostName + '.' + hostPort;
-
       // Build the URL if not specified
       if (!url) {url = t.attributes.url = 'http://' + hostName + ':' + hostPort;}
-      log.info('connect' + t.logId);
+      log.info(t.logId + 'connect');
 
       // Connect with this url
       var opts = {
@@ -8357,7 +8388,7 @@ if (typeof define === "function" && define.amd) {
       t.connecting = false;
       t.connected = false;
 
-      log.info('disconnect' + t.logId, reason);
+      log.info(t.logId + 'disconnect', reason);
 
       // Only disconnect once.
       // This method can be called many times during a disconnect (manually,
@@ -8399,7 +8430,7 @@ if (typeof define === "function" && define.amd) {
     */
     emit: function() {
       var t = this, socket = t.get('socket');
-      log.info('emit' + t.logId, arguments);
+      log.info(t.logId + 'emit', Monitor.deepCopy(arguments, 5));
       socket.emit.apply(socket, arguments);
     },
 
@@ -8540,12 +8571,12 @@ if (typeof define === "function" && define.amd) {
           startTime = Date.now(),
           firewall = t.get('firewall');
 
-      log.info('probeConnect' + t.logId, monitorJSON);
+      log.info(t.logId + 'probeConnect', monitorJSON);
 
       // Don't allow inbound requests if this connection is firewalled
       if (firewall) {
         errorText = 'firewalled';
-        log.error('probeConnect' + t.logId, errorText);
+        log.error('probeConnect', errorText);
         return callback(errorText);
       }
 
@@ -8557,7 +8588,7 @@ if (typeof define === "function" && define.amd) {
         // Function to run upon connection (internal or external)
         var onConnect = function(error, probe) {
           if (error) {
-            log.error('probeConnect' + t.logId, error);
+            log.error(t.logId + 'probeConnect', error);
             return callback(error);
           }
           var monitorProxy = new Monitor(monitorJSON), probeId = probe.get('id');
@@ -8565,11 +8596,16 @@ if (typeof define === "function" && define.amd) {
           t.incomingMonitorsById[probeId] = monitorProxy;
           monitorProxy.probe = probe;
           monitorProxy.probeChange = function(){
-            t.emit('probe:change:' + probeId, probe.changedAttributes());
+            try {
+              t.emit('probe:change:' + probeId, probe.changedAttributes());
+            }
+            catch (e) {
+              log.error('probeChange', e, probe);
+            }
           };
           var duration = Date.now() - startTime;
-          log.info('probeConnected' + t.logId, duration);
-          stat.time('probeConnected' + t.logId, duration);
+          log.info(t.logId + 'probeConnected', {probeClass: monitorJSON.probeClass, duration:duration});
+          stat.time(t.logId + 'probeConnected', duration);
           callback(null, probe.toJSON());
           probe.on('change', monitorProxy.probeChange);
         };
@@ -8602,34 +8638,34 @@ if (typeof define === "function" && define.amd) {
           monitorProxy = t.incomingMonitorsById[probeId],
           firewall = t.get('firewall');
 
-      log.info('probeDisconnect' + t.logId, params);
+      log.info(t.logId + 'probeDisconnect', params);
 
       // Don't allow inbound requests if this connection is firewalled
       if (firewall) {
         errorText = 'firewalled';
-        log.error('probeDisconnect' + t.logId, errorText);
+        log.error(t.logId + 'probeDisconnect', errorText);
         return callback(errorText);
       }
 
       // The probe must be connected
       if (!monitorProxy || !monitorProxy.probe) {
         errorText = 'Probe not connected';
-        log.error('probeDisconnect' + t.logId, errorText);
+        log.error(t.logId + 'probeDisconnect', errorText);
         return callback(errorText);
       }
 
       // Called upon disconnect (internal or external)
       var onDisconnect = function(error) {
         if (error) {
-          log.error('probeDisconnect' + t.logId, error);
+          log.error(t.logId + 'probeDisconnect', error);
           return callback(error);
         }
         monitorProxy.probe.off('change', monitorProxy.probeChange);
         monitorProxy.probe = monitorProxy.probeChange = null;
         delete t.incomingMonitorsById[probeId];
         var duration = Date.now() - startTime;
-        log.info('probeDisconnected' + t.logId, duration);
-        stat.time('probeDisconnected' + t.logId, duration);
+        log.info(t.logId + 'probeDisconnected', {duration:duration});
+        stat.time(t.logId + 'probeDisconnected', duration);
         return callback(null);
       };
 
@@ -8657,7 +8693,7 @@ if (typeof define === "function" && define.amd) {
       callback = callback || function(){};
       var t = this,
           errorText = '',
-          logId = 'probeControl' + t.logId + '.' + params.name + '.' + params.probeId,
+          logId = t.logId + 'probeControl',
           startTime = Date.now(),
           router = Monitor.getRouter(),
           firewall = t.get('firewall');
@@ -8679,7 +8715,7 @@ if (typeof define === "function" && define.amd) {
         }
         else {
           var duration = Date.now() - startTime;
-          log.info(logId, duration);
+          log.info(logId + '.return', {duration:duration, returnArgs: arguments});
           stat.time(logId, duration);
           return callback.apply(null, arguments);
         }
@@ -8702,6 +8738,8 @@ if (typeof define === "function" && define.amd) {
           onReturn(err, returnParams);
         });
       }
+      logId = logId + '.' + probe.probeClass + '.' + params.name;
+      log.info(logId + '.request', {params:params.params, probeId:params.probeId});
       return probe.onControl(params.name, params.params, onReturn);
     }
 
@@ -9607,7 +9645,7 @@ if (typeof define === "function" && define.amd) {
                 probeImpl.release();
               } catch (e){}
             }
-            log.error('connectInternal', {error: error, probeKey: probeKey, probeId: probeImpl.id});
+            log.error('connectInternal', {error: error, probeKey: probeKey});
             return callback(error);
           }
 
@@ -10590,7 +10628,7 @@ if (typeof define === "function" && define.amd) {
   *     @param [initParams.interval=1000] {Numeric} Queue interval (see <a href="StreamProbe.html">StreamProbe</a>)
   * @param model {Object} Monitor data model elements
   *     @param model.bundle {Stat array} Array of Stat elements.
-  *         @param model.bundle.timestamp {long} Timestamp of the stat bundle in milliseconds
+  *         @param model.bundle.timestamp {String} Timestamp of the stat entry
   *         @param model.bundle.module {String} Stat module
   *         @param model.bundle.name {String} Stat name
   *         @param model.bundle.value {Numeric} Stat value
@@ -10658,7 +10696,7 @@ if (typeof define === "function" && define.amd) {
   *     @param [initParams.interval=1000] {Numeric} Queue interval (see <a href="StreamProbe.html">StreamProbe</a>)
   * @param model {Object} Monitor data model elements
   *     @param model.bundle {Log array} Array of Log elements.
-  *         @param model.bundle.timestamp {long} Timestamp of the log statement in ms
+  *         @param model.bundle.timestamp {String} Timestamp of the log statement
   *         @param model.bundle.logType {String} Log type (error, info, etc)
   *         @param model.bundle.module {String} Module that emitted the log
   *         @param model.bundle.name {String} Log entry name

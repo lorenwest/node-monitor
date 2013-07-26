@@ -488,8 +488,8 @@
                             "props": [
                                 {
                                     "name": "timestamp",
-                                    "description": "Timestamp of the log statement in ms",
-                                    "type": "Long"
+                                    "description": "Timestamp of the log statement",
+                                    "type": "String"
                                 },
                                 {
                                     "name": "logType",
@@ -846,8 +846,8 @@
                             "props": [
                                 {
                                     "name": "timestamp",
-                                    "description": "Timestamp of the stat bundle in milliseconds",
-                                    "type": "Long"
+                                    "description": "Timestamp of the stat entry",
+                                    "type": "String"
                                 },
                                 {
                                     "name": "module",
@@ -957,7 +957,7 @@
             "module": "Monitor",
             "namespace": "",
             "file": "lib/Connection.js",
-            "line": 24,
+            "line": 25,
             "description": "Connection with a remote process\n\nInstances of this class represent a connection with a remote monitor\nprocess.  The remote process is a peer of this process - it may produce\nand/or consume probe information.\n\nThis is an internal class created when a connection to a server is\nrequested from a monitor, or when an external connection is made from\na <a href=\"Server.html\">Server</a> instance.",
             "extends": "Backbone.Model",
             "is_constructor": 1,
@@ -2013,7 +2013,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 54,
+            "line": 55,
             "description": "Connected to remote monitor process\n\nThis event is emitted after the two sides of the connection have exchanged\ninformation about themselves.",
             "itemtype": "event",
             "name": "connect",
@@ -2022,7 +2022,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 122,
+            "line": 125,
             "description": "Ping a remote connection",
             "itemtype": "method",
             "name": "ping",
@@ -2038,7 +2038,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 139,
+            "line": 142,
             "description": "Disconnect from the remote process\n\nThis can be called from the underlying transport if it detects a disconnect,\nor it can be manually called to force a disconnect.",
             "itemtype": "method",
             "name": "disconnect",
@@ -2054,7 +2054,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 148,
+            "line": 151,
             "description": "<strong>Disconnected from a remote monitor process</strong>\n\nThis event is emitted after the remote connection is disconnected and\nresources released.",
             "itemtype": "event",
             "name": "disconnect",
@@ -2070,7 +2070,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 174,
+            "line": 177,
             "description": "Is this connection with the specified host?",
             "itemtype": "method",
             "name": "isThisHost",
@@ -2092,7 +2092,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 190,
+            "line": 193,
             "description": "Emit the specified message to the socket.\n\nThe other side of the connection can handle and respond to the message\nusing the 'on' method.",
             "itemtype": "method",
             "name": "emit",
@@ -2120,7 +2120,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 208,
+            "line": 211,
             "description": "Bind the specified handler to the remote socket message.\n\nOnly a single handler (per message name) can be bound using this method.",
             "itemtype": "method",
             "name": "addEvent",
@@ -2143,7 +2143,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 253,
+            "line": 256,
             "description": "An error has occurred on the connection\n\nThis event is triggered when an error occurs on the connection.  Errors\nmay occur when network is unstable, and can be an indication of impending\ndisconnection.",
             "itemtype": "event",
             "name": "error",
@@ -2159,7 +2159,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 322,
+            "line": 325,
             "description": "Process an inbound request to connect with a probe\n\nThis will fail if this connection was created as a firewall.",
             "itemtype": "method",
             "name": "probeConnect",
@@ -2204,7 +2204,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 393,
+            "line": 396,
             "description": "Process an inbound request to disconnect with a probe",
             "itemtype": "method",
             "name": "probeDisconnect",
@@ -2227,7 +2227,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 452,
+            "line": 455,
             "description": "Process an inbound control request to a probe",
             "itemtype": "method",
             "name": "probeControl",
@@ -2250,7 +2250,7 @@
         },
         {
             "file": "lib/Connection.js",
-            "line": 517,
+            "line": 522,
             "description": "Constructor for a list of Connection objects\n\n    var myList = new Connection.List(initialElements);",
             "static": 1,
             "itemtype": "method",
@@ -2812,7 +2812,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 585,
+            "line": 587,
             "description": "Produce a recursion-safe JSON string.\n\nThis method recurses the specified object to a maximum specified depth\n(default 4).\n\nIt also indents sub-objects for debugging output.  The indent level can be\nspecified, or set to 0 for no indentation.\n\nThis is mostly useful in debugging when the standard JSON.stringify\nreturns an error.",
             "itemtype": "method",
             "name": "stringify",
@@ -2846,7 +2846,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 613,
+            "line": 615,
             "description": "Expose the stat logger class",
             "access": "protected",
             "tagname": "",
@@ -2864,7 +2864,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 631,
+            "line": 633,
             "description": "Expose the logger class",
             "access": "protected",
             "tagname": "",
@@ -2882,7 +2882,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 649,
+            "line": 651,
             "description": "Constructor for a list of Monitor objects\n\n    var myList = new Monitor.List(initialElements);",
             "static": 1,
             "itemtype": "method",

@@ -777,7 +777,7 @@
                 probeImpl.release();
               } catch (e){}
             }
-            log.error(&#x27;connectInternal&#x27;, {error: error, probeKey: probeKey, probeId: probeImpl.id});
+            log.error(&#x27;connectInternal&#x27;, {error: error, probeKey: probeKey});
             return callback(error);
           }
 

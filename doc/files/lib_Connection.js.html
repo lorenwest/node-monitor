@@ -145,7 +145,8 @@
       log = Monitor.getLogger(&#x27;Connection&#x27;),
       stat = Monitor.getStatLogger(&#x27;Connection&#x27;),
       Config = Monitor.Config, SocketIO = root.io || require(&#x27;socket.io-client&#x27;),
-      Probe = Monitor.Probe;
+      Probe = Monitor.Probe,
+      nextConnectionNum = 1;
 
   &#x2F;**
   * Core monitor classes
@@ -221,8 +222,13 @@
       t.remoteProbesById = {};      &#x2F;&#x2F; Key = probeId, data = {Probe proxy}
       t.incomingMonitorsById = {};  &#x2F;&#x2F; Key = probeId, data = {Monitor proxy}
 
+      &#x2F;&#x2F; Create a connection ID for logging
+      t.logId = (nextConnectionNum++) + &#x27;.&#x27;;
+
       &#x2F;&#x2F; Either connect to an URL or with an existing socket
-      if (params.socket) {t.bindConnectionEvents();}
+      if (params.socket) {
+        t.bindConnectionEvents();
+      }
       else if (params.url || (params.hostName &amp;&amp; params.hostPort)) {
         t.connect();
       }
@@ -236,12 +242,9 @@
       var t = this, hostName = t.get(&#x27;hostName&#x27;), hostPort = t.get(&#x27;hostPort&#x27;),
       url = t.get(&#x27;url&#x27;);
 
-      &#x2F;&#x2F; Build a logger ID for this connection
-      t.logId = &#x27;.&#x27; + hostName + &#x27;.&#x27; + hostPort;
-
       &#x2F;&#x2F; Build the URL if not specified
       if (!url) {url = t.attributes.url = &#x27;http:&#x2F;&#x2F;&#x27; + hostName + &#x27;:&#x27; + hostPort;}
-      log.info(&#x27;connect&#x27; + t.logId);
+      log.info(t.logId + &#x27;connect&#x27;);
 
       &#x2F;&#x2F; Connect with this url
       var opts = {
@@ -294,7 +297,7 @@
       t.connecting = false;
       t.connected = false;
 
-      log.info(&#x27;disconnect&#x27; + t.logId, reason);
+      log.info(t.logId + &#x27;disconnect&#x27;, reason);
 
       &#x2F;&#x2F; Only disconnect once.
       &#x2F;&#x2F; This method can be called many times during a disconnect (manually,
@@ -336,7 +339,7 @@
     *&#x2F;
     emit: function() {
       var t = this, socket = t.get(&#x27;socket&#x27;);
-      log.info(&#x27;emit&#x27; + t.logId, Monitor.stringify(arguments));
+      log.info(t.logId + &#x27;emit&#x27;, Monitor.deepCopy(arguments, 5));
       socket.emit.apply(socket, arguments);
     },
 
@@ -477,12 +480,12 @@
           startTime = Date.now(),
           firewall = t.get(&#x27;firewall&#x27;);
 
-      log.info(&#x27;probeConnect&#x27; + t.logId, monitorJSON);
+      log.info(t.logId + &#x27;probeConnect&#x27;, monitorJSON);
 
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
       if (firewall) {
         errorText = &#x27;firewalled&#x27;;
-        log.error(&#x27;probeConnect&#x27; + t.logId, errorText);
+        log.error(&#x27;probeConnect&#x27;, errorText);
         return callback(errorText);
       }
 
@@ -494,7 +497,7 @@
         &#x2F;&#x2F; Function to run upon connection (internal or external)
         var onConnect = function(error, probe) {
           if (error) {
-            log.error(&#x27;probeConnect&#x27; + t.logId, error);
+            log.error(t.logId + &#x27;probeConnect&#x27;, error);
             return callback(error);
           }
           var monitorProxy = new Monitor(monitorJSON), probeId = probe.get(&#x27;id&#x27;);
@@ -510,8 +513,8 @@
             }
           };
           var duration = Date.now() - startTime;
-          log.info(&#x27;probeConnected&#x27; + t.logId, duration);
-          stat.time(&#x27;probeConnected&#x27; + t.logId, duration);
+          log.info(t.logId + &#x27;probeConnected&#x27;, {probeClass: monitorJSON.probeClass, duration:duration});
+          stat.time(t.logId + &#x27;probeConnected&#x27;, duration);
           callback(null, probe.toJSON());
           probe.on(&#x27;change&#x27;, monitorProxy.probeChange);
         };
@@ -544,34 +547,34 @@
           monitorProxy = t.incomingMonitorsById[probeId],
           firewall = t.get(&#x27;firewall&#x27;);
 
-      log.info(&#x27;probeDisconnect&#x27; + t.logId, params);
+      log.info(t.logId + &#x27;probeDisconnect&#x27;, params);
 
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
       if (firewall) {
         errorText = &#x27;firewalled&#x27;;
-        log.error(&#x27;probeDisconnect&#x27; + t.logId, errorText);
+        log.error(t.logId + &#x27;probeDisconnect&#x27;, errorText);
         return callback(errorText);
       }
 
       &#x2F;&#x2F; The probe must be connected
       if (!monitorProxy || !monitorProxy.probe) {
         errorText = &#x27;Probe not connected&#x27;;
-        log.error(&#x27;probeDisconnect&#x27; + t.logId, errorText);
+        log.error(t.logId + &#x27;probeDisconnect&#x27;, errorText);
         return callback(errorText);
       }
 
       &#x2F;&#x2F; Called upon disconnect (internal or external)
       var onDisconnect = function(error) {
         if (error) {
-          log.error(&#x27;probeDisconnect&#x27; + t.logId, error);
+          log.error(t.logId + &#x27;probeDisconnect&#x27;, error);
           return callback(error);
         }
         monitorProxy.probe.off(&#x27;change&#x27;, monitorProxy.probeChange);
         monitorProxy.probe = monitorProxy.probeChange = null;
         delete t.incomingMonitorsById[probeId];
         var duration = Date.now() - startTime;
-        log.info(&#x27;probeDisconnected&#x27; + t.logId, duration);
-        stat.time(&#x27;probeDisconnected&#x27; + t.logId, duration);
+        log.info(t.logId + &#x27;probeDisconnected&#x27;, {duration:duration});
+        stat.time(t.logId + &#x27;probeDisconnected&#x27;, duration);
         return callback(null);
       };
 
@@ -599,7 +602,7 @@
       callback = callback || function(){};
       var t = this,
           errorText = &#x27;&#x27;,
-          logId = &#x27;probeControl&#x27; + t.logId + &#x27;.&#x27; + params.name + &#x27;.&#x27; + params.probeId,
+          logId = t.logId + &#x27;probeControl&#x27;,
           startTime = Date.now(),
           router = Monitor.getRouter(),
           firewall = t.get(&#x27;firewall&#x27;);
@@ -621,7 +624,7 @@
         }
         else {
           var duration = Date.now() - startTime;
-          log.info(logId, duration);
+          log.info(logId + &#x27;.return&#x27;, {duration:duration, returnArgs: arguments});
           stat.time(logId, duration);
           return callback.apply(null, arguments);
         }
@@ -644,6 +647,8 @@
           onReturn(err, returnParams);
         });
       }
+      logId = logId + &#x27;.&#x27; + probe.probeClass + &#x27;.&#x27; + params.name;
+      log.info(logId + &#x27;.request&#x27;, {params:params.params, probeId:params.probeId});
       return probe.onControl(params.name, params.params, onReturn);
     }
 
