@@ -321,9 +321,10 @@
       if (regex.test(fullName)) {
 
         &#x2F;&#x2F; Build the arguments as event name, log type, module, name, [other args...]
-        var allArgs = _.toArray(args);
+        var allArgs = _.toArray(args),
+            emitFn = Log.emit || Log.trigger; &#x2F;&#x2F; NodeJS&#x2F;server=emit, Backbone&#x2F;browser=trigger
         allArgs.splice(0, 1, eventName, type, module, name);
-        Log.emit.apply(Log, allArgs);
+        emitFn.apply(Log, allArgs);
       }
     }
 

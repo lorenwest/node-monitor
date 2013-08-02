@@ -151,6 +151,9 @@
       &#x2F;&#x2F; Set if server-side
       hostName = Monitor.commonJS ? require(&#x27;os&#x27;).hostname() : null;
 
+  &#x2F;&#x2F; Constants
+  var PROBE_TIMEOUT_MS = 10000;
+
   &#x2F;**
   * Probe location and message routing
   *
@@ -840,12 +843,17 @@
       var t = this, probeImpl = t.runningProbesById[probeId];
       if (!probeImpl) {return callback(&#x27;Probe not running&#x27;);}
       if (--probeImpl.refCount === 0) {
-        &#x2F;&#x2F; Release probe resources &amp; internal references
-        try {
-          probeImpl.release();
-        } catch (e){}
-        delete t.runningProbesByKey[probeImpl.probeKey];
-        delete t.runningProbesById[probeId];
+
+        &#x2F;&#x2F; Release probe resources &amp; internal references if still no references after a while
+        setTimeout(function() {
+          if (probeImpl.refCount === 0) {
+            try {
+              probeImpl.release();
+            } catch (e){}
+            delete t.runningProbesByKey[probeImpl.probeKey];
+            delete t.runningProbesById[probeId];
+          }
+        }, PROBE_TIMEOUT_MS);
       }
       callback(null, probeImpl);
     },

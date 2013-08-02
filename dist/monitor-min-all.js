@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.7 - 2013-07-26 */
+/* monitor-min - v0.5.7 - 2013-08-01 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -7304,7 +7304,7 @@ if (typeof define === "function" && define.amd) {
 
     // Copy all elements (by reference)
     for (var prop in value) {
-      if (value.hasOwnProperty(prop)) {
+      if (!value.hasOwnProperty || value.hasOwnProperty(prop)) {
         var elem = value[prop];
         if (typeof elem === 'object' || typeof elem === 'function') {
           copy[prop] = Monitor.deepCopy(elem, depth - 1);
@@ -7965,9 +7965,10 @@ if (typeof define === "function" && define.amd) {
       if (regex.test(fullName)) {
 
         // Build the arguments as event name, log type, module, name, [other args...]
-        var allArgs = _.toArray(args);
+        var allArgs = _.toArray(args),
+            emitFn = Log.emit || Log.trigger; // NodeJS/server=emit, Backbone/browser=trigger
         allArgs.splice(0, 1, eventName, type, module, name);
-        Log.emit.apply(Log, allArgs);
+        emitFn.apply(Log, allArgs);
       }
     }
 
@@ -8319,9 +8320,11 @@ if (typeof define === "function" && define.amd) {
       // Either connect to an URL or with an existing socket
       if (params.socket) {
         t.bindConnectionEvents();
+        log.info(t.logId + 'connect', {socketId:params.socket.id});
       }
       else if (params.url || (params.hostName && params.hostPort)) {
         t.connect();
+        log.info(t.logId + 'connect', {url:t.get('url')});
       }
       else {
         log.error('init', 'Connection must supply a socket, url, or host name/port');
@@ -8334,8 +8337,10 @@ if (typeof define === "function" && define.amd) {
       url = t.get('url');
 
       // Build the URL if not specified
-      if (!url) {url = t.attributes.url = 'http://' + hostName + ':' + hostPort;}
-      log.info(t.logId + 'connect');
+      if (!url) {
+        url = t.attributes.url = 'http://' + hostName + ':' + hostPort;
+        t.set('url', url);
+      }
 
       // Connect with this url
       var opts = {
@@ -8388,8 +8393,6 @@ if (typeof define === "function" && define.amd) {
       t.connecting = false;
       t.connected = false;
 
-      log.info(t.logId + 'disconnect', reason);
-
       // Only disconnect once.
       // This method can be called many times during a disconnect (manually,
       // by socketIO disconnect, and/or by the underlying socket disconnect).
@@ -8397,6 +8400,7 @@ if (typeof define === "function" && define.amd) {
         t.removeAllEvents();
         socket.disconnect();
         t.trigger('disconnect', reason);
+        log.info(t.logId + 'disconnect', reason);
       }
     },
 
@@ -8569,14 +8573,13 @@ if (typeof define === "function" && define.amd) {
           router = Monitor.getRouter(),
           gateway = t.get('gateway'),
           startTime = Date.now(),
-          firewall = t.get('firewall');
-
-      log.info(t.logId + 'probeConnect', monitorJSON);
+          firewall = t.get('firewall'),
+          logCtxt = _.extend({}, monitorJSON);
 
       // Don't allow inbound requests if this connection is firewalled
       if (firewall) {
         errorText = 'firewalled';
-        log.error('probeConnect', errorText);
+        log.error('probeConnect', errorText, logCtxt);
         return callback(errorText);
       }
 
@@ -8588,10 +8591,27 @@ if (typeof define === "function" && define.amd) {
         // Function to run upon connection (internal or external)
         var onConnect = function(error, probe) {
           if (error) {
-            log.error(t.logId + 'probeConnect', error);
+            log.error(t.logId + 'probeConnect', error, logCtxt);
             return callback(error);
           }
-          var monitorProxy = new Monitor(monitorJSON), probeId = probe.get('id');
+
+          // Get probe info
+          var probeId = probe.get('id');
+          logCtxt.id = probeId;
+
+          // Check for a duplicate proxy for this probeId.  This happens when
+          // two connect requests are made before the first one completes.
+          var monitorProxy = t.incomingMonitorsById[probeId];
+          if (monitorProxy != null) {
+            probe.refCount--;
+            logCtxt.dupDetected = true;
+            logCtxt.refCount = probe.refCount;
+            log.info(t.logId + 'probeConnected', logCtxt);
+            return callback(null, monitorProxy.probe.toJSON());
+          }
+
+          // Connect the montior proxy
+          monitorProxy = new Monitor(monitorJSON);
           monitorProxy.set('probeId', probeId);
           t.incomingMonitorsById[probeId] = monitorProxy;
           monitorProxy.probe = probe;
@@ -8600,14 +8620,22 @@ if (typeof define === "function" && define.amd) {
               t.emit('probe:change:' + probeId, probe.changedAttributes());
             }
             catch (e) {
-              log.error('probeChange', e, probe);
+              log.error('probeChange', e, probe, logCtxt);
             }
           };
-          var duration = Date.now() - startTime;
-          log.info(t.logId + 'probeConnected', {probeClass: monitorJSON.probeClass, duration:duration});
+          probe.connectTime = Date.now();
+          var duration = probe.connectTime - startTime;
+          logCtxt.duration = duration;
+          logCtxt.refCount = probe.refCount;
+          log.info(t.logId + 'probeConnected', logCtxt);
           stat.time(t.logId + 'probeConnected', duration);
           callback(null, probe.toJSON());
           probe.on('change', monitorProxy.probeChange);
+
+          // Disconnect the probe on connection disconnect
+          t.on('disconnect', function() {
+            t.probeDisconnect({probeId:probeId});
+          });
         };
 
         // Connect internally or externally
@@ -8632,27 +8660,25 @@ if (typeof define === "function" && define.amd) {
       callback = callback || function(){};
       var t = this,
           errorText = '',
-          startTime = Date.now(),
           router = Monitor.getRouter(),
           probeId = params.probeId,
           monitorProxy = t.incomingMonitorsById[probeId],
-          firewall = t.get('firewall');
+          firewall = t.get('firewall'),
+          logCtxt = null,
+          probe = null;
 
-      log.info(t.logId + 'probeDisconnect', params);
-
-      // Don't allow inbound requests if this connection is firewalled
-      if (firewall) {
-        errorText = 'firewalled';
-        log.error(t.logId + 'probeDisconnect', errorText);
-        return callback(errorText);
-      }
-
-      // The probe must be connected
+      // Already disconnected
       if (!monitorProxy || !monitorProxy.probe) {
-        errorText = 'Probe not connected';
-        log.error(t.logId + 'probeDisconnect', errorText);
-        return callback(errorText);
+        return callback(null);
       }
+
+      // Get a good logging context
+      probe = monitorProxy.probe;
+      logCtxt = {
+        probeClass: monitorProxy.get('probeClass'),
+        initParams: monitorProxy.get('initParams'),
+        probeId: probeId
+      };
 
       // Called upon disconnect (internal or external)
       var onDisconnect = function(error) {
@@ -8660,17 +8686,16 @@ if (typeof define === "function" && define.amd) {
           log.error(t.logId + 'probeDisconnect', error);
           return callback(error);
         }
-        monitorProxy.probe.off('change', monitorProxy.probeChange);
+        var duration = logCtxt.duration = Date.now() - probe.connectTime;
+        probe.off('change', monitorProxy.probeChange);
         monitorProxy.probe = monitorProxy.probeChange = null;
         delete t.incomingMonitorsById[probeId];
-        var duration = Date.now() - startTime;
-        log.info(t.logId + 'probeDisconnected', {duration:duration});
+        log.info(t.logId + 'probeDisconnected', logCtxt);
         stat.time(t.logId + 'probeDisconnected', duration);
         return callback(null);
       };
 
       // Disconnect from an internal or external probe
-      var probe = monitorProxy.probe;
       if (probe && probe.connection) {
         router.disconnectExternal(probe.connection, probeId, onDisconnect);
       } else {
@@ -8697,8 +8722,6 @@ if (typeof define === "function" && define.amd) {
           startTime = Date.now(),
           router = Monitor.getRouter(),
           firewall = t.get('firewall');
-
-      log.info(logId, params);
 
       // Don't allow inbound requests if this connection is firewalled
       if (firewall) {
@@ -9018,6 +9041,9 @@ if (typeof define === "function" && define.amd) {
 
       // Set if server-side
       hostName = Monitor.commonJS ? require('os').hostname() : null;
+
+  // Constants
+  var PROBE_TIMEOUT_MS = 10000;
 
   /**
   * Probe location and message routing
@@ -9708,12 +9734,17 @@ if (typeof define === "function" && define.amd) {
       var t = this, probeImpl = t.runningProbesById[probeId];
       if (!probeImpl) {return callback('Probe not running');}
       if (--probeImpl.refCount === 0) {
-        // Release probe resources & internal references
-        try {
-          probeImpl.release();
-        } catch (e){}
-        delete t.runningProbesByKey[probeImpl.probeKey];
-        delete t.runningProbesById[probeId];
+
+        // Release probe resources & internal references if still no references after a while
+        setTimeout(function() {
+          if (probeImpl.refCount === 0) {
+            try {
+              probeImpl.release();
+            } catch (e){}
+            delete t.runningProbesByKey[probeImpl.probeKey];
+            delete t.runningProbesById[probeId];
+          }
+        }, PROBE_TIMEOUT_MS);
       }
       callback(null, probeImpl);
     },

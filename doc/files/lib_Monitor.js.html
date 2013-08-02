@@ -692,7 +692,7 @@
 
     &#x2F;&#x2F; Copy all elements (by reference)
     for (var prop in value) {
-      if (value.hasOwnProperty(prop)) {
+      if (!value.hasOwnProperty || value.hasOwnProperty(prop)) {
         var elem = value[prop];
         if (typeof elem === &#x27;object&#x27; || typeof elem === &#x27;function&#x27;) {
           copy[prop] = Monitor.deepCopy(elem, depth - 1);

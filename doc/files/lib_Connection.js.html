@@ -228,9 +228,11 @@
       &#x2F;&#x2F; Either connect to an URL or with an existing socket
       if (params.socket) {
         t.bindConnectionEvents();
+        log.info(t.logId + &#x27;connect&#x27;, {socketId:params.socket.id});
       }
       else if (params.url || (params.hostName &amp;&amp; params.hostPort)) {
         t.connect();
+        log.info(t.logId + &#x27;connect&#x27;, {url:t.get(&#x27;url&#x27;)});
       }
       else {
         log.error(&#x27;init&#x27;, &#x27;Connection must supply a socket, url, or host name&#x2F;port&#x27;);
@@ -243,8 +245,10 @@
       url = t.get(&#x27;url&#x27;);
 
       &#x2F;&#x2F; Build the URL if not specified
-      if (!url) {url = t.attributes.url = &#x27;http:&#x2F;&#x2F;&#x27; + hostName + &#x27;:&#x27; + hostPort;}
-      log.info(t.logId + &#x27;connect&#x27;);
+      if (!url) {
+        url = t.attributes.url = &#x27;http:&#x2F;&#x2F;&#x27; + hostName + &#x27;:&#x27; + hostPort;
+        t.set(&#x27;url&#x27;, url);
+      }
 
       &#x2F;&#x2F; Connect with this url
       var opts = {
@@ -297,8 +301,6 @@
       t.connecting = false;
       t.connected = false;
 
-      log.info(t.logId + &#x27;disconnect&#x27;, reason);
-
       &#x2F;&#x2F; Only disconnect once.
       &#x2F;&#x2F; This method can be called many times during a disconnect (manually,
       &#x2F;&#x2F; by socketIO disconnect, and&#x2F;or by the underlying socket disconnect).
@@ -306,6 +308,7 @@
         t.removeAllEvents();
         socket.disconnect();
         t.trigger(&#x27;disconnect&#x27;, reason);
+        log.info(t.logId + &#x27;disconnect&#x27;, reason);
       }
     },
 
@@ -478,14 +481,13 @@
           router = Monitor.getRouter(),
           gateway = t.get(&#x27;gateway&#x27;),
           startTime = Date.now(),
-          firewall = t.get(&#x27;firewall&#x27;);
-
-      log.info(t.logId + &#x27;probeConnect&#x27;, monitorJSON);
+          firewall = t.get(&#x27;firewall&#x27;),
+          logCtxt = _.extend({}, monitorJSON);
 
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
       if (firewall) {
         errorText = &#x27;firewalled&#x27;;
-        log.error(&#x27;probeConnect&#x27;, errorText);
+        log.error(&#x27;probeConnect&#x27;, errorText, logCtxt);
         return callback(errorText);
       }
 
@@ -497,10 +499,27 @@
         &#x2F;&#x2F; Function to run upon connection (internal or external)
         var onConnect = function(error, probe) {
           if (error) {
-            log.error(t.logId + &#x27;probeConnect&#x27;, error);
+            log.error(t.logId + &#x27;probeConnect&#x27;, error, logCtxt);
             return callback(error);
           }
-          var monitorProxy = new Monitor(monitorJSON), probeId = probe.get(&#x27;id&#x27;);
+
+          &#x2F;&#x2F; Get probe info
+          var probeId = probe.get(&#x27;id&#x27;);
+          logCtxt.id = probeId;
+
+          &#x2F;&#x2F; Check for a duplicate proxy for this probeId.  This happens when
+          &#x2F;&#x2F; two connect requests are made before the first one completes.
+          var monitorProxy = t.incomingMonitorsById[probeId];
+          if (monitorProxy != null) {
+            probe.refCount--;
+            logCtxt.dupDetected = true;
+            logCtxt.refCount = probe.refCount;
+            log.info(t.logId + &#x27;probeConnected&#x27;, logCtxt);
+            return callback(null, monitorProxy.probe.toJSON());
+          }
+
+          &#x2F;&#x2F; Connect the montior proxy
+          monitorProxy = new Monitor(monitorJSON);
           monitorProxy.set(&#x27;probeId&#x27;, probeId);
           t.incomingMonitorsById[probeId] = monitorProxy;
           monitorProxy.probe = probe;
@@ -509,14 +528,22 @@
               t.emit(&#x27;probe:change:&#x27; + probeId, probe.changedAttributes());
             }
             catch (e) {
-              log.error(&#x27;probeChange&#x27;, e, probe);
+              log.error(&#x27;probeChange&#x27;, e, probe, logCtxt);
             }
           };
-          var duration = Date.now() - startTime;
-          log.info(t.logId + &#x27;probeConnected&#x27;, {probeClass: monitorJSON.probeClass, duration:duration});
+          probe.connectTime = Date.now();
+          var duration = probe.connectTime - startTime;
+          logCtxt.duration = duration;
+          logCtxt.refCount = probe.refCount;
+          log.info(t.logId + &#x27;probeConnected&#x27;, logCtxt);
           stat.time(t.logId + &#x27;probeConnected&#x27;, duration);
           callback(null, probe.toJSON());
           probe.on(&#x27;change&#x27;, monitorProxy.probeChange);
+
+          &#x2F;&#x2F; Disconnect the probe on connection disconnect
+          t.on(&#x27;disconnect&#x27;, function() {
+            t.probeDisconnect({probeId:probeId});
+          });
         };
 
         &#x2F;&#x2F; Connect internally or externally
@@ -541,27 +568,25 @@
       callback = callback || function(){};
       var t = this,
           errorText = &#x27;&#x27;,
-          startTime = Date.now(),
           router = Monitor.getRouter(),
           probeId = params.probeId,
           monitorProxy = t.incomingMonitorsById[probeId],
-          firewall = t.get(&#x27;firewall&#x27;);
+          firewall = t.get(&#x27;firewall&#x27;),
+          logCtxt = null,
+          probe = null;
 
-      log.info(t.logId + &#x27;probeDisconnect&#x27;, params);
-
-      &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
-      if (firewall) {
-        errorText = &#x27;firewalled&#x27;;
-        log.error(t.logId + &#x27;probeDisconnect&#x27;, errorText);
-        return callback(errorText);
-      }
-
-      &#x2F;&#x2F; The probe must be connected
+      &#x2F;&#x2F; Already disconnected
       if (!monitorProxy || !monitorProxy.probe) {
-        errorText = &#x27;Probe not connected&#x27;;
-        log.error(t.logId + &#x27;probeDisconnect&#x27;, errorText);
-        return callback(errorText);
+        return callback(null);
       }
+
+      &#x2F;&#x2F; Get a good logging context
+      probe = monitorProxy.probe;
+      logCtxt = {
+        probeClass: monitorProxy.get(&#x27;probeClass&#x27;),
+        initParams: monitorProxy.get(&#x27;initParams&#x27;),
+        probeId: probeId
+      };
 
       &#x2F;&#x2F; Called upon disconnect (internal or external)
       var onDisconnect = function(error) {
@@ -569,17 +594,16 @@
           log.error(t.logId + &#x27;probeDisconnect&#x27;, error);
           return callback(error);
         }
-        monitorProxy.probe.off(&#x27;change&#x27;, monitorProxy.probeChange);
+        var duration = logCtxt.duration = Date.now() - probe.connectTime;
+        probe.off(&#x27;change&#x27;, monitorProxy.probeChange);
         monitorProxy.probe = monitorProxy.probeChange = null;
         delete t.incomingMonitorsById[probeId];
-        var duration = Date.now() - startTime;
-        log.info(t.logId + &#x27;probeDisconnected&#x27;, {duration:duration});
+        log.info(t.logId + &#x27;probeDisconnected&#x27;, logCtxt);
         stat.time(t.logId + &#x27;probeDisconnected&#x27;, duration);
         return callback(null);
       };
 
       &#x2F;&#x2F; Disconnect from an internal or external probe
-      var probe = monitorProxy.probe;
       if (probe &amp;&amp; probe.connection) {
         router.disconnectExternal(probe.connection, probeId, onDisconnect);
       } else {
@@ -606,8 +630,6 @@
           startTime = Date.now(),
           router = Monitor.getRouter(),
           firewall = t.get(&#x27;firewall&#x27;);
-
-      log.info(logId, params);
 
       &#x2F;&#x2F; Don&#x27;t allow inbound requests if this connection is firewalled
       if (firewall) {
