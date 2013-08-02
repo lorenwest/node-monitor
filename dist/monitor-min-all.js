@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.7 - 2013-08-01 */
+/* monitor-min - v0.5.7 - 2013-08-02 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -9085,6 +9085,7 @@ if (typeof define === "function" && define.amd) {
       t.connections = new Connection.List();
       t.runningProbesByKey = {}; // key=probeKey, data=probeImpl
       t.runningProbesById = {};  // key=probeId, data=probeImpl
+      t.addHostCallbacks = {};  // key=hostName, data=[callbacks]
       log.info('init', 'Router initialized');
     },
 
@@ -9588,6 +9589,10 @@ if (typeof define === "function" && define.amd) {
     * This performs a scan of monitor ports on the server, and adds connections
     * for newly discovered servers.
     *
+    * It can take a while to complete, and if called for the same host before
+    * completion, it will save the callback and call all callbacks when the
+    * original task is complete.
+    *
     * @method addHostConnections
     * @protected
     * @param hostName {String} - The host to add connections with
@@ -9599,6 +9604,24 @@ if (typeof define === "function" && define.amd) {
           connectedPorts = [],
           portStart = Config.MonitorMin.serviceBasePort,
           portEnd = Config.MonitorMin.serviceBasePort + Config.MonitorMin.portsToScan - 1;
+
+      // Create an array to hold callbacks for this host
+      if (!t.addHostCallbacks[hostName]) {
+        t.addHostCallbacks[hostName] = [];
+      }
+
+      // Remember this callback and return if we're already adding connections for this host
+      if (t.addHostCallbacks[hostName].push(callback) > 1) {
+        return;
+      }
+
+      // Called when done
+      var doneAdding = function(error) {
+        t.addHostCallbacks[hostName].forEach(function(cb) {
+          cb(error);
+        });
+        delete t.addHostCallbacks[hostName];
+      };
 
       // Build the list of ports already connected
       t.connections.each(function(connection){
@@ -9614,19 +9637,19 @@ if (typeof define === "function" && define.amd) {
       if (portsToScan === 0) {
         errStr = 'All monitor ports in use.  Increase the Config.MonitorMin.portsToScan configuration';
         log.error('addHostConnections', errStr);
-        return callback(errStr);
+        return doneAdding(errStr);
       }
-      var callbackWhenDone = function() {
+      var doneScanning = function() {
         var conn = this; // called in the context of the connection
-        conn.off('connect disconnect error', callbackWhenDone);
+        conn.off('connect disconnect error', doneScanning);
         if (--portsToScan === 0) {
-          return callback();
+          return doneAdding();
         }
       };
       for (var i = portStart; i <= portEnd; i++) {
         if (connectedPorts.indexOf(i) < 0) {
           var connection = t.addConnection({hostName:hostName, hostPort:i});
-          connection.on('connect disconnect error', callbackWhenDone, connection);
+          connection.on('connect disconnect error', doneScanning, connection);
         }
       }
     },

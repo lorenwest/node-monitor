@@ -389,7 +389,7 @@ via the <a href="Connection.html">Connection</a> to the remote process.</p>
                 
                     <div id="method_addConnection" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l152" title="lib/Router.js:152">addConnection</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l153" title="lib/Router.js:153">addConnection</a>
     </code></h3>
 
     
@@ -583,7 +583,7 @@ via the <a href="Connection.html">Connection</a> to the remote process.</p>
                 
                     <div id="method_addHostConnections" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l559" title="lib/Router.js:559">addHostConnections</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l560" title="lib/Router.js:560">addHostConnections</a>
     </code></h3>
 
     
@@ -640,6 +640,10 @@ via the <a href="Connection.html">Connection</a> to the remote process.</p>
 
 <p>This performs a scan of monitor ports on the server, and adds connections
 for newly discovered servers.</p>
+
+<p>It can take a while to complete, and if called for the same host before
+completion, it will save the callback and call all callbacks when the
+original task is complete.</p>
     </div>
 
     
@@ -694,7 +698,7 @@ for newly discovered servers.</p>
                 
                     <div id="method_buildProbeKey" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l332" title="lib/Router.js:332">buildProbeKey</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l333" title="lib/Router.js:333">buildProbeKey</a>
     </code></h3>
 
     
@@ -830,7 +834,7 @@ for newly discovered servers.</p>
                 
                     <div id="method_connectExternal" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l726" title="lib/Router.js:726">connectExternal</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l749" title="lib/Router.js:749">connectExternal</a>
     </code></h3>
 
     
@@ -998,7 +1002,7 @@ coordinate the remote instantiation of the probe if it's not running.</p>
                 
                     <div id="method_connectInternal" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l608" title="lib/Router.js:608">connectInternal</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l631" title="lib/Router.js:631">connectInternal</a>
     </code></h3>
 
     
@@ -1143,7 +1147,7 @@ the probe if it isn't currently running.</p>
                 
                     <div id="method_connectMonitor" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l223" title="lib/Router.js:223">connectMonitor</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l224" title="lib/Router.js:224">connectMonitor</a>
     </code></h3>
 
     
@@ -1257,7 +1261,7 @@ occurred)</p>
                 
                     <div id="method_determineConnection" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l352" title="lib/Router.js:352">determineConnection</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l353" title="lib/Router.js:353">determineConnection</a>
     </code></h3>
 
     
@@ -1402,7 +1406,7 @@ reached directly, it returns a connection with the gateway.</p>
                 
                     <div id="method_disconnectExternal" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l790" title="lib/Router.js:790">disconnectExternal</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l813" title="lib/Router.js:813">disconnectExternal</a>
     </code></h3>
 
     
@@ -1533,7 +1537,7 @@ reached directly, it returns a connection with the gateway.</p>
                 
                     <div id="method_disconnectInternal" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l699" title="lib/Router.js:699">disconnectInternal</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l722" title="lib/Router.js:722">disconnectInternal</a>
     </code></h3>
 
     
@@ -1641,7 +1645,7 @@ reached directly, it returns a connection with the gateway.</p>
                 
                     <div id="method_disconnectMonitor" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l291" title="lib/Router.js:291">disconnectMonitor</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l292" title="lib/Router.js:292">disconnectMonitor</a>
     </code></h3>
 
     
@@ -1778,7 +1782,7 @@ object watching it.</p>
                 
                     <div id="method_findConnection" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l501" title="lib/Router.js:501">findConnection</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l502" title="lib/Router.js:502">findConnection</a>
     </code></h3>
 
     
@@ -1931,7 +1935,7 @@ that matches the specified parameters.</p>
                 
                     <div id="method_findConnections" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l531" title="lib/Router.js:531">findConnections</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l532" title="lib/Router.js:532">findConnections</a>
     </code></h3>
 
     
@@ -2061,7 +2065,7 @@ that match the specified parameters.</p>
                 
                     <div id="method_getHostName" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l120" title="lib/Router.js:120">getHostName</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l121" title="lib/Router.js:121">getHostName</a>
     </code></h3>
 
     
@@ -2128,7 +2132,7 @@ that match the specified parameters.</p>
                 
                     <div id="method_removeConnection" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l206" title="lib/Router.js:206">removeConnection</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l207" title="lib/Router.js:207">removeConnection</a>
     </code></h3>
 
     
@@ -2215,7 +2219,7 @@ that match the specified parameters.</p>
                 
                     <div id="method_setFirewall" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l65" title="lib/Router.js:65">setFirewall</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l66" title="lib/Router.js:66">setFirewall</a>
     </code></h3>
 
     
@@ -2310,7 +2314,7 @@ Any existing connections will still accept incoming probe requests.</p>
                 
                     <div id="method_setGateway" class="method item">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l88" title="lib/Router.js:88">setGateway</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l89" title="lib/Router.js:89">setGateway</a>
     </code></h3>
 
     
@@ -2489,7 +2493,7 @@ var server = new Monitor.Server({gateway:true});
                 
                     <div id="method_setHostName" class="method item protected">
     <h3 class="name"><code>
-      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l137" title="lib/Router.js:137">setHostName</a>
+      <a href="..&#x2F;files&#x2F;lib_Router.js.html#l138" title="lib/Router.js:138">setHostName</a>
     </code></h3>
 
     
