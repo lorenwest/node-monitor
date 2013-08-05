@@ -2,6 +2,7 @@
 ==================
 
   * Detect and prevent stat & log recursion
+  * Improved log usage
 
 0.5.6 / 2013-07-22
 ==================

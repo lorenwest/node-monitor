@@ -141,6 +141,7 @@
 
   &#x2F;&#x2F; Module loading - this runs server-side only
   var Monitor = root.Monitor || require(&#x27;..&#x2F;Monitor&#x27;),
+      logger = Monitor.getLogger(&#x27;FileSyncProbe&#x27;),
       Probe = Monitor.Probe,
       _ = Monitor._,
       SyncProbe = Monitor.SyncProbe,
@@ -219,7 +220,9 @@
           if (error) {
             if (isInitializing) {
               t.release();
-              initCallback({code: error.code, msg: &#x27;LiveSync requires the file to exist and be readable&#x27;});
+              var err = {code: error.code, msg: &#x27;LiveSync requires the file to exist and be readable&#x27;};
+              logger.warn(&#x27;monitorError&#x27;, err);
+              initCallback(err);
             }
             return;
           }
@@ -227,6 +230,7 @@
           &#x2F;&#x2F; Parse the JSON content into a JS object.
           try {
             content = JSON.parse(content);
+            logger.info(&#x27;fileParse&#x27;, {id: t.get(&#x27;modelId&#x27;), content: content});
           } catch (e) {
 
             &#x2F;&#x2F; Fail the probe on first load error
@@ -236,7 +240,8 @@
             }
 
             &#x2F;&#x2F; Nothing productive to do if the file can&#x27;t be parsed. Just log it.
-            return console.error(&#x27;File format error - invalid JSON on model ID: &#x27; + t.get(&#x27;modelId&#x27;) + &#x27; Content: &#x27; + content);
+            logger.error(&#x27;fileParse&#x27;, {error: e, id: t.get(&#x27;modelId&#x27;), content: content});
+            return;
           }
 
           &#x2F;&#x2F; Set the content into the model if it&#x27;s different

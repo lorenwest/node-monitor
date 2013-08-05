@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.7 - 2013-08-02 */
+/* monitor-min - v0.5.7 - 2013-08-05 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.

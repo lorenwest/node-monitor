@@ -370,7 +370,7 @@
             "extension_for": [],
             "module": "Monitor",
             "file": "lib/probes/FileSyncProbe.js",
-            "line": 19,
+            "line": 20,
             "description": "Probe for synchronizing a Backbone data model with a file on the O/S\n\nProbe parameters are listed under <a href=\"SyncProbe.html\">SyncProbe</a>.",
             "extends": "Probe",
             "is_constructor": 1
@@ -1617,7 +1617,7 @@
         },
         {
             "file": "lib/probes/FileSyncProbe.js",
-            "line": 257,
+            "line": 262,
             "description": "Get the full path to the file\n\nThis builds the full pathname to the file, and performs an fs.sync()\non that pathname, providing the pathname and sync object in the callback.",
             "itemtype": "method",
             "name": "getFullPath",
@@ -1661,7 +1661,7 @@
         },
         {
             "file": "lib/probes/FileSyncProbe.js",
-            "line": 311,
+            "line": 316,
             "description": "Set the server root path for objects stored with this probe\n\nFor security purposes, this must be set before the SyncFileProbe\nwill operate.  It will not accept any changes once set.",
             "static": 1,
             "itemtype": "method",
@@ -1677,7 +1677,7 @@
         },
         {
             "file": "lib/probes/FileSyncProbe.js",
-            "line": 329,
+            "line": 334,
             "description": "Get the current root path.\n\nAs a static method, this is only available on the server running the probe.\nFor security purposes, this is not exposed in the FileSyncProbe data model.",
             "static": 1,
             "itemtype": "method",
