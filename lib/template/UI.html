@@ -17,6 +17,8 @@
     <script type="text/javascript" charset="utf-8">
     <!--
       $(function(){
+        var Log = Monitor.Log;
+        Log.on('[warn,error,fatal].*', Log.console);
         Monitor.getRouter().setFirewall(true);
         var UI = Monitor.UI;
         var page = new UI.Page({{{pageParams}}});
