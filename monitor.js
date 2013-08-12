@@ -30,6 +30,10 @@
   console.log("/_/ /_/\\____/\\__,_/  \\___/      /_/ /_/ /_/\\____//_/ /_//_/  \\__/ \\____//_/");
   console.log("");
 
+  // Send error/fatal logs to the console
+  var Log = Monitor.Log;
+  Log.on('[warn,error,fatal].*', Log.console);
+
   // Boot the UI server.
   // This accepts http and websocket connections on the configured port.
   var uiServer = new UIServer();
