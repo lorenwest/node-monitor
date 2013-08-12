@@ -197,7 +197,7 @@
       subArray1Change: 0,
       subArray2Change: 0,
       subArray3Change: 0
-    }
+    };
   };
 
 }(this));
