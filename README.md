@@ -1,4 +1,4 @@
-Node-Monitor
+Node Monitor
 ============
 
 [![Build Status](https://secure.travis-ci.org/lorenwest/node-monitor.png?branch=master)](https://travis-ci.org/lorenwest/node-monitor)
