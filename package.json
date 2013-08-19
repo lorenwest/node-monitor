@@ -20,7 +20,8 @@
     "docpad-plugin-stylus": "2.x",
     "docpad-plugin-text": "2.x",
     "docpad-plugin-handlebars": "2.x",
-    "docpad-plugin-ghpages": "~2.3.0"
+    "docpad-plugin-ghpages": "~2.3.0",
+    "docpad-plugin-geturl": "~2.1.x"
   },
   "devDependencies": {
     "docpad-plugin-livereload": "2.x"

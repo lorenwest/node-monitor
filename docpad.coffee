@@ -5,6 +5,12 @@ docpadConfig = {
 	# =================================
 	# Custom environments
 	# To access one of these within our templates, refer to the FAQ: https://github.com/bevry/docpad/wiki/FAQ
+	environments:
+		static:
+			templateData:
+				site:
+					# The production site
+					url: "http://lorenwest.github.com/node-monitor"
 
 	# =================================
 	# Template Data
@@ -15,8 +21,8 @@ docpadConfig = {
 
 		# Specify some site properties
 		site:
-			# The production url of our website
-			url: "http://lorenwest.github.com/node-monitor"
+			# For running locally
+			url: "http://localhost:9778"
 
 			# The default title of our website
 			title: "Node Monitor"
@@ -69,8 +75,6 @@ docpadConfig = {
 		getPreparedKeywords: ->
 			# Merge the document keywords with the site keywords
 			@site.keywords.concat(@document.keywords or []).join(', ')
-
-		# ---- Saga Extensions ----
 
 		# Produce the breadcrumbs
 		getBreadcrumbs: ->

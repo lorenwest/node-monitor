@@ -8,11 +8,11 @@ different directory structure from the node monitor source.
 To Develop
 ------------------------------
 
-    ./docpad.sh
+    ./docpad.sh run
 
 Then open a browser to http://localhost:9778
 
 To Publish
 ----------
 
-    git push origin gh-pages
+    ./docpad.sh publish gh-pages

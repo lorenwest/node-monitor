@@ -1,1 +1,1 @@
-./node_modules/docpad/bin/docpad run
+./node_modules/docpad/bin/docpad $@

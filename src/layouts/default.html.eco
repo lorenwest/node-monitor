@@ -19,7 +19,7 @@
     <![endif]-->
 
     <!-- Styles -->
-    <%- @getBlock('styles').add(["/css/bootstrap.css","/css/font-awesome.css","/css/site.css"]).toHTML() %>
+    <%- @getBlock('styles').add(@getUrl(["/css/bootstrap.css","/css/font-awesome.css","/css/site.css"])).toHTML() %>
   </head>
 
   <body data-title="<%= @getPreparedTitle() %>">
@@ -28,31 +28,31 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="/">
-            <img src="/img/monitor.jpg" class="logo"></img>
+          <a class="brand" href="<%- @getUrl('/') %>">
+            <img src="<%- @getUrl('/img/monitor.jpg') %>" class="logo"></img>
 	    Node Monitor
 	  </a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
-              <li><a href="/pages/getting-started.html">Getting Started</a></li>
+              <li><a href="<%- @getUrl('/pages/getting-started.html') %>">Getting Started</a></li>
               <li class="dropdown">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">Overview <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="/pages/overview/dashboards.html">Dashboards</a></li>
-                  <li><a href="/pages/overview/tours.html">Tours</a></li>
-                  <li><a href="/pages/overview/apps.html">Apps</a></li>
+                  <li><a href="<%- @getUrl('/pages/overview/dashboards.html') %>">Dashboards</a></li>
+                  <li><a href="<%- @getUrl('/pages/overview/tours.html') %>">Tours</a></li>
+                  <li><a href="<%- @getUrl('/pages/overview/apps.html') %>">Apps</a></li>
                 </ul>
               </li>
               <li class="dropdown">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">Developers <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="/pages/developers/probes.html">Building Data Probes</a></li>
-                  <li><a href="/pages/developers/views.html">Building Monitor Views</a></li>
+                  <li><a href="<%- @getUrl('/pages/developers/probes.html') %>">Building Data Probes</a></li>
+                  <li><a href="<%- @getUrl('/pages/developers/views.html') %>">Building Monitor Views</a></li>
                   <li class="divider"></li>
-                  <li><a href="/pages/developers/packaging.html">Packaging Your App</a></li>
+                  <li><a href="<%- @getUrl('/pages/developers/packaging.html') %>">Packaging Your App</a></li>
 		</ul>
 	      </li>
-              <li><a href="/blog/index.html">Blog</a></li>
+              <li><a href="<%- @getUrl('/blog/index.html') %>">Blog</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -80,6 +80,6 @@
     </footer>
 
     <!-- Scripts -->
-    <%- @getBlock('scripts').add(["/vendor/jquery.js","/vendor/log.js","/vendor/modernizr.js","/vendor/twitter-bootstrap/js/bootstrap.js","/js/underscore.js","/js/backbone.js"]).toHTML() %>
+    <%- @getBlock('scripts').add(@getUrl(["/vendor/jquery.js","/vendor/log.js","/vendor/modernizr.js","/vendor/twitter-bootstrap/js/bootstrap.js","/js/underscore.js","/js/backbone.js"])).toHTML() %>
   </body>
 </html>

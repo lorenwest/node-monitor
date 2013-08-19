@@ -5,7 +5,7 @@ layout: default
 <!-- Breadcrumbs -->
   <ul class="breadcrumb">
     <% for crumb in @getBreadcrumbs(): %>
-      <li><a href="<%= crumb.href %>"><%= crumb.name %></a> <span class="divider"> &#8594; </span></li>
+      <li><a href="<%= @getUrl(crumb.href) %>"><%= crumb.name %></a> <span class="divider"> &#8594; </span></li>
     <% end %>
     <li class="active"><%= @document.title %></li>
 </ul>
