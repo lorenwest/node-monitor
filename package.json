@@ -1,9 +1,13 @@
 {
   "name": "node-monitor-pages",
   "version": "0.1.0",
-  "engines" : {
+  "engines": {
     "node": "0.8.x",
     "npm": "1.1.x"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "http://github.com/lorenwest/node-monitor.git"
   },
   "dependencies": {
     "docpad": "6.x",
@@ -15,7 +19,8 @@
     "docpad-plugin-partials": "2.x",
     "docpad-plugin-stylus": "2.x",
     "docpad-plugin-text": "2.x",
-    "docpad-plugin-handlebars": "2.x"
+    "docpad-plugin-handlebars": "2.x",
+    "docpad-plugin-ghpages": "~2.3.0"
   },
   "devDependencies": {
     "docpad-plugin-livereload": "2.x"
