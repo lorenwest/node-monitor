@@ -10,7 +10,7 @@ title: Getting Started
 <img style="float:left; margin-right: 10px; height: 100px; width: 150px; border-radius:8px" src="<%- @getUrl('/img/gauge.png') %>">
 
 Node Monitor is a [Node.JS](http://nodejs.org) webapp for monitoring
-and controlling Node.JS application servers.  It hosts components assembled onto [dashboards](<%- @getUrl('/pages/dashboards') %>)
+and controlling Node.JS application servers.  It hosts components assembled onto [dashboards](<%- @getUrl('/pages/overview/dashboards') %>)
 you create for visualizing and controlling your systems in real time.
 
 It has built-in components for monitoring process information, application logs
@@ -46,7 +46,7 @@ doesn't exist, Node Monitor asks if you want to create one at that URL.
 Is Node monitor still running on your workstation?  This URL probably doesn't exist yet.  Try it:
 <a href="http://localhost:4200/testing/gettingStarted">localhost:4200/testing/gettingStarted</a>
 
-For more on dashboards, head over to the [dashboard overview](/pages/overview/dashboards.html) page.
+For more on dashboards, head over to the [dashboard overview](/pages/overview/dashboards) page.
 
 ## Tours
 

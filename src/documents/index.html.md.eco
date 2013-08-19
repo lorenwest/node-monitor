@@ -48,7 +48,7 @@ title: Node Monitor
       ONE
     </p>
     <p>
-      <a class="btn" href="<%- @getUrl('/console.html') %>">View details &raquo;</a>
+      <a class="btn" href="<%- @getUrl('/console') %>">View details &raquo;</a>
     </p>
   </div>
   <div class="span4">
@@ -57,13 +57,13 @@ title: Node Monitor
       TWO
       <br>
     </p>
-    <p><a class="btn" href="<%- @getUrl('/v1/register.html') %>">View details &raquo;</a></p>
+    <p><a class="btn" href="<%- @getUrl('/v1/register') %>">View details &raquo;</a></p>
  </div>
   <div class="span4">
     <h2>Develop</h2>
     <p>
       THREE
     </p>
-    <p><a class="btn" href="<%- @getUrl('/examples.html') %>">View details &raquo;</a></p>
+    <p><a class="btn" href="<%- @getUrl('/examples') %>">View details &raquo;</a></p>
   </div>
 </div>
