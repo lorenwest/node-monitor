@@ -5,7 +5,7 @@
     <!-- Meta -->
     <meta charset="utf-8" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-Powered-By" content="DocPad"/>
+    <meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="description" content="Remote Monitoring and Control Panels for Node.js" />
@@ -19,7 +19,11 @@
     <![endif]-->
 
     <!-- Styles -->
-    <link  rel="stylesheet" href="/css/bootstrap.css" /><link  rel="stylesheet" href="/css/font-awesome.css" /><link  rel="stylesheet" href="/css/site.css" />
+    <style >html.wait {
+	cursor: wait !important;
+	opacity: 0;
+	transition: opacity 0.5s ease;
+}</style><link  rel="stylesheet" href="/css/bootstrap.css" /><link  rel="stylesheet" href="/css/font-awesome.css" /><link  rel="stylesheet" href="/css/site.css" />
   </head>
 
   <body data-title="Packaging Your App">
@@ -30,16 +34,15 @@
         <div class="container">
           <a class="brand" href="/">
             <img src="/img/monitor.jpg" class="logo"></img>
-        Node Monitor
-      </a>
+	    Node Monitor
+	  </a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
               <li><a href="/pages/getting-started.html">Getting Started</a></li>
               <li class="dropdown">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">Overview <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="/pages/overview/site.html">Monitor Site</a></li>
-                  <li><a href="/pages/overview/pages.html">Pages</a></li>
+                  <li><a href="/pages/overview/dashboards.html">Dashboards</a></li>
                   <li><a href="/pages/overview/tours.html">Tours</a></li>
                   <li><a href="/pages/overview/apps.html">Apps</a></li>
                 </ul>
@@ -51,8 +54,8 @@
                   <li><a href="/pages/developers/views.html">Building Monitor Views</a></li>
                   <li class="divider"></li>
                   <li><a href="/pages/developers/packaging.html">Packaging Your App</a></li>
-        </ul>
-          </li>
+		</ul>
+	      </li>
               <li><a href="/blog/index.html">Blog</a></li>
             </ul>
           </div><!--/.nav-collapse -->
@@ -83,7 +86,7 @@
         <ul class="nav footer-refs pull-left">
           <li><a href="https://github.com/lorenwest/node-monitor/blob/master/LICENSE">Copyright &copy;2010-2013</a></li>
           <li><a href="https://github.com/lorenwest/node-monitor/blob/master/LICENSE">May be freely used and distributed under the MIT licence</a></li>
-    </ul>
+	</ul>
         <ul class="nav footer-refs pull-right">
           <li><a class="nm-pvm-questions" href="https://github.com/lorenwest/node-monitor/wiki/FAQ"><i class="icon-question-sign"></i> Questions? </a></li>
           <li><a class="nm-pvm-comments" href="https://twitter.com/intent/tweet?source=webclient&text=Hey%20%23nodemonitor%20community%2C%20" target="_blank"><i class="icon-bullhorn"></i> Comments <i class="icon-twitter"></i></a></li>
@@ -93,25 +96,50 @@
 
     <!-- Scripts -->
     <script >(function(){
-	// Add the depedency if it doesn't already exist
-if ( typeof io === 'undefined' ) {
+	/* Did we just livereload? */
+var log = !!(localStorage && console && console.log && true);
+if ( log && localStorage.getItem('/docpad-livereload/reloaded') === 'yes' ) {
+	localStorage.removeItem('/docpad-livereload/reloaded');
+	console.log('LiveReload completed at', new Date())
+}
+
+/* Listen for the regenerated event and perform a reload of the page when the event occurs */
+var listen = function(){
+	var primus = new Primus('/docpad-livereload');
+	primus.on('data', function(data){
+		if ( data && data.message ) {
+			if ( data.message === 'generateBefore' ) {
+				if ( log ) {
+					console.log('LiveReload started at', new Date());
+				}
+				if ( typeof document.getElementsByTagName !== 'undefined' ) {
+	document.getElementsByTagName('html')[0].className += ' wait';
+}
+			}
+			else if ( data.message === 'generateAfter' ) {
+				if ( log ) {
+					localStorage.setItem('/docpad-livereload/reloaded', 'yes');
+				}
+				document.location.reload();
+			}
+		}
+	});
+};
+	/* Inject socket into our page */
+var inject = function(){
 	var t = document.createElement('script');
 	t.type = 'text/javascript';
-	t.async = true;
-	t.src = '/socket.io/socket.io.js';
-	t.onload = function(){
-
-// Listen for the regenerated event
-// and perform a reload of the page when the event occurs
-var socket = io.connect('/docpad-live-reload');
-socket.on('regenerated',function(){
-	document.location.reload();
-});
-
-	};
+	t.async = 'async';
+	t.src = '/primus/primus.js';
+	t.onload = listen;
 	var s = document.getElementsByTagName('script')[0];
-	s.parentNode.insertBefore(t,s);
-}
+	s.parentNode.insertBefore(t, s);
+};
+	if ( typeof Primus !== 'undefined' ) {
+		listen();
+	} else {
+		inject();
+	}
 })();</script><script defer="defer"  src="/vendor/jquery.js"></script><script defer="defer"  src="/vendor/log.js"></script><script defer="defer"  src="/vendor/modernizr.js"></script><script defer="defer"  src="/vendor/twitter-bootstrap/js/bootstrap.js"></script><script defer="defer"  src="/js/underscore.js"></script><script defer="defer"  src="/js/backbone.js"></script>
   </body>
 </html>

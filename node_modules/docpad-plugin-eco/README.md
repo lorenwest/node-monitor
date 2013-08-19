@@ -1,5 +1,5 @@
 # ECO Plugin for DocPad
-Adds support for the [ECO](https://github.com/sstephenson/eco/) (embedded CoffeeScript templates) templating engine to [DocPad](https://github.com/bevry/docpad)
+Adds support for the [ECO](https://github.com/sstephenson/eco/) (embedded CoffeeScript templates) templating engine to [DocPad](https://docpad.org)
 
 Convention:  `.anything.eco`
 

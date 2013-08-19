@@ -19,7 +19,7 @@ You can customise the [Marked](https://github.com/chjj/marked) [options](https:/
 
 	pedantic: false
 	gfm: true
-	sanitize: true
+	sanitize: false
 	highlight: null
 
 

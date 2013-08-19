@@ -1,5 +1,10 @@
 ## History
 
+- v2.0.2 March 7, 2013
+	- Repackaged
+	- Dependency upgrades
+		-  `eco` from 1.1.0 to ~1.1.0
+
 - v2.0.1 August 10, 2012
 	- Re-added markdown files to npm distribution as they are required for the npm website
 

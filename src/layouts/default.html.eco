@@ -38,8 +38,7 @@
               <li class="dropdown">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">Overview <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="/pages/overview/site.html">Monitor Site</a></li>
-                  <li><a href="/pages/overview/pages.html">Pages</a></li>
+                  <li><a href="/pages/overview/dashboards.html">Dashboards</a></li>
                   <li><a href="/pages/overview/tours.html">Tours</a></li>
                   <li><a href="/pages/overview/apps.html">Apps</a></li>
                 </ul>

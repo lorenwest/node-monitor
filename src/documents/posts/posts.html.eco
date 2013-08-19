@@ -6,7 +6,7 @@ pageOrder: 2
 
 <nav class="linklist">
 	<% for document in @getCollection('posts').toJSON(): %>
-		<li><span><%= document.date.toShortDateString() %></span>
+		<li><span><%= document.date.toDateString() %></span>
 		&raquo;
 		<a href="<%= document.url %>"><%= document.title %></a></li>
 	<% end %>

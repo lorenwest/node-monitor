@@ -36,7 +36,7 @@
 ------------------- */
 #comments /* boo */ {
   /**/ // An empty comment
-  color: red; /* A C-style comment */
+  color: red; /* A C-style comment */  /* A C-style comment */
   background-color: orange; // A little comment
   font-size: 12px;
 
@@ -58,8 +58,20 @@
 .selector /* .with */, .lots, /* of */ .comments {
   color: grey, /* blue */ orange;
   -webkit-border-radius: 2px /* webkit only */;
-  -moz-border-radius: 2px * 4 /* moz only with operation */;
+  -moz-border-radius: (2px * 4) /* moz only with operation */;
 }
+
+.mixin_def_with_colors(@a: white, // in
+       @b: 1px //put in @b - causes problems! --->
+	   ) // the
+	   when (@a = white) {
+	.test {
+	    color: @b;
+	}
+}
+.mixin_def_with_colors();
 
 #last { color: blue }
 //
+
+/*  *//* { *//*  *//*  *//*  */#div { color:#A33; }/* } */

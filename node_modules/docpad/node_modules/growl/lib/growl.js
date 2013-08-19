@@ -165,6 +165,8 @@ function growl(msg, options, fn) {
         break;
       case 'Linux':
         args.push(cmd.icon + " " + image);
+        // libnotify defaults to sticky, set a hint for transient notifications
+        if (!options.sticky) args.push('--hint=int:transient:1');
         break;
       case 'Windows':
         args.push(cmd.icon + quote(image));

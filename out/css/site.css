@@ -5,6 +5,11 @@ html {
 body {
   padding-top: 70px;
   background-color: white;
+  background-image: -moz-radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
+  background-image: -webkit-radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
+  background-image: -o-radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
+  background-image: -ms-radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
+  background-image: radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
 }
 
 h1, h2, h3, h4, h5, legend, caption {

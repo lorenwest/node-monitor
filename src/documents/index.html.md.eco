@@ -15,7 +15,7 @@ title: Node Monitor
   <p class="message">
     Site development
     <ul>
-      <li>Site layout, menu structure, placeholder pages</li>
+      <li>X - Site layout, menu structure, placeholder pages</li>
       <li>Describe the meaning and suggested content for each page</li>
       <li>Getting Started (installation & setup)</li>
       <li>Overview = End User Documentation</li>
@@ -43,7 +43,7 @@ title: Node Monitor
 <!-- Bottom row of columns -->
 <div class="row">
   <div class="span4">
-    <h2>Play.</h2>
+    <h2>Monitor</h2>
     <p>
       ONE
     </p>
@@ -52,7 +52,7 @@ title: Node Monitor
     </p>
   </div>
   <div class="span4">
-    <h2>Connect.</h2>
+    <h2>Control</h2>
     <p>
       TWO
       <br>
@@ -60,7 +60,7 @@ title: Node Monitor
     <p><a class="btn" href="/v1/register.html">View details &raquo;</a></p>
  </div>
   <div class="span4">
-    <h2>Profit.</h2>
+    <h2>Develop</h2>
     <p>
       THREE
     </p>

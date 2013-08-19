@@ -1,151 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>Node Monitor</title>
-    <link href="http://lorenwest.github.com/node-monitor/atom.xml" rel="self"/>
-    <link href="http://lorenwest.github.com/node-monitor"/>
-    <updated>2013-06-04T14:43:18.561Z</updated>
-    <id>http://lorenwest.github.com/node-monitor</id>
-    <author>
-        <name>Loren West</name>
-        <email>open-source@lorenwest.com</email>
-    </author>
+	<title>Node Monitor</title>
+	<link href="http://lorenwest.github.com/node-monitor/atom.xml" rel="self"/>
+	<link href="http://lorenwest.github.com/node-monitor"/>
+	<updated>2013-08-19T04:59:21.390Z</updated>
+	<id>http://lorenwest.github.com/node-monitor</id>
+	<author>
+		<name>Loren West</name>
+		<email>open-source@lorenwest.com</email>
+	</author>
 
-    
-        <entry>
-            <title>This is a Blog Post</title>
-            <link href="http://lorenwest.github.com/node-monitor//posts/hello"/>
-            <updated>2013-03-15T14:35:04.000Z</updated>
-            <id>http://lorenwest.github.com/node-monitor//posts/hello</id>
-            <content type="html">&lt;!DOCTYPE html&gt;
+	
+		<entry>
+			<title>Posts</title>
+			<link href="http://lorenwest.github.com/node-monitor//posts/posts"/>
+			<updated>2013-08-19T04:59:14.000Z</updated>
+			<id>http://lorenwest.github.com/node-monitor//posts/posts</id>
+			<content type="html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
   &lt;head&gt;
 
     &lt;!-- Meta --&gt;
     &lt;meta charset=&quot;utf-8&quot; /&gt;
     &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
-    &lt;meta http-equiv=&quot;X-Powered-By&quot; content=&quot;DocPad&quot;/&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
-    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
-    &lt;meta name=&quot;description&quot; content=&quot;Remote Monitoring and Control Panels for Node.js&quot; /&gt;
-    &lt;meta name=&quot;keywords&quot; content=&quot;nodejs, node.js, monitor, node-monitor, remote control, monitoring, control, realtime, dashboard, control panel&quot; /&gt;
-    &lt;meta name=&quot;author&quot; content=&quot;Loren West&quot; /&gt;
-    &lt;title&gt;This is a Blog Post&lt;/title&gt;
-
-    &lt;!-- Shims: IE6-8 support of HTML5 elements --&gt;
-    &lt;!--[if lt IE 9]&gt;
-        &lt;script async src=&quot;http://html5shim.googlecode.com/svn/trunk/html5.js&quot;&gt;&lt;/script&gt;
-    &lt;![endif]--&gt;
-
-    &lt;!-- Styles --&gt;
-    &lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/bootstrap.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/font-awesome.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/site.css&quot; /&gt;
-  &lt;/head&gt;
-
-  &lt;body data-title=&quot;This is a Blog Post&quot;&gt;
-
-    &lt;!-- Navbar --&gt;
-    &lt;div class=&quot;navbar navbar-inverse navbar-fixed-top&quot;&gt;
-      &lt;div class=&quot;navbar-inner&quot;&gt;
-        &lt;div class=&quot;container&quot;&gt;
-          &lt;a class=&quot;brand&quot; href=&quot;/&quot;&gt;
-            &lt;img src=&quot;/img/monitor.jpg&quot; class=&quot;logo&quot;&gt;&lt;/img&gt;
-        Node Monitor
-      &lt;/a&gt;
-          &lt;div class=&quot;nav-collapse collapse&quot;&gt;
-            &lt;ul class=&quot;nav pull-right&quot;&gt;
-              &lt;li&gt;&lt;a href=&quot;/pages/getting-started.html&quot;&gt;Getting Started&lt;/a&gt;&lt;/li&gt;
-              &lt;li class=&quot;dropdown&quot;&gt;
-                &lt;a href=&quot;&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;&gt;Overview &lt;b class=&quot;caret&quot;&gt;&lt;/b&gt;&lt;/a&gt;
-                &lt;ul class=&quot;dropdown-menu&quot;&gt;
-                  &lt;li&gt;&lt;a href=&quot;/pages/overview/site.html&quot;&gt;Monitor Site&lt;/a&gt;&lt;/li&gt;
-                  &lt;li&gt;&lt;a href=&quot;/pages/overview/pages.html&quot;&gt;Pages&lt;/a&gt;&lt;/li&gt;
-                  &lt;li&gt;&lt;a href=&quot;/pages/overview/tours.html&quot;&gt;Tours&lt;/a&gt;&lt;/li&gt;
-                  &lt;li&gt;&lt;a href=&quot;/pages/overview/apps.html&quot;&gt;Apps&lt;/a&gt;&lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              &lt;li class=&quot;dropdown&quot;&gt;
-                &lt;a href=&quot;&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;&gt;Developers &lt;b class=&quot;caret&quot;&gt;&lt;/b&gt;&lt;/a&gt;
-                &lt;ul class=&quot;dropdown-menu&quot;&gt;
-                  &lt;li&gt;&lt;a href=&quot;/pages/developers/probes.html&quot;&gt;Building Data Probes&lt;/a&gt;&lt;/li&gt;
-                  &lt;li&gt;&lt;a href=&quot;/pages/developers/views.html&quot;&gt;Building Monitor Views&lt;/a&gt;&lt;/li&gt;
-                  &lt;li class=&quot;divider&quot;&gt;&lt;/li&gt;
-                  &lt;li&gt;&lt;a href=&quot;/pages/developers/packaging.html&quot;&gt;Packaging Your App&lt;/a&gt;&lt;/li&gt;
-        &lt;/ul&gt;
-          &lt;/li&gt;
-              &lt;li&gt;&lt;a href=&quot;/blog/index.html&quot;&gt;Blog&lt;/a&gt;&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/div&gt;&lt;!--/.nav-collapse --&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;container&quot;&gt;
-      &lt;section id=&quot;content&quot; class=&quot;content&quot;&gt;
-        &lt;article id=&quot;post&quot; class=&quot;post&quot;&gt;
-    &lt;h1&gt;This is a Blog Post&lt;/h1&gt;
-    &lt;div class=&quot;post-content&quot;&gt;&lt;p&gt;This is a &lt;strong&gt;blog post&lt;/strong&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;/article&gt;
-
-&lt;footer&gt;
-    
-&lt;/footer&gt;
-      &lt;/section&gt;
-    &lt;/div&gt; &lt;!-- /container --&gt;
-
-    &lt;!-- Footer spans entire bottom section --&gt;
-    &lt;footer class=&quot;navbar navbar-inverse navbar-fixed-bottom&quot;&gt;
-      &lt;div class=&quot;navbar-inner container&quot;&gt;
-        &lt;ul class=&quot;nav footer-refs pull-left&quot;&gt;
-          &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;Copyright &amp;copy;2010-2013&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;May be freely used and distributed under the MIT licence&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-        &lt;ul class=&quot;nav footer-refs pull-right&quot;&gt;
-          &lt;li&gt;&lt;a class=&quot;nm-pvm-questions&quot; href=&quot;https://github.com/lorenwest/node-monitor/wiki/FAQ&quot;&gt;&lt;i class=&quot;icon-question-sign&quot;&gt;&lt;/i&gt; Questions? &lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a class=&quot;nm-pvm-comments&quot; href=&quot;https://twitter.com/intent/tweet?source=webclient&amp;text=Hey%20%23nodemonitor%20community%2C%20&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;icon-bullhorn&quot;&gt;&lt;/i&gt; Comments &lt;i class=&quot;icon-twitter&quot;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/div&gt;
-    &lt;/footer&gt;
-
-    &lt;!-- Scripts --&gt;
-    &lt;script &gt;(function(){
-	// Add the depedency if it doesn't already exist
-if ( typeof io === 'undefined' ) {
-	var t = document.createElement('script');
-	t.type = 'text/javascript';
-	t.async = true;
-	t.src = '/socket.io/socket.io.js';
-	t.onload = function(){
-
-// Listen for the regenerated event
-// and perform a reload of the page when the event occurs
-var socket = io.connect('/docpad-live-reload');
-socket.on('regenerated',function(){
-	document.location.reload();
-});
-
-	};
-	var s = document.getElementsByTagName('script')[0];
-	s.parentNode.insertBefore(t,s);
-}
-})();&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/jquery.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/log.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/modernizr.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/twitter-bootstrap/js/bootstrap.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/js/underscore.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/js/backbone.js&quot;&gt;&lt;/script&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-</content>
-        </entry>
-    
-        <entry>
-            <title>Posts</title>
-            <link href="http://lorenwest.github.com/node-monitor//posts/posts"/>
-            <updated>2013-03-15T14:35:04.000Z</updated>
-            <id>http://lorenwest.github.com/node-monitor//posts/posts</id>
-            <content type="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-  &lt;head&gt;
-
-    &lt;!-- Meta --&gt;
-    &lt;meta charset=&quot;utf-8&quot; /&gt;
-    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
-    &lt;meta http-equiv=&quot;X-Powered-By&quot; content=&quot;DocPad&quot;/&gt;
+    &lt;meta http-equiv=&quot;X-Powered-By&quot; content=&quot;DocPad v6.49.1&quot;/&gt;
     &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
     &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
     &lt;meta name=&quot;description&quot; content=&quot;Remote Monitoring and Control Panels for Node.js&quot; /&gt;
@@ -159,7 +37,11 @@ socket.on('regenerated',function(){
     &lt;![endif]--&gt;
 
     &lt;!-- Styles --&gt;
-    &lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/bootstrap.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/font-awesome.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/site.css&quot; /&gt;
+    &lt;style &gt;html.wait {
+	cursor: wait !important;
+	opacity: 0;
+	transition: opacity 0.5s ease;
+}&lt;/style&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/bootstrap.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/font-awesome.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/site.css&quot; /&gt;
   &lt;/head&gt;
 
   &lt;body data-title=&quot;Posts&quot;&gt;
@@ -170,16 +52,15 @@ socket.on('regenerated',function(){
         &lt;div class=&quot;container&quot;&gt;
           &lt;a class=&quot;brand&quot; href=&quot;/&quot;&gt;
             &lt;img src=&quot;/img/monitor.jpg&quot; class=&quot;logo&quot;&gt;&lt;/img&gt;
-        Node Monitor
-      &lt;/a&gt;
+	    Node Monitor
+	  &lt;/a&gt;
           &lt;div class=&quot;nav-collapse collapse&quot;&gt;
             &lt;ul class=&quot;nav pull-right&quot;&gt;
               &lt;li&gt;&lt;a href=&quot;/pages/getting-started.html&quot;&gt;Getting Started&lt;/a&gt;&lt;/li&gt;
               &lt;li class=&quot;dropdown&quot;&gt;
                 &lt;a href=&quot;&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;&gt;Overview &lt;b class=&quot;caret&quot;&gt;&lt;/b&gt;&lt;/a&gt;
                 &lt;ul class=&quot;dropdown-menu&quot;&gt;
-                  &lt;li&gt;&lt;a href=&quot;/pages/overview/site.html&quot;&gt;Monitor Site&lt;/a&gt;&lt;/li&gt;
-                  &lt;li&gt;&lt;a href=&quot;/pages/overview/pages.html&quot;&gt;Pages&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;/pages/overview/dashboards.html&quot;&gt;Dashboards&lt;/a&gt;&lt;/li&gt;
                   &lt;li&gt;&lt;a href=&quot;/pages/overview/tours.html&quot;&gt;Tours&lt;/a&gt;&lt;/li&gt;
                   &lt;li&gt;&lt;a href=&quot;/pages/overview/apps.html&quot;&gt;Apps&lt;/a&gt;&lt;/li&gt;
                 &lt;/ul&gt;
@@ -191,8 +72,8 @@ socket.on('regenerated',function(){
                   &lt;li&gt;&lt;a href=&quot;/pages/developers/views.html&quot;&gt;Building Monitor Views&lt;/a&gt;&lt;/li&gt;
                   &lt;li class=&quot;divider&quot;&gt;&lt;/li&gt;
                   &lt;li&gt;&lt;a href=&quot;/pages/developers/packaging.html&quot;&gt;Packaging Your App&lt;/a&gt;&lt;/li&gt;
-        &lt;/ul&gt;
-          &lt;/li&gt;
+		&lt;/ul&gt;
+	      &lt;/li&gt;
               &lt;li&gt;&lt;a href=&quot;/blog/index.html&quot;&gt;Blog&lt;/a&gt;&lt;/li&gt;
             &lt;/ul&gt;
           &lt;/div&gt;&lt;!--/.nav-collapse --&gt;
@@ -212,15 +93,15 @@ socket.on('regenerated',function(){
 
 &lt;article id=&quot;page&quot; class=&quot;page&quot;&gt;
   &lt;div class=&quot;page-content&quot;&gt;&lt;nav class=&quot;linklist&quot;&gt;
-    
-        &lt;li&gt;&lt;span&gt;Mar 15 2013&lt;/span&gt;
-        &amp;raquo;
-        &lt;a href=&quot;/posts/hello&quot;&gt;This is a Blog Post&lt;/a&gt;&lt;/li&gt;
-    
-        &lt;li&gt;&lt;span&gt;Mar 15 2013&lt;/span&gt;
-        &amp;raquo;
-        &lt;a href=&quot;/posts/posts&quot;&gt;Posts&lt;/a&gt;&lt;/li&gt;
-    
+	
+		&lt;li&gt;&lt;span&gt;Sun Aug 18 2013&lt;/span&gt;
+		&amp;raquo;
+		&lt;a href=&quot;/posts/posts&quot;&gt;Posts&lt;/a&gt;&lt;/li&gt;
+	
+		&lt;li&gt;&lt;span&gt;Fri Mar 15 2013&lt;/span&gt;
+		&amp;raquo;
+		&lt;a href=&quot;/posts/hello&quot;&gt;This is a Blog Post&lt;/a&gt;&lt;/li&gt;
+	
 &lt;/nav&gt;&lt;/div&gt;
 &lt;/article&gt;
       &lt;/section&gt;
@@ -232,7 +113,7 @@ socket.on('regenerated',function(){
         &lt;ul class=&quot;nav footer-refs pull-left&quot;&gt;
           &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;Copyright &amp;copy;2010-2013&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;May be freely used and distributed under the MIT licence&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
+	&lt;/ul&gt;
         &lt;ul class=&quot;nav footer-refs pull-right&quot;&gt;
           &lt;li&gt;&lt;a class=&quot;nm-pvm-questions&quot; href=&quot;https://github.com/lorenwest/node-monitor/wiki/FAQ&quot;&gt;&lt;i class=&quot;icon-question-sign&quot;&gt;&lt;/i&gt; Questions? &lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a class=&quot;nm-pvm-comments&quot; href=&quot;https://twitter.com/intent/tweet?source=webclient&amp;text=Hey%20%23nodemonitor%20community%2C%20&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;icon-bullhorn&quot;&gt;&lt;/i&gt; Comments &lt;i class=&quot;icon-twitter&quot;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
@@ -242,29 +123,204 @@ socket.on('regenerated',function(){
 
     &lt;!-- Scripts --&gt;
     &lt;script &gt;(function(){
-	// Add the depedency if it doesn't already exist
-if ( typeof io === 'undefined' ) {
+	/* Did we just livereload? */
+var log = !!(localStorage &amp;&amp; console &amp;&amp; console.log &amp;&amp; true);
+if ( log &amp;&amp; localStorage.getItem('/docpad-livereload/reloaded') === 'yes' ) {
+	localStorage.removeItem('/docpad-livereload/reloaded');
+	console.log('LiveReload completed at', new Date())
+}
+
+/* Listen for the regenerated event and perform a reload of the page when the event occurs */
+var listen = function(){
+	var primus = new Primus('/docpad-livereload');
+	primus.on('data', function(data){
+		if ( data &amp;&amp; data.message ) {
+			if ( data.message === 'generateBefore' ) {
+				if ( log ) {
+					console.log('LiveReload started at', new Date());
+				}
+				if ( typeof document.getElementsByTagName !== 'undefined' ) {
+	document.getElementsByTagName('html')[0].className += ' wait';
+}
+			}
+			else if ( data.message === 'generateAfter' ) {
+				if ( log ) {
+					localStorage.setItem('/docpad-livereload/reloaded', 'yes');
+				}
+				document.location.reload();
+			}
+		}
+	});
+};
+	/* Inject socket into our page */
+var inject = function(){
 	var t = document.createElement('script');
 	t.type = 'text/javascript';
-	t.async = true;
-	t.src = '/socket.io/socket.io.js';
-	t.onload = function(){
-
-// Listen for the regenerated event
-// and perform a reload of the page when the event occurs
-var socket = io.connect('/docpad-live-reload');
-socket.on('regenerated',function(){
-	document.location.reload();
-});
-
-	};
+	t.async = 'async';
+	t.src = '/primus/primus.js';
+	t.onload = listen;
 	var s = document.getElementsByTagName('script')[0];
-	s.parentNode.insertBefore(t,s);
-}
+	s.parentNode.insertBefore(t, s);
+};
+	if ( typeof Primus !== 'undefined' ) {
+		listen();
+	} else {
+		inject();
+	}
 })();&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/jquery.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/log.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/modernizr.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/twitter-bootstrap/js/bootstrap.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/js/underscore.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/js/backbone.js&quot;&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
 </content>
-        </entry>
-    
+		</entry>
+	
+		<entry>
+			<title>This is a Blog Post</title>
+			<link href="http://lorenwest.github.com/node-monitor//posts/hello"/>
+			<updated>2013-03-15T14:35:04.000Z</updated>
+			<id>http://lorenwest.github.com/node-monitor//posts/hello</id>
+			<content type="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+
+    &lt;!-- Meta --&gt;
+    &lt;meta charset=&quot;utf-8&quot; /&gt;
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+    &lt;meta http-equiv=&quot;X-Powered-By&quot; content=&quot;DocPad v6.49.1&quot;/&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
+    &lt;meta name=&quot;description&quot; content=&quot;Remote Monitoring and Control Panels for Node.js&quot; /&gt;
+    &lt;meta name=&quot;keywords&quot; content=&quot;nodejs, node.js, monitor, node-monitor, remote control, monitoring, control, realtime, dashboard, control panel&quot; /&gt;
+    &lt;meta name=&quot;author&quot; content=&quot;Loren West&quot; /&gt;
+    &lt;title&gt;This is a Blog Post&lt;/title&gt;
+
+    &lt;!-- Shims: IE6-8 support of HTML5 elements --&gt;
+    &lt;!--[if lt IE 9]&gt;
+        &lt;script async src=&quot;http://html5shim.googlecode.com/svn/trunk/html5.js&quot;&gt;&lt;/script&gt;
+    &lt;![endif]--&gt;
+
+    &lt;!-- Styles --&gt;
+    &lt;style &gt;html.wait {
+	cursor: wait !important;
+	opacity: 0;
+	transition: opacity 0.5s ease;
+}&lt;/style&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/bootstrap.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/font-awesome.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;/css/site.css&quot; /&gt;
+  &lt;/head&gt;
+
+  &lt;body data-title=&quot;This is a Blog Post&quot;&gt;
+
+    &lt;!-- Navbar --&gt;
+    &lt;div class=&quot;navbar navbar-inverse navbar-fixed-top&quot;&gt;
+      &lt;div class=&quot;navbar-inner&quot;&gt;
+        &lt;div class=&quot;container&quot;&gt;
+          &lt;a class=&quot;brand&quot; href=&quot;/&quot;&gt;
+            &lt;img src=&quot;/img/monitor.jpg&quot; class=&quot;logo&quot;&gt;&lt;/img&gt;
+	    Node Monitor
+	  &lt;/a&gt;
+          &lt;div class=&quot;nav-collapse collapse&quot;&gt;
+            &lt;ul class=&quot;nav pull-right&quot;&gt;
+              &lt;li&gt;&lt;a href=&quot;/pages/getting-started.html&quot;&gt;Getting Started&lt;/a&gt;&lt;/li&gt;
+              &lt;li class=&quot;dropdown&quot;&gt;
+                &lt;a href=&quot;&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;&gt;Overview &lt;b class=&quot;caret&quot;&gt;&lt;/b&gt;&lt;/a&gt;
+                &lt;ul class=&quot;dropdown-menu&quot;&gt;
+                  &lt;li&gt;&lt;a href=&quot;/pages/overview/dashboards.html&quot;&gt;Dashboards&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;/pages/overview/tours.html&quot;&gt;Tours&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;/pages/overview/apps.html&quot;&gt;Apps&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+              &lt;li class=&quot;dropdown&quot;&gt;
+                &lt;a href=&quot;&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;&gt;Developers &lt;b class=&quot;caret&quot;&gt;&lt;/b&gt;&lt;/a&gt;
+                &lt;ul class=&quot;dropdown-menu&quot;&gt;
+                  &lt;li&gt;&lt;a href=&quot;/pages/developers/probes.html&quot;&gt;Building Data Probes&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;/pages/developers/views.html&quot;&gt;Building Monitor Views&lt;/a&gt;&lt;/li&gt;
+                  &lt;li class=&quot;divider&quot;&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;/pages/developers/packaging.html&quot;&gt;Packaging Your App&lt;/a&gt;&lt;/li&gt;
+		&lt;/ul&gt;
+	      &lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;/blog/index.html&quot;&gt;Blog&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/div&gt;&lt;!--/.nav-collapse --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;container&quot;&gt;
+      &lt;section id=&quot;content&quot; class=&quot;content&quot;&gt;
+        &lt;article id=&quot;post&quot; class=&quot;post&quot;&gt;
+	&lt;h1&gt;This is a Blog Post&lt;/h1&gt;
+	&lt;div class=&quot;post-content&quot;&gt;&lt;p&gt;This is a &lt;strong&gt;blog post&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/article&gt;
+
+&lt;footer&gt;
+	
+&lt;/footer&gt;
+      &lt;/section&gt;
+    &lt;/div&gt; &lt;!-- /container --&gt;
+
+    &lt;!-- Footer spans entire bottom section --&gt;
+    &lt;footer class=&quot;navbar navbar-inverse navbar-fixed-bottom&quot;&gt;
+      &lt;div class=&quot;navbar-inner container&quot;&gt;
+        &lt;ul class=&quot;nav footer-refs pull-left&quot;&gt;
+          &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;Copyright &amp;copy;2010-2013&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;May be freely used and distributed under the MIT licence&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+        &lt;ul class=&quot;nav footer-refs pull-right&quot;&gt;
+          &lt;li&gt;&lt;a class=&quot;nm-pvm-questions&quot; href=&quot;https://github.com/lorenwest/node-monitor/wiki/FAQ&quot;&gt;&lt;i class=&quot;icon-question-sign&quot;&gt;&lt;/i&gt; Questions? &lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class=&quot;nm-pvm-comments&quot; href=&quot;https://twitter.com/intent/tweet?source=webclient&amp;text=Hey%20%23nodemonitor%20community%2C%20&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;icon-bullhorn&quot;&gt;&lt;/i&gt; Comments &lt;i class=&quot;icon-twitter&quot;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/footer&gt;
+
+    &lt;!-- Scripts --&gt;
+    &lt;script &gt;(function(){
+	/* Did we just livereload? */
+var log = !!(localStorage &amp;&amp; console &amp;&amp; console.log &amp;&amp; true);
+if ( log &amp;&amp; localStorage.getItem('/docpad-livereload/reloaded') === 'yes' ) {
+	localStorage.removeItem('/docpad-livereload/reloaded');
+	console.log('LiveReload completed at', new Date())
+}
+
+/* Listen for the regenerated event and perform a reload of the page when the event occurs */
+var listen = function(){
+	var primus = new Primus('/docpad-livereload');
+	primus.on('data', function(data){
+		if ( data &amp;&amp; data.message ) {
+			if ( data.message === 'generateBefore' ) {
+				if ( log ) {
+					console.log('LiveReload started at', new Date());
+				}
+				if ( typeof document.getElementsByTagName !== 'undefined' ) {
+	document.getElementsByTagName('html')[0].className += ' wait';
+}
+			}
+			else if ( data.message === 'generateAfter' ) {
+				if ( log ) {
+					localStorage.setItem('/docpad-livereload/reloaded', 'yes');
+				}
+				document.location.reload();
+			}
+		}
+	});
+};
+	/* Inject socket into our page */
+var inject = function(){
+	var t = document.createElement('script');
+	t.type = 'text/javascript';
+	t.async = 'async';
+	t.src = '/primus/primus.js';
+	t.onload = listen;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(t, s);
+};
+	if ( typeof Primus !== 'undefined' ) {
+		listen();
+	} else {
+		inject();
+	}
+})();&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/jquery.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/log.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/modernizr.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/vendor/twitter-bootstrap/js/bootstrap.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/js/underscore.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;/js/backbone.js&quot;&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</content>
+		</entry>
+	
 </feed>

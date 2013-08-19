@@ -11,30 +11,22 @@
 // `import,push`, we also pass it a callback, which it'll call once
 // the file has been fetched, and parsed.
 //
-tree.Import = function (path, imports, features, once, index) {
+tree.Import = function (path, features, options, index, currentFileInfo) {
     var that = this;
 
-    this.once = once;
+    this.options = options;
     this.index = index;
-    this._path = path;
-    this.features = features && new(tree.Value)(features);
+    this.path = path;
+    this.features = features;
+    this.currentFileInfo = currentFileInfo;
 
-    // The '.less' extension is optional
-    if (path instanceof tree.Quoted) {
-        this.path = /\.(le?|c)ss(\?.*)?$/.test(path.value) ? path.value : path.value + '.less';
+    if (this.options.less !== undefined) {
+        this.css = !this.options.less;
     } else {
-        this.path = path.value.value || path.value;
-    }
-
-    this.css = /css(\?.*)?$/.test(this.path);
-
-    // Only pre-compile .less files
-    if (! this.css) {
-        imports.push(this.path, function (e, root, imported) {
-            if (e) { e.index = index }
-            if (imported && that.once) that.skip = imported;
-            that.root = root || new(tree.Ruleset)([], []);
-        });
+        var pathValue = this.getPath();
+        if (pathValue && /css([\?;].*)?$/.test(pathValue)) {
+            this.css = true;
+        }
     }
 };
 
@@ -48,33 +40,61 @@ tree.Import = function (path, imports, features, once, index) {
 // ruleset.
 //
 tree.Import.prototype = {
+    type: "Import",
+    accept: function (visitor) {
+        this.features = visitor.visit(this.features);
+        this.path = visitor.visit(this.path);
+        this.root = visitor.visit(this.root);
+    },
     toCSS: function (env) {
         var features = this.features ? ' ' + this.features.toCSS(env) : '';
 
         if (this.css) {
-            return "@import " + this._path.toCSS() + features + ';\n';
+            return "@import " + this.path.toCSS() + features + ';\n';
         } else {
             return "";
         }
     },
+    getPath: function () {
+        if (this.path instanceof tree.Quoted) {
+            var path = this.path.value;
+            return (this.css !== undefined || /(\.[a-z]*$)|([\?;].*)$/.test(path)) ? path : path + '.less';
+        } else if (this.path instanceof tree.URL) {
+            return this.path.value.value;
+        }
+        return null;
+    },
+    evalForImport: function (env) {
+        return new(tree.Import)(this.path.eval(env), this.features, this.options, this.index, this.currentFileInfo);
+    },
+    evalPath: function (env) {
+        var path = this.path.eval(env);
+        var rootpath = this.currentFileInfo && this.currentFileInfo.rootpath;
+        if (rootpath && !(path instanceof tree.URL)) {
+            var pathValue = path.value;
+            // Add the base path if the import is relative
+            if (pathValue && env.isPathRelative(pathValue)) {
+                path.value =  rootpath + pathValue;
+            }
+        }
+        return path;
+    },
     eval: function (env) {
         var ruleset, features = this.features && this.features.eval(env);
 
-        if (this.skip) return [];
+        if (this.skip) { return []; }
 
         if (this.css) {
-            return this;
+            var newImport = new(tree.Import)(this.evalPath(env), features, this.options, this.index);
+            if (!newImport.css && this.error) {
+                throw this.error;
+            }
+            return newImport;
         } else {
             ruleset = new(tree.Ruleset)([], this.root.rules.slice(0));
 
-            for (var i = 0; i < ruleset.rules.length; i++) {
-                if (ruleset.rules[i] instanceof tree.Import) {
-                    Array.prototype
-                         .splice
-                         .apply(ruleset.rules,
-                                [i, 1].concat(ruleset.rules[i].eval(env)));
-                }
-            }
+            ruleset.evalImports(env);
+
             return this.features ? new(tree.Media)(ruleset.rules, this.features.value) : ruleset.rules;
         }
     }

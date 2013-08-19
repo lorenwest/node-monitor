@@ -10,7 +10,7 @@
  */
 
 var nodes = require('./nodes')
-  , join = require('path').join
+  , resolve = require('path').resolve
   , fs = require('fs');
 
 /**
@@ -21,8 +21,9 @@ var nodes = require('./nodes')
  * @api private
  */
 
-exports.absolute = function(path){
-  return /^([a-z]:\\)|\//i.test(path);
+exports.absolute = function(path){  
+  // On Windows the path could start with a drive letter, i.e. a:\\ or two leading backslashes
+  return path.substr(0, 2) == '\\\\' || path[0] == '/' || /^[a-z]:\\/i.test(path);
 };
 
 /**
@@ -56,7 +57,7 @@ exports.lookup = function(path, paths, ignore){
   // Relative
   while (i--) {
     try {
-      lookup = join(paths[i], path);
+      lookup = resolve(paths[i], path);
       if (ignore == lookup) continue;
       fs.statSync(lookup);
       return lookup;
