@@ -15,4 +15,4 @@ Then open a browser to http://localhost:9778
 To Publish
 ----------
 
-    ./docpad.sh publish gh-pages
+    ./docpad.sh deploy-ghpages
