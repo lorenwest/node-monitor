@@ -11,6 +11,7 @@
     <meta name="description" content="<%= @getPreparedDescription() %>" />
     <meta name="keywords" content="<%= @getPreparedKeywords() %>" />
     <meta name="author" content="<%= @site.author or '' %>" />
+    <link rel="icon" href="<%- @getUrl('/favicon.ico') %>" type="image/x-icon">
     <title><%= @getPreparedTitle() %></title>
 
     <!-- Shims: IE6-8 support of HTML5 elements -->
