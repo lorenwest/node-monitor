@@ -82,6 +82,7 @@ var MODULE_DEF = {
     "lib/ext/bootstrap-modal.js",
     "lib/ext/bootstrap-alert.js",
     "lib/ext/mustache-0.7.0-dev.js",
+    "lib/ext/numeral.min.js",
     "lib/ext/jquery.miniColors.min.js"
   ]
 };
