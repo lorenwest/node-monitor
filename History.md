@@ -1,6 +1,8 @@
-0.5.7 / 
+0.5.7 / 2013-08-28
 ==================
 
+  * Allow socket.io to connect any way it can
+  * Fixed process.uptime
   * Detect and prevent stat & log recursion
   * Improved log usage
 
