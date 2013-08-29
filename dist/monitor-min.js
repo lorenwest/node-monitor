@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.7 - 2013-08-05 */
+/* monitor-min - v0.5.7 - 2013-08-28 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -1599,7 +1599,7 @@
 
       // Connect with this url
       var opts = {
-        'transports': ['websocket', 'xhr-polling'],
+        // 'transports': ['websocket', 'xhr-polling', 'jsonp-polling'],
         'force new connection': true,      // Don't re-use existing connections
         'reconnect': false                 // Don't let socket.io reconnect.
                                            // Reconnects are performed by the Router.

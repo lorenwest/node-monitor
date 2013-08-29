@@ -569,7 +569,7 @@
             "extension_for": [],
             "module": "Monitor",
             "file": "lib/probes/ProcessProbe.js",
-            "line": 12,
+            "line": 13,
             "description": "Probe for attaining process and O/S information",
             "extends": "PollingProbe",
             "is_constructor": 1,
@@ -1745,7 +1745,7 @@
         },
         {
             "file": "lib/probes/ProcessProbe.js",
-            "line": 70,
+            "line": 71,
             "description": "Poll the probe for changes\n\nThis method is called by the parent <a href=\"PollingProbe.html\">PollingProbe</a> on the interval specified by the client <a href=\"Monitor.html\">Monitor</a>.\n\nIt polls for process information, and updates the data model with any changes.",
             "itemtype": "method",
             "name": "poll",

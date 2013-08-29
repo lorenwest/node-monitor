@@ -142,6 +142,7 @@
   &#x2F;&#x2F; Module loading - this runs server-side only
   var util = require(&#x27;util&#x27;), OS = require(&#x27;os&#x27;),
       Monitor = root.Monitor || require(&#x27;..&#x2F;Monitor&#x27;), _ = Monitor._,
+      logger = Monitor.getLogger(&#x27;ProcessProbe&#x27;),
       PollingProbe = Monitor.PollingProbe;
 
   &#x2F;**
@@ -235,7 +236,7 @@
         totalmem: OS.totalmem(),
         cpus: OS.cpus()
       }, process.memoryUsage());
-      if (process.uptime) {attrs.uptime = process.uptime;}
+      if (process.uptime) {attrs.uptime = process.uptime();}
       if (process.versions) {attrs.versions = process.versions;}
       if (process.arch) {attrs.arch = process.arch;}
       t.set(attrs);

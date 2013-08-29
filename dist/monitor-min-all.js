@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.7 - 2013-08-05 */
+/* monitor-min - v0.5.7 - 2013-08-28 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -8344,7 +8344,7 @@ if (typeof define === "function" && define.amd) {
 
       // Connect with this url
       var opts = {
-        'transports': ['websocket', 'xhr-polling'],
+        // 'transports': ['websocket', 'xhr-polling', 'jsonp-polling'],
         'force new connection': true,      // Don't re-use existing connections
         'reconnect': false                 // Don't let socket.io reconnect.
                                            // Reconnects are performed by the Router.
