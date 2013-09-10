@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>lib&#x2F;log.js - monitor-min</title>
+    <title>lib&#x2F;Log.js - monitor-min</title>
     <link rel="stylesheet" href="..&#x2F;assets/css/cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -129,7 +129,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: lib&#x2F;log.js</h1>
+                        <h1 class="file-heading">File: lib&#x2F;Log.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -361,8 +361,8 @@
   Log.console = function(type, module, name, args) {
 
     &#x2F;&#x2F; Build the string to log, in log4js format
-    var nowStr = JSON.stringify(new Date()).substr(1,22);
-        allArgs = _.toArray(arguments);
+    var nowStr = JSON.stringify(new Date()).substr(1,22),
+        allArgs = _.toArray(arguments),
         logStr = nowStr + &#x27; [&#x27; + type + &#x27;] &#x27; + module + &#x27;.&#x27; + name + &#x27; &#x27;;
     allArgs.splice(0,3);
     try {
