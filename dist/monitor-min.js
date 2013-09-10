@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.7 - 2013-08-28 */
+/* monitor-min - v0.5.8 - 2013-09-09 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -468,8 +468,15 @@
   */
   Monitor.start = function(options, callback) {
     log.info('start', options);
-    Monitor.defaultServer = new Monitor.Server();
-    Monitor.defaultServer.start(options, callback);
+
+    // Get a default monitor
+    if (!Monitor.defaultServer) {
+      Monitor.defaultServer = new Monitor.Server();
+      Monitor.defaultServer.start(options, callback);
+    } else {
+      callback();
+    }
+
   };
 
   /**
@@ -481,7 +488,12 @@
   */
   Monitor.stop = function(callback) {
     log.info('stop');
-    Monitor.defaultServer.stop(callback);
+    if (Monitor.defaultServer) {
+      Monitor.defaultServer.stop(callback);
+      delete Monitor.defaultServer;
+    } else {
+      callback();
+    }
   };
 
   /**
@@ -1029,255 +1041,6 @@
 
   // Expose this class from the Monitor module
   Monitor.setStatLoggerClass(Stat);
-
-}(this));
-
-/*jslint browser: true */
-// Log.js (c) 2010-2013 Loren West and other contributors
-// May be freely distributed under the MIT license.
-// For further details and documentation:
-// http://lorenwest.github.com/monitor-min
-(function(root){
-
-  // Module loading
-  var Monitor = root.Monitor || require('./Monitor'),
-      // Raw events on the server (for speed), backbone events on the browser (for functionality)
-      EventEmitter = Monitor.commonJS ? require('events').EventEmitter.prototype : Monitor.Backbone.Events,
-      Stat = Monitor.Stat,
-      stat = new Stat('Log'),
-      _ = Monitor._,
-      emittingNow = false;
-
-  /**
-  * A lightweight component for gathering and emitting application logs
-  *
-  * It's designed with low development and runtime cost in mind, encouraging
-  * usage with minimum concern for overhead.  Runtime monitoring can be as chatty
-  * as desired, outputting every log statement of every type, or finely tuned
-  * with regular expressions to monitor specific log statements.
-  *
-  * Log Collector
-  * -------------
-  *
-  * As a collector, it's a place to send application logs.
-  *
-  * Example for outputting a log in your application:
-  *
-  *     var log = require('monitor-min').getLogger('myModule');
-  *     ...
-  *     log.info('Credit limit accepted', limit, requestedAmount);
-  *
-  * The above is a request to output an ```info``` log for ```myModule``` named
-  * ```Credit limit accepted```.  The log entry includes all additional parameters,
-  * in this case the customer credit limit and the reqeusted amount.
-  *
-  * The full name for this log entry is: ```"info.myModule.Credit limit accepted"```
-  * The name is important, as monitors can be configured to output logs based
-  * on this name.
-  *
-  * Best practices are to include dynamic parameters in extra arguments
-  * vs. concatenating strings.  This reduces logging overhead, especially
-  * for log statements that aren't currently being watched.
-  *
-  * Log Emitter
-  * -----------
-  * As an emitter, the Log module is a place to capture logging output.
-  *
-  * When listening for log entries, wildcards can be used to register for
-  * particular log types and entries.
-  *
-  *     var Log = require('monitor-min').Log;
-  *     ...
-  *     Log.on('info.myModule.*', myFunction);
-  *
-  * Will call ```myFunction``` when all ```info.myModule.*``` logs are emitted.
-  *
-  * Listeners are invoked with the following arguments:
-  *
-  * - type - The log type (trace, debug, info, warn, error, or fatal)
-  * - module - The logger module name
-  * - name - The log entry name
-  * - args... - Additional arguments passed into the log entry are passed on
-  *             as additional args to the event listener.
-  *
-  * Wildcards
-  * ---------
-  * A flexible and user-oriented wildcard pattern is used for monitoring
-  * logs.  The pattern is described in the <a href="Stat.html#wildcards">Wildcard secttion of the Stats class</a>.
-  *
-  * Choosing Good Names
-  * -------------------
-  * It's a good idea to pick a good naming scheme with each dot-delimited segment
-  * having a consistent, well-defined purpose.  Volatile segments should be as deep
-  * into the hierarchy (furthest right) as possible.  Keeping the names less
-  * volatile makes it easier to turn statistics recording on for all logs.
-  *
-  * @class Log
-  * @constructor
-  */
-  var Log = Monitor.Log = function(module) {
-    var t = this;
-    t.module = module;
-  };
-  var proto = Log.prototype;
-
-  // This is a map of registered event names to compiled regexs, for
-  // quickly testing if a log needs to be emitted.
-  Log.eventRegex = {};
-
-  /**
-  * Output a ```trace``` log entry
-  *
-  * @method trace
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```debug``` log entry
-  *
-  * @method debug
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```info``` log entry
-  *
-  * @method info
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```warn``` log entry
-  *
-  * @method warn
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```error``` log entry
-  *
-  * @method error
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  /**
-  * Output a ```fatal``` log entry
-  *
-  * @method fatal
-  * @param name {String} Log entry name
-  * @param [...] {Any} Subsequent arguments to add to the log
-  */
-
-  // Add a method for each log type
-  ['trace','debug','info','warn','error','fatal'].forEach(function(method) {
-    proto[method] = function(name) {
-      Log._emit(method, this.module, name, arguments);
-    };
-  });
-
-  /**
-  * Send the log to all registered listeners
-  *
-  * @private
-  * @static
-  * @method emit
-  * @param type {string} The log type (trace, debug, info, etc)
-  * @param module {String} The log module name
-  * @param name {String} The log entry name
-  * @param args {any[]} Arguments to the log entry
-  */
-  Log._emit = function(type, module, name, args) {
-    var eventName,
-        fullName = type + '.' + module + '.' + name;
-
-    // Prevent log recursion. This has the effect of disabling all logging
-    // for log handlers (and their downstream effect), but is necessary to
-    // prevent infinite recursion.  If it's desired to log the output of
-    // log handlers, then delay that processing until nextTick.
-    if (emittingNow) {
-      return;
-    }
-    emittingNow = true;
-
-    // Output a counter stat for this log
-    stat.increment(fullName);
-
-    // Test the name against all registered events
-    for (eventName in Log._events) {
-
-      // Get the regex associated with the name (using the Stat package)
-      var regex = Log.eventRegex[eventName];
-      if (!regex) {
-        regex = Log.eventRegex[eventName] = Stat._buildRegex(eventName);
-      }
-
-      // Test the long name with the regex, and emit if it matches
-      if (regex.test(fullName)) {
-
-        // Build the arguments as event name, log type, module, name, [other args...]
-        var allArgs = _.toArray(args),
-            emitFn = Log.emit || Log.trigger; // NodeJS/server=emit, Backbone/browser=trigger
-        allArgs.splice(0, 1, eventName, type, module, name);
-        emitFn.apply(Log, allArgs);
-      }
-    }
-
-    // Turn off recursion prevention
-    emittingNow = false;
-  };
-
-  // Mixin event processing for the Log class
-  _.extend(Log, EventEmitter);
-
-  // Expose this class from the Monitor module
-  Monitor.setLoggerClass(Log);
-
-  /**
-  * Output log statements to the console
-  *
-  * This method can be used as a listener to send logs to the console.
-  *
-  * It uses console.error() for error and fatal log types, and console.log()
-  * for all other log types.
-  *
-  * Example:
-  *
-  *     var Log = Monitor.Log;
-  *     Log.on('*.MyModule.*', Log.console);
-  *
-  * @static
-  * @method consoleLogger
-  * @param type {string} The log type (trace, debug, info, etc)
-  * @param module {String} The log module name
-  * @param name {String} The log entry name
-  * @param args {any[]} All original, starting with the short name
-  */
-  Log.console = function(type, module, name, args) {
-
-    // Build the string to log, in log4js format
-    var nowStr = JSON.stringify(new Date()).substr(1,22);
-    var logStr = nowStr + ' [' + type + '] [' + module + ':' + name + '] ' + JSON.stringify(args);
-
-    // Log or error
-    if (type === 'error' || type === 'fatal') {
-      console.error(logStr);
-    }
-    else {
-      console.log(logStr);
-    }
-
-  };
-
-  // Attach the console log listener
-  var pattern = Monitor.Config.MonitorMin.consoleLogListener.pattern;
-  if (pattern) {
-    Log.on(pattern, Log.console);
-  }
 
 }(this));
 
@@ -3132,6 +2895,7 @@
 
   // Module loading - this runs server-side only
   var Monitor = root.Monitor || require('./Monitor'),
+      log = Monitor.getLogger('Sync'),
       Backbone = Monitor.Backbone,
       _ = Monitor._;
 
@@ -3208,6 +2972,7 @@
     // Get a Sync object and bind it to the sync function
     var syncObj = new Sync(className, options);
     return function(method, model, options) {
+      log.info('sync', {className: className, method:method, model:model.toJSON(), options:options});
       return syncObj._sync(method, model, options);
     };
   };
@@ -3235,6 +3000,7 @@
   */
   var Sync = function(className, options) {
     var t = this;
+    log.info('syncInit', className, options);
     t.className = className;
     t.options = options || {};
   };
@@ -3267,6 +3033,7 @@
     if (!model.has('id')) {
       if (method === METHOD_CREATE) {
         model.set({id: Monitor.generateUniqueId()}, {silent: true});
+        log.info('_sync.generateUniqueId', t.className, model.toJSON(), options);
       } else {
         return options.error(null, 'ID element must be set.');
       }
@@ -3287,8 +3054,10 @@
     // Create a function to run once complete
     var onComplete = function(error, params) {
       if (error) {
+        log.error('_sync.onComplete', t.className, error);
         options.error(null, error);
       } else {
+        log.info('_sync.onComplete', t.className, model.get('id'));
         options.success(params);
       }
     };
@@ -3337,6 +3106,7 @@
     var t = this;
 
     // Connect a syncMonitor for the class
+    log.info('connectClassMonitor', t.className, method, model.toJSON());
     var monitorParams = t._getMonitorParams(null);
     var syncMonitor = new Monitor(monitorParams);
     syncMonitor.connect(function(error){
@@ -3384,6 +3154,7 @@
 
       // Called to disconnect the listeners
       var disconnectListeners = function() {
+        log.info('disconnectLiveSync', t.className, model.toJSON());
         model.off('change', modelListener);
         model.syncMonitor.off('change', monitorListener);
         model.syncMonitor.disconnect();
@@ -3396,16 +3167,19 @@
 
         // Don't persist unless the model is different
         if (_.isEqual(JSON.parse(JSON.stringify(model)), JSON.parse(JSON.stringify(model.syncMonitor.get('model'))))) {
+          log.info('modelListener.noChanges', t.className, model.toJSON());
           return;
         }
 
         // Disconnect listeners if the ID changes
         if (model.get('id') !== modelId) {
+          log.info('modelListener.alteredId', t.className, model.toJSON());
           return disconnectListeners();
         }
 
         // Persist changes to the server (unless the changes originated from there)
         if (!options.isSyncChanging) {
+          log.info('modelListener.saving', t.className, model.toJSON());
           model.save();
         }
       };
@@ -3416,20 +3190,26 @@
         // Don't update unless the model is different
         var newModel = model.syncMonitor.get('model');
         if (_.isEqual(JSON.parse(JSON.stringify(model)), JSON.parse(JSON.stringify(newModel)))) {
+          log.info('monitorListener.noChanges', t.className, newModel);
           return;
         }
 
         // Disconnect if the model was deleted or the ID isn't the same
         var isDeleted = (_.size(newModel) === 0);
         if (isDeleted || newModel.id !== modelId)  {
+          log.info('modelListener.deleted', t.className, newModel);
           disconnectListeners();
         }
 
         // Forward changes to the model (including server-side delete)
         var newOpts = {isSyncChanging:true};
         if (isDeleted) {
+          log.info('modelListener.deleting', t.className, newModel);
           model.clear(newOpts);
         } else {
+          // Make sure the model is set to exactly the new contents (vs. override)
+          log.info('modelListener.setting', t.className, newModel);
+          model.clear({silent:true});
           model.set(newModel, newOpts);
         }
       };
@@ -3439,6 +3219,7 @@
       model.syncMonitor.on('change', monitorListener);
 
       // Send back the initial data model
+      log.info('connectInstanceMonitor.done', t.className, model.toJSON());
       callback(null, model.syncMonitor.get('model'));
     };
 
@@ -3447,6 +3228,7 @@
     syncMonitor = new Monitor(monitorParams);
     syncMonitor.connect(function(error){
       if (error) {
+        log.error('connectInstanceMonitor.monitorConnect', error);
         syncMonitor.disconnect();
         return whenDone(error);
       }
@@ -3463,6 +3245,7 @@
 
       // Forward the initial control
       var opts = t._getOpts(method, model);
+      log.error('connectInstanceMonitor.forwarding', method, t.className, model.toJSON());
       syncMonitor.control(method, opts, whenDone);
     });
   };
