@@ -9502,9 +9502,13 @@ if (typeof define === "function" && define.amd) {
         return connectedCheck();
       }
 
-      // Prefer the gateway if it exists
+      // Prefer the gateway if it exists, and remove the hostname
+      // if it's specified as localhost.
       if (t.defaultGateway) {
         connection = t.defaultGateway;
+        if (monitorJSON.hostname === 'localhost') {
+          delete monitorJSON.hostName;
+        }
         return connectedCheck(true);
       }
 

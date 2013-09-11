@@ -3326,7 +3326,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 503,
+            "line": 507,
             "description": "Find an existing connection to use\n\nThis method looks into the existing known connections to find one\nthat matches the specified parameters.\n\nFirewalled connections are not returned.",
             "itemtype": "method",
             "name": "findConnection",
@@ -3358,7 +3358,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 533,
+            "line": 537,
             "description": "Find all connections matching the selection criteria\n\nThis method looks into the existing known connections to find all\nthat match the specified parameters.\n\nFirewalled connections are not returned.",
             "itemtype": "method",
             "name": "findConnections",
@@ -3385,7 +3385,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 561,
+            "line": 565,
             "description": "Add connections for the specified host\n\nThis performs a scan of monitor ports on the server, and adds connections\nfor newly discovered servers.\n\nIt can take a while to complete, and if called for the same host before\ncompletion, it will save the callback and call all callbacks when the\noriginal task is complete.",
             "itemtype": "method",
             "name": "addHostConnections",
@@ -3408,7 +3408,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 632,
+            "line": 636,
             "description": "Connect to an internal probe implementation\n\nThis connects with a probe running in this process.  It will instantiate\nthe probe if it isn't currently running.",
             "itemtype": "method",
             "name": "connectInternal",
@@ -3443,7 +3443,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 723,
+            "line": 727,
             "description": "Disconnect with an internal probe implementation.",
             "itemtype": "method",
             "name": "disconnectInternal",
@@ -3466,7 +3466,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 750,
+            "line": 754,
             "description": "Connect to an external probe implementation.\n\nThis connects with a probe running in another process.  It will\ncoordinate the remote instantiation of the probe if it's not running.",
             "itemtype": "method",
             "name": "connectExternal",
@@ -3506,7 +3506,7 @@
         },
         {
             "file": "lib/Router.js",
-            "line": 814,
+            "line": 818,
             "description": "Disconnect with an external probe implementation.",
             "itemtype": "method",
             "name": "disconnectExternal",

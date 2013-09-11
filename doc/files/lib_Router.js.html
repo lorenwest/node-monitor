@@ -592,9 +592,13 @@
         return connectedCheck();
       }
 
-      &#x2F;&#x2F; Prefer the gateway if it exists
+      &#x2F;&#x2F; Prefer the gateway if it exists, and remove the hostname
+      &#x2F;&#x2F; if it&#x27;s specified as localhost.
       if (t.defaultGateway) {
         connection = t.defaultGateway;
+        if (monitorJSON.hostname === &#x27;localhost&#x27;) {
+          delete monitorJSON.hostName;
+        }
         return connectedCheck(true);
       }
 
