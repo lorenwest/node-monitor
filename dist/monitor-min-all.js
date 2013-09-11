@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.8 - 2013-09-09 */
+/* monitor-min - v0.5.8 - 2013-09-11 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -9502,6 +9502,12 @@ if (typeof define === "function" && define.amd) {
         return connectedCheck();
       }
 
+      // Prefer the gateway if it exists
+      if (t.defaultGateway) {
+        connection = t.defaultGateway;
+        return connectedCheck(true);
+      }
+
       // See if we can establish new connections with the host
       if (hostName && makeNewConnections) {
         t.addHostConnections(hostName, function(err) {
@@ -9512,18 +9518,13 @@ if (typeof define === "function" && define.amd) {
 
           // Try finding now that new connections have been made
           connection = t.findConnection(hostName, appName, appInstance);
-          if (connection) {
-            return connectedCheck();
-          }
-
-          // Cant find a direct connection.  Use gateway if available.
-          if (!t.defaultGateway) {
+          if (!connection) {
             errStr = 'No route to host: ' + Monitor.toServerString(monitorJSON);
             log.error('connect.toHost', errStr);
             return callback({err:errStr});
           }
-          connection = t.defaultGateway;
-          return connectedCheck(true);
+
+          return connectedCheck();
         });
 
         // Wait for addHostConnections to complete

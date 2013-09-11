@@ -592,6 +592,12 @@
         return connectedCheck();
       }
 
+      &#x2F;&#x2F; Prefer the gateway if it exists
+      if (t.defaultGateway) {
+        connection = t.defaultGateway;
+        return connectedCheck(true);
+      }
+
       &#x2F;&#x2F; See if we can establish new connections with the host
       if (hostName &amp;&amp; makeNewConnections) {
         t.addHostConnections(hostName, function(err) {
@@ -602,18 +608,13 @@
 
           &#x2F;&#x2F; Try finding now that new connections have been made
           connection = t.findConnection(hostName, appName, appInstance);
-          if (connection) {
-            return connectedCheck();
-          }
-
-          &#x2F;&#x2F; Cant find a direct connection.  Use gateway if available.
-          if (!t.defaultGateway) {
+          if (!connection) {
             errStr = &#x27;No route to host: &#x27; + Monitor.toServerString(monitorJSON);
             log.error(&#x27;connect.toHost&#x27;, errStr);
             return callback({err:errStr});
           }
-          connection = t.defaultGateway;
-          return connectedCheck(true);
+
+          return connectedCheck();
         });
 
         &#x2F;&#x2F; Wait for addHostConnections to complete
