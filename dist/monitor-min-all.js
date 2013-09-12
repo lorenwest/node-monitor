@@ -7427,7 +7427,7 @@ if (typeof define === "function" && define.amd) {
     portsToScan: 20,
     allowExternalConnections: false,
     consoleLogListener: {
-      pattern: "[error,fatal].*"
+      pattern: "{warn,error,fatal}.*"
     }
   };
   if (commonJS) {
@@ -9425,7 +9425,7 @@ if (typeof define === "function" && define.amd) {
           appName = monitorJSON.appName,
           appInstance = monitorJSON.appInstance,
           thisHostName = t.getHostName().toLowerCase(),
-          thisAppName = Config.appName,
+          thisAppName = Config.MonitorMin.appName  || 'unknown',
           thisAppInstance = typeof process !== 'undefined' ? process.env.NODE_APP_INSTANCE : '1';
 
       // Return a found connection immediately if it's connected.

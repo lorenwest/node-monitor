@@ -515,7 +515,7 @@
           appName = monitorJSON.appName,
           appInstance = monitorJSON.appInstance,
           thisHostName = t.getHostName().toLowerCase(),
-          thisAppName = Config.appName,
+          thisAppName = Config.MonitorMin.appName  || &#x27;unknown&#x27;,
           thisAppInstance = typeof process !== &#x27;undefined&#x27; ? process.env.NODE_APP_INSTANCE : &#x27;1&#x27;;
 
       &#x2F;&#x2F; Return a found connection immediately if it&#x27;s connected.
