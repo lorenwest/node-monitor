@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.8 - 2013-09-11 */
+/* monitor-min - v0.5.8 - 2013-09-12 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -3077,7 +3077,7 @@
         // Connect with the remote probe
         connection.emit('probe:connect', monitorJSON, function(error, probeJSON){
           if (error) {
-            errStr = "Cannot connect to probeClass '" + monitorJSON.probeClass +
+            errStr = "probe:connect returned an error for probeClass '" + monitorJSON.probeClass +
               "' on " + Monitor.toServerString(monitorJSON);
             log.error('connectExternal', errStr, error);
             return callback({err: error, msg: errStr});

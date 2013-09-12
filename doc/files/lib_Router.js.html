@@ -912,7 +912,7 @@
         &#x2F;&#x2F; Connect with the remote probe
         connection.emit(&#x27;probe:connect&#x27;, monitorJSON, function(error, probeJSON){
           if (error) {
-            errStr = &quot;Cannot connect to probeClass &#x27;&quot; + monitorJSON.probeClass +
+            errStr = &quot;probe:connect returned an error for probeClass &#x27;&quot; + monitorJSON.probeClass +
               &quot;&#x27; on &quot; + Monitor.toServerString(monitorJSON);
             log.error(&#x27;connectExternal&#x27;, errStr, error);
             return callback({err: error, msg: errStr});
