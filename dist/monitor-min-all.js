@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.8 - 2013-09-12 */
+/* monitor-min - v0.5.8 - 2013-09-15 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org

@@ -1,7 +1,10 @@
-0.5.8 /
+0.5.8 / 2013-09-15
 ==================
 
+  * Use a gateway if available
+  * More efficient localhost processing
   * Don't restart if already started
+  * Fixed lint issues
 
 0.5.7 / 2013-08-28
 ==================
