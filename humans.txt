@@ -1,0 +1,22 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+
+/* TEAM */
+  Architect: Loren West
+  Site: lorenwest.github.com/node-monitor
+  Twitter:
+  Location:
+
+/* SITE */
+  Standards: HTML5, CSS3
+  Components: Modernizr, jQuery
+  Software:
+
+             _________                                  __________
+___________________  /____      _______ ___________________(_)_  /______________
+__  __ \  __ \  __  /_  _ \     __  __ `__ \  __ \_  __ \_  /_  __/  __ \_  ___/
+_  / / / /_/ / /_/ / /  __/     _  / / / / / /_/ /  / / /  / / /_ / /_/ /  /
+/_/ /_/\____/\__,_/  \___/      /_/ /_/ /_/\____//_/ /_//_/  \__/ \____//_/
+
+
