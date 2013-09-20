@@ -5,65 +5,49 @@ title: Node Monitor
 
 <div class="hero-unit">
   <h1>
-     Node Monitor
-  </h1>
-  <h1>
+     Node Monitor<br>
      Remote Monitoring & Control
   </h1>
 </div>
 
   <p class="message">
-    Site development
-    <ul>
-      <li>X - Site layout, menu structure, placeholder pages</li>
-      <li>Describe the meaning and suggested content for each page</li>
-      <li>Getting Started (installation & setup)</li>
-      <li>Overview = End User Documentation</li>
-      <li>Overview / Site</li>
-      <li>Overview / Page</li>
-      <li>Overview / Tours</li>
-      <li>Overview / Apps</li>
-      <li>Developers / Adding data probes</li>
-      <li>Developers / Adding monitor views</li>
-      <li>Developers / Packaging Your App</li>
-      <li>Blog (blog setup)</li>
-      <li>First blog post (announcement)</li>
-      <li>Home Page (first impressions)</li>
-    </ul>
+    <img style="float:right; margin-left: 20px; height: 200px; border-radius:4px" src="<%- @getUrl('/img/dashboard.png') %>">
+    Node-Monitor is currently being prepared for release.
   </p>
 
   <p class="message">
-    A little more about it.  Maybe a paragraph or two.
+    Check back soon for more complete documentation.
   </p>
 
-  <p class="message">
-    Some cute slogan here.
+  <p class="message clearfix">
+    What would you monitor?
   </p>
 
 <!-- Bottom row of columns -->
 <div class="row">
   <div class="span4">
-    <h2>Monitor</h2>
+    <h2>Dashboards</h2>
     <p>
-      ONE
+      Build as many dashboards and control panels as you like.
+      Node Monitor is a web site where each page is a different dashboard.
     </p>
     <p>
-      <a class="btn" href="<%- @getUrl('/console') %>">View details &raquo;</a>
+      <a class="btn" href="<%- @getUrl('/pages/overview/dashboards.html') %>">View details &raquo;</a>
     </p>
   </div>
   <div class="span4">
-    <h2>Control</h2>
+    <h2>Tours</h2>
     <p>
-      TWO
-      <br>
-    </p>
-    <p><a class="btn" href="<%- @getUrl('/v1/register') %>">View details &raquo;</a></p>
+      Build a tour to automatically cycle through<br>
+      your favorite Node Monitor dashboards.<br><br>
+    <p><a class="btn" href="<%- @getUrl('/pages/overview/tours.html') %>">View details &raquo;</a></p>
  </div>
   <div class="span4">
-    <h2>Develop</h2>
+    <h2>Apps</h2>
     <p>
-      THREE
+      Use Node Monitor in your apps, distribute Node Monitor with your apps,
+      or write Node Monitor add-ons for your NPM modules.
     </p>
-    <p><a class="btn" href="<%- @getUrl('/examples') %>">View details &raquo;</a></p>
+    <p><a class="btn" href="<%- @getUrl('/pages/overview/apps.html') %>">View details &raquo;</a></p>
   </div>
 </div>

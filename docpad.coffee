@@ -11,6 +11,11 @@ docpadConfig = {
 				site:
 					# The production site
 					url: "http://lorenwest.github.com/node-monitor"
+		embedded:
+			templateData:
+				site:
+					# Embedded into core-monitor
+					url: "/app/core/out"
 
 	# =================================
 	# Template Data
@@ -47,7 +52,7 @@ docpadConfig = {
 			breadcrumbs: [
 				{
 					name: "Home"
-					href: "/"
+					href: "/index.html"
 				}
 			]
 

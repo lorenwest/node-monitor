@@ -1,7 +1,12 @@
 ---
 layout: page
-title: Building Views
+title: Building Monitor Views
 ---
 
 <%- %>
 # Building Monitor Views
+
+Views are client-side components written to visualize probe data.
+They can provide alternate views of existing probes, or offer custom views of
+
+##

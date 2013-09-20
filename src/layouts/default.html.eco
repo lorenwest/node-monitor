@@ -29,31 +29,31 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="<%- @getUrl('/') %>">
+          <a class="brand" href="<%- @getUrl('/index.html') %>">
             <img src="<%- @getUrl('/img/monitor.jpg') %>" class="logo"></img>
 	    Node Monitor
 	  </a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
-              <li><a href="<%- @getUrl('/pages/getting-started') %>">Getting Started</a></li>
+              <li><a href="<%- @getUrl('/pages/getting-started.html') %>">Getting Started</a></li>
               <li class="dropdown">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">Overview <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="<%- @getUrl('/pages/overview/dashboards') %>">Dashboards</a></li>
-                  <li><a href="<%- @getUrl('/pages/overview/tours') %>">Tours</a></li>
-                  <li><a href="<%- @getUrl('/pages/overview/apps') %>">Apps</a></li>
+                  <li><a href="<%- @getUrl('/pages/overview/dashboards.html') %>">Dashboards</a></li>
+                  <li><a href="<%- @getUrl('/pages/overview/tours.html') %>">Tours</a></li>
+                  <li><a href="<%- @getUrl('/pages/overview/apps.html') %>">Apps</a></li>
                 </ul>
               </li>
               <li class="dropdown">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">Developers <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="<%- @getUrl('/pages/developers/probes') %>">Building Data Probes</a></li>
-                  <li><a href="<%- @getUrl('/pages/developers/views') %>">Building Monitor Views</a></li>
+                  <li><a href="<%- @getUrl('/pages/developers/probes.html') %>">Building Data Probes</a></li>
+                  <li><a href="<%- @getUrl('/pages/developers/views.html') %>">Building Monitor Views</a></li>
                   <li class="divider"></li>
-                  <li><a href="<%- @getUrl('/pages/developers/packaging') %>">Packaging Your App</a></li>
+                  <li><a href="<%- @getUrl('/pages/developers/packaging.html') %>">Packaging Your App</a></li>
 		</ul>
 	      </li>
-              <li><a href="<%- @getUrl('/blog') %>">Blog</a></li>
+              <li><a href="<%- @getUrl('/blog/index.html') %>">Blog</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
