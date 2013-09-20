@@ -1,0 +1,36 @@
+---
+layout: page
+title: Page Tours
+---
+
+# Page Tours
+
+<img style="float:left; margin-right: 20px;" src="<%- @getUrl('/img/tour.png') %>">
+
+Tours are located in the left sidebar.  They represent a grouping of
+pages on your monitor site.
+
+When a tour is selected from the sidebar, the first page of the tour is loaded and
+a tour control is displayed at the bottom of the screen.  The tour runs until it is
+stopped from the control.
+
+Most tours are configured to automatically cycle through the pages at a specified interval.
+
+<div class="clearfix"></div>
+
+## Building Tours
+
+<img style="float:right; margin-left: 40px; border: 1px solid #333; border-radius: 10px" src="<%- @getUrl('/img/tour_settings.png') %>">
+
+While hovering over the Tours heading in the sidebar,
+a Tour Settings option appears in the heading.
+
+<img style="margin: 20px; border-radius: 8px;" src="<%- @getUrl('/img/tour_manage.png') %>">
+
+Clicking that icon opens the Tour Settings panel (shown at the right) where you can add new tours,
+manage tour pages, and remove tours.
+
+Your changes are saved by pressing the Save button.
+
+
+<div class="clearfix"></div>

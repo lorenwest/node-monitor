@@ -1,0 +1,50 @@
+---
+layout: page
+title: Monitor Apps
+---
+
+# Monitor Apps
+
+<img style="float:right; margin: 10px 20px 20px 40px; border-radius: 6px;" src="<%- @getUrl('/img/app.png') %>">
+
+Monitor apps extend node-monitor with new capabilities.  They can be written to
+run locally in a node.js application, or packaged for installation by npm into any
+node.js application.
+
+### Probes
+
+Data probes are server-side components installed into (or close to) the systems being monitored.
+Built as Backbone models extended from a common parent, probes define the data structure exposed
+to a monitor, and any remote control functionality.
+
+Probes require the [monitor-min](https://github.com/lorenwest/monitor-min) module - a core set of functionality available
+to all probes.
+
+The [building data probes](<%- @getUrl('/pages/developers/probes.html') %>) page has information about developing probes for your
+application or node.js module.
+
+
+### Views
+
+Views are client-side components written to visualize probe data.
+They can provide alternate views of existing probes, or offer custom views of
+probes delivered in the app.
+
+When installed, views appear in the New Component screen, and can be added to
+any dashboard.  They come with a standard settings screen that can be
+extended to offer fine grained configuration.
+
+Views can also pass user input on to probes having remote control
+functionality, turning your dashboards into control panels.
+
+The [building monitor views](<%- @getUrl('/pages/developers/views.html') %>) page has information about writing visualizations
+for your node.js application or module.
+
+
+### Pages & Tours
+
+Applications can contain monitor pages for standard dashboards, or documentation
+for the probes and views contained in the app.
+
+Applications may also contain tours to guide you through these pages.
+

@@ -1,0 +1,62 @@
+---
+layout: page
+title: Dashboards
+---
+
+<a name="Dashboards" class="clearfix"></a>
+# Dashboards
+
+<img style="float:left; margin-right: 20px; height: 130px; border-radius:4px" src="<%- @getUrl('/img/dashboard.png') %>">
+
+Each page in the Node Monitor site is a dashboard.  You can have as many
+dashboards as you like, and you can create a dashboard hierarchy with the
+path to your pages.
+
+To create a new dashboard, enter a new page URL in your browser.  If the page
+doesn't exist, Node Monitor asks if you want to create one at that URL.
+
+<a name="Header" class="clearfix"></a>
+## Header
+
+<img style="float:right; margin: -10px 20px 10px 20px; height: 130px; border-radius:6px" src="<%- @getUrl('/img/header.png') %>">
+
+The header contains the page title and main menu.  Hovering over the title displays the page description (if one is set),
+and clicking the title takes you to the page settings dialog.
+
+The drop-down menu lets you manage various elements within the page, and the About section gives kudos to the software used in node-monitor.
+
+Clicking the logo on the right opens and closes the header bar.
+
+
+<a name="Sidebar" class="clearfix"></a>
+## Sidebar
+<img style="float:left; margin-right: 20px; height: 130px; border-radius:6px" src="<%- @getUrl('/img/sidebar.png') %>">
+
+The pages in your site are displayed in the sidebar for single-click navigation.
+The sidebar is updated as pages are added, and a page hierarchy is maintained based on the URL path to the page.
+
+Page tours are also shown in the sidebar, and can be run by selecting the tour.
+For more on tours, head over to the [tours overview](<%- @getUrl('/pages/overview/tours.html') %>) page.
+
+The sidebar can be resized by dragging the divider, and clicking the divider quickly opens and closes the sidebar.
+Like opening and closing the header, this can be handy for full screen monitors.
+
+New pages and tours can be added by hovering over the Pages and Tours title bar, and selecting the icon to the right.
+
+<a name="Components" class="clearfix"></a>
+## Components
+<img style="float:right; margin: -10px 20px 0 20px; height: 300px; border-radius:6px; border: 1px solid #aaa;" src="<%- @getUrl('/img/components.png') %>">
+
+Components are the items contained on a dashboard page.
+They are added by selecting "Add a Component" on the drop down menu,
+and they can be sized and positioned anywhere on the page.
+
+Clicking on the component title opens a settings screen to customize
+the component.  Changes are seen immediately, but aren't persisted to the page
+until the 'Save' button is pressed.  A "view source" button is available
+giving you access to view and edit the source component data.
+
+A core set of components are delivered from the [core-monitor](https://github.com/lorenwest/core-monitor)
+app, and other component types can be written and packaged as [monitor apps](<%- @getUrl('/pages/overview/apps.html') %>).
+
+<a name="end" class="clearfix"></a>
