@@ -1,3 +1,8 @@
+0.5.9 / 
+==================
+
+  * Better probe instantiation error message
+
 0.5.8 / 2013-09-15
 ==================
 
