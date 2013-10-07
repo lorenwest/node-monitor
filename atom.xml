@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>Node Monitor</title>
+	<link href="http://lorenwest.github.com/node-monitor/atom.xml" rel="self"/>
+	<link href="http://lorenwest.github.com/node-monitor"/>
+	<updated>2013-09-20T00:31:49.156Z</updated>
+	<id>http://lorenwest.github.com/node-monitor</id>
+	<author>
+		<name>Loren West</name>
+		<email>open-source@lorenwest.com</email>
+	</author>
+
+	
+		<entry>
+			<title>Posts</title>
+			<link href="http://lorenwest.github.com/node-monitor//posts/posts"/>
+			<updated>2013-08-19T04:59:14.000Z</updated>
+			<id>http://lorenwest.github.com/node-monitor//posts/posts</id>
+			<content type="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+
+    &lt;!-- Meta --&gt;
+    &lt;meta charset=&quot;utf-8&quot; /&gt;
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+    &lt;meta http-equiv=&quot;X-Powered-By&quot; content=&quot;DocPad v6.49.1&quot;/&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
+    &lt;meta name=&quot;description&quot; content=&quot;Remote Monitoring and Control Panels for Node.js&quot; /&gt;
+    &lt;meta name=&quot;keywords&quot; content=&quot;nodejs, node.js, monitor, node-monitor, remote control, monitoring, control, realtime, dashboard, control panel&quot; /&gt;
+    &lt;meta name=&quot;author&quot; content=&quot;Loren West&quot; /&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;http://lorenwest.github.com/node-monitor/favicon.ico&quot; type=&quot;image/x-icon&quot;&gt;
+    &lt;title&gt;Posts&lt;/title&gt;
+
+    &lt;!-- Shims: IE6-8 support of HTML5 elements --&gt;
+    &lt;!--[if lt IE 9]&gt;
+        &lt;script async src=&quot;http://html5shim.googlecode.com/svn/trunk/html5.js&quot;&gt;&lt;/script&gt;
+    &lt;![endif]--&gt;
+
+    &lt;!-- Styles --&gt;
+    &lt;link  rel=&quot;stylesheet&quot; href=&quot;http://lorenwest.github.com/node-monitor/css/bootstrap.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;http://lorenwest.github.com/node-monitor/css/font-awesome.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;http://lorenwest.github.com/node-monitor/css/site.css&quot; /&gt;
+  &lt;/head&gt;
+
+  &lt;body data-title=&quot;Posts&quot;&gt;
+
+    &lt;!-- Navbar --&gt;
+    &lt;div class=&quot;navbar navbar-inverse navbar-fixed-top&quot;&gt;
+      &lt;div class=&quot;navbar-inner&quot;&gt;
+        &lt;div class=&quot;container&quot;&gt;
+          &lt;a class=&quot;brand&quot; href=&quot;http://lorenwest.github.com/node-monitor/index.html&quot;&gt;
+            &lt;img src=&quot;http://lorenwest.github.com/node-monitor/img/monitor.jpg&quot; class=&quot;logo&quot;&gt;&lt;/img&gt;
+	    Node Monitor
+	  &lt;/a&gt;
+          &lt;div class=&quot;nav-collapse collapse&quot;&gt;
+            &lt;ul class=&quot;nav pull-right&quot;&gt;
+              &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/getting-started.html&quot;&gt;Getting Started&lt;/a&gt;&lt;/li&gt;
+              &lt;li class=&quot;dropdown&quot;&gt;
+                &lt;a href=&quot;&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;&gt;Overview &lt;b class=&quot;caret&quot;&gt;&lt;/b&gt;&lt;/a&gt;
+                &lt;ul class=&quot;dropdown-menu&quot;&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/overview/dashboards.html&quot;&gt;Dashboards&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/overview/tours.html&quot;&gt;Tours&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/overview/apps.html&quot;&gt;Apps&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+              &lt;li class=&quot;dropdown&quot;&gt;
+                &lt;a href=&quot;&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;&gt;Developers &lt;b class=&quot;caret&quot;&gt;&lt;/b&gt;&lt;/a&gt;
+                &lt;ul class=&quot;dropdown-menu&quot;&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/developers/probes.html&quot;&gt;Building Data Probes&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/developers/views.html&quot;&gt;Building Monitor Views&lt;/a&gt;&lt;/li&gt;
+                  &lt;li class=&quot;divider&quot;&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/developers/packaging.html&quot;&gt;Packaging Your App&lt;/a&gt;&lt;/li&gt;
+		&lt;/ul&gt;
+	      &lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/blog/index.html&quot;&gt;Blog&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/div&gt;&lt;!--/.nav-collapse --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;container&quot;&gt;
+      &lt;section id=&quot;content&quot; class=&quot;content&quot;&gt;
+        &lt;!-- Breadcrumbs --&gt;
+  &lt;ul class=&quot;breadcrumb&quot;&gt;
+    
+      &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/index.html&quot;&gt;Home&lt;/a&gt; &lt;span class=&quot;divider&quot;&gt; &amp;#8594; &lt;/span&gt;&lt;/li&gt;
+    
+    &lt;li class=&quot;active&quot;&gt;Posts&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;article id=&quot;page&quot; class=&quot;page&quot;&gt;
+  &lt;div class=&quot;page-content&quot;&gt;&lt;nav class=&quot;linklist&quot;&gt;
+	
+		&lt;li&gt;&lt;span&gt;Sun Aug 18 2013&lt;/span&gt;
+		&amp;raquo;
+		&lt;a href=&quot;/posts/posts&quot;&gt;Posts&lt;/a&gt;&lt;/li&gt;
+	
+		&lt;li&gt;&lt;span&gt;Fri Mar 15 2013&lt;/span&gt;
+		&amp;raquo;
+		&lt;a href=&quot;/posts/hello&quot;&gt;This is a Blog Post&lt;/a&gt;&lt;/li&gt;
+	
+&lt;/nav&gt;&lt;/div&gt;
+&lt;/article&gt;
+      &lt;/section&gt;
+    &lt;/div&gt; &lt;!-- /container --&gt;
+
+    &lt;!-- Footer spans entire bottom section --&gt;
+    &lt;footer class=&quot;navbar navbar-inverse navbar-fixed-bottom&quot;&gt;
+      &lt;div class=&quot;navbar-inner container&quot;&gt;
+        &lt;ul class=&quot;nav footer-refs pull-left&quot;&gt;
+          &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;Copyright &amp;copy;2010-2013&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;May be freely used and distributed under the MIT licence&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+        &lt;ul class=&quot;nav footer-refs pull-right&quot;&gt;
+          &lt;li&gt;&lt;a class=&quot;nm-pvm-questions&quot; href=&quot;https://github.com/lorenwest/node-monitor/wiki/FAQ&quot;&gt;&lt;i class=&quot;icon-question-sign&quot;&gt;&lt;/i&gt; Questions? &lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class=&quot;nm-pvm-comments&quot; href=&quot;https://twitter.com/intent/tweet?source=webclient&amp;text=Hey%20%23nodemonitor%20community%2C%20&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;icon-bullhorn&quot;&gt;&lt;/i&gt; Comments &lt;i class=&quot;icon-twitter&quot;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/footer&gt;
+
+    &lt;!-- Scripts --&gt;
+    &lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/vendor/jquery.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/vendor/log.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/vendor/modernizr.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/vendor/twitter-bootstrap/js/bootstrap.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/js/underscore.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/js/backbone.js&quot;&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</content>
+		</entry>
+	
+		<entry>
+			<title>This is a Blog Post</title>
+			<link href="http://lorenwest.github.com/node-monitor//posts/hello"/>
+			<updated>2013-03-15T14:35:04.000Z</updated>
+			<id>http://lorenwest.github.com/node-monitor//posts/hello</id>
+			<content type="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+
+    &lt;!-- Meta --&gt;
+    &lt;meta charset=&quot;utf-8&quot; /&gt;
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+    &lt;meta http-equiv=&quot;X-Powered-By&quot; content=&quot;DocPad v6.49.1&quot;/&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
+    &lt;meta name=&quot;description&quot; content=&quot;Remote Monitoring and Control Panels for Node.js&quot; /&gt;
+    &lt;meta name=&quot;keywords&quot; content=&quot;nodejs, node.js, monitor, node-monitor, remote control, monitoring, control, realtime, dashboard, control panel&quot; /&gt;
+    &lt;meta name=&quot;author&quot; content=&quot;Loren West&quot; /&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;http://lorenwest.github.com/node-monitor/favicon.ico&quot; type=&quot;image/x-icon&quot;&gt;
+    &lt;title&gt;This is a Blog Post&lt;/title&gt;
+
+    &lt;!-- Shims: IE6-8 support of HTML5 elements --&gt;
+    &lt;!--[if lt IE 9]&gt;
+        &lt;script async src=&quot;http://html5shim.googlecode.com/svn/trunk/html5.js&quot;&gt;&lt;/script&gt;
+    &lt;![endif]--&gt;
+
+    &lt;!-- Styles --&gt;
+    &lt;link  rel=&quot;stylesheet&quot; href=&quot;http://lorenwest.github.com/node-monitor/css/bootstrap.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;http://lorenwest.github.com/node-monitor/css/font-awesome.css&quot; /&gt;&lt;link  rel=&quot;stylesheet&quot; href=&quot;http://lorenwest.github.com/node-monitor/css/site.css&quot; /&gt;
+  &lt;/head&gt;
+
+  &lt;body data-title=&quot;This is a Blog Post&quot;&gt;
+
+    &lt;!-- Navbar --&gt;
+    &lt;div class=&quot;navbar navbar-inverse navbar-fixed-top&quot;&gt;
+      &lt;div class=&quot;navbar-inner&quot;&gt;
+        &lt;div class=&quot;container&quot;&gt;
+          &lt;a class=&quot;brand&quot; href=&quot;http://lorenwest.github.com/node-monitor/index.html&quot;&gt;
+            &lt;img src=&quot;http://lorenwest.github.com/node-monitor/img/monitor.jpg&quot; class=&quot;logo&quot;&gt;&lt;/img&gt;
+	    Node Monitor
+	  &lt;/a&gt;
+          &lt;div class=&quot;nav-collapse collapse&quot;&gt;
+            &lt;ul class=&quot;nav pull-right&quot;&gt;
+              &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/getting-started.html&quot;&gt;Getting Started&lt;/a&gt;&lt;/li&gt;
+              &lt;li class=&quot;dropdown&quot;&gt;
+                &lt;a href=&quot;&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;&gt;Overview &lt;b class=&quot;caret&quot;&gt;&lt;/b&gt;&lt;/a&gt;
+                &lt;ul class=&quot;dropdown-menu&quot;&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/overview/dashboards.html&quot;&gt;Dashboards&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/overview/tours.html&quot;&gt;Tours&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/overview/apps.html&quot;&gt;Apps&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+              &lt;li class=&quot;dropdown&quot;&gt;
+                &lt;a href=&quot;&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;&gt;Developers &lt;b class=&quot;caret&quot;&gt;&lt;/b&gt;&lt;/a&gt;
+                &lt;ul class=&quot;dropdown-menu&quot;&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/developers/probes.html&quot;&gt;Building Data Probes&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/developers/views.html&quot;&gt;Building Monitor Views&lt;/a&gt;&lt;/li&gt;
+                  &lt;li class=&quot;divider&quot;&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/pages/developers/packaging.html&quot;&gt;Packaging Your App&lt;/a&gt;&lt;/li&gt;
+		&lt;/ul&gt;
+	      &lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;http://lorenwest.github.com/node-monitor/blog/index.html&quot;&gt;Blog&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/div&gt;&lt;!--/.nav-collapse --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;container&quot;&gt;
+      &lt;section id=&quot;content&quot; class=&quot;content&quot;&gt;
+        &lt;article id=&quot;post&quot; class=&quot;post&quot;&gt;
+	&lt;h1&gt;This is a Blog Post&lt;/h1&gt;
+	&lt;div class=&quot;post-content&quot;&gt;&lt;p&gt;This is a &lt;strong&gt;blog post&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/article&gt;
+
+&lt;footer&gt;
+	
+&lt;/footer&gt;
+      &lt;/section&gt;
+    &lt;/div&gt; &lt;!-- /container --&gt;
+
+    &lt;!-- Footer spans entire bottom section --&gt;
+    &lt;footer class=&quot;navbar navbar-inverse navbar-fixed-bottom&quot;&gt;
+      &lt;div class=&quot;navbar-inner container&quot;&gt;
+        &lt;ul class=&quot;nav footer-refs pull-left&quot;&gt;
+          &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;Copyright &amp;copy;2010-2013&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;https://github.com/lorenwest/node-monitor/blob/master/LICENSE&quot;&gt;May be freely used and distributed under the MIT licence&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+        &lt;ul class=&quot;nav footer-refs pull-right&quot;&gt;
+          &lt;li&gt;&lt;a class=&quot;nm-pvm-questions&quot; href=&quot;https://github.com/lorenwest/node-monitor/wiki/FAQ&quot;&gt;&lt;i class=&quot;icon-question-sign&quot;&gt;&lt;/i&gt; Questions? &lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class=&quot;nm-pvm-comments&quot; href=&quot;https://twitter.com/intent/tweet?source=webclient&amp;text=Hey%20%23nodemonitor%20community%2C%20&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;icon-bullhorn&quot;&gt;&lt;/i&gt; Comments &lt;i class=&quot;icon-twitter&quot;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/footer&gt;
+
+    &lt;!-- Scripts --&gt;
+    &lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/vendor/jquery.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/vendor/log.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/vendor/modernizr.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/vendor/twitter-bootstrap/js/bootstrap.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/js/underscore.js&quot;&gt;&lt;/script&gt;&lt;script defer=&quot;defer&quot;  src=&quot;http://lorenwest.github.com/node-monitor/js/backbone.js&quot;&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</content>
+		</entry>
+	
+</feed>
