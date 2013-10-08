@@ -10,7 +10,7 @@ docpadConfig = {
 			templateData:
 				site:
 					# The production site
-					url: "http://lorenwest.github.com/node-monitor"
+					url: "http://lorenwest.github.io/node-monitor"
 		embedded:
 			templateData:
 				site:
