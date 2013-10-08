@@ -25,10 +25,6 @@
   console.log("/_/ /_/ /_/\\____//_/ /_//_/  \\__/ \\____//_/           /_/ /_/ /_//_/  /_/ /_/ ");
   console.log("");
 
-  // Send error/fatal logs to the console
-  var Log = Monitor.Log;
-  Log.on('[warn,error,fatal].*', Log.console);
-
   // Boot the monitor server.
   // This accepts websocket connections on the configured port.
   var server = new Monitor.Server();
