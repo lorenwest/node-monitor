@@ -27,7 +27,7 @@ module.exports = {
 
     // Configure the built-in console log output
     consoleLogListener: {
-      pattern: "[error,fatal].*"
+      pattern: "{warn,error,fatal}.*"
     }
   }
 }
