@@ -1,4 +1,10 @@
-0.5.9 / 
+0.5.10 / 2013-10-15
+===================
+
+  * Better console logging
+  * Can chain require().start()
+
+0.5.9 / 2013-10-04
 ==================
 
   * Better probe instantiation error message
