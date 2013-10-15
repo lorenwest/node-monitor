@@ -31,7 +31,7 @@
       });
 
   // Old style watch takes *forever* to connect
-  var WATCH_CONNECT_TIME = FS.watch ? 10 : 1000;
+  var WATCH_CONNECT_TIME = 1200;
 
   // Initialize the server-side sync probes
   var DEFAULT_PROBE_NAME = 'FileSyncProbe';
