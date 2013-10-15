@@ -3,6 +3,7 @@
 
   * Better console logging
   * Can chain require().start()
+  * Travis test
 
 0.5.9 / 2013-10-04
 ==================
