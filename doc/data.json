@@ -2,7 +2,7 @@
     "project": {
         "name": "monitor-min",
         "description": "Monitor Min",
-        "version": "0.5.8",
+        "version": "0.5.10",
         "year": "2013",
         "url": "http://lorenwest.github.com/monitor-min",
         "logo": "",
@@ -2704,7 +2704,7 @@
         {
             "file": "lib/Monitor.js",
             "line": 450,
-            "description": "Start a monitor server in this process\n\nThis is a shortand for the following:\n\n    var Monitor = require('monitor-min');\n    var server = new Monitor.Server();\n    server.start();\n\nFor more fine-tuned starting, see the <a href=\"Server.html\">Server</a> api.",
+            "description": "Start a monitor server in this process\n\nThis is a shortand for the following:\n\n    var Monitor = require('monitor-min');\n    var server = new Monitor.Server();\n    server.start();\n\nIt can be chained like this:\n\n    var Monitor = require('monitor-min').start(),\n        log = Monitor.getLogger('my-app');\n\nFor more fine-tuned starting, see the <a href=\"Server.html\">Server</a> api.",
             "static": 1,
             "itemtype": "method",
             "name": "start",
@@ -2727,12 +2727,16 @@
                     "type": "Function(error)"
                 }
             ],
+            "return": {
+                "description": "monitor  - Returns the static Monitor class (for chaining)",
+                "type": "Monitor"
+            },
             "class": "Monitor",
             "module": "Monitor"
         },
         {
             "file": "lib/Monitor.js",
-            "line": 480,
+            "line": 486,
             "description": "Stop a started monitor server in this process",
             "static": 1,
             "itemtype": "method",
@@ -2749,7 +2753,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 497,
+            "line": 503,
             "description": "Produce a server string representation of the hostName:appName:appInstance\n\nDepending on the presence of the appName and appInstance, this will produce\none of the following:\n\n    hostName\n    hostName:appName\n    hostName:appName:appInstance",
             "itemtype": "method",
             "name": "toServerString",
@@ -2785,7 +2789,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 525,
+            "line": 531,
             "description": "Produce a depth-limited copy of the specified object\n\nFunctions are copied for visual inspection purposes - the fact that\nthey are a function, and any prototype members.  This is so a JSON.stringify\nof the result will show the functions (normally JSON.stringify doesn't output\nfunctions).\n\nThis method is mostly for debugging - for producing a human-readable stream\nrepresentation of the object.  It is an exact copy, except for elements of\ntype function.",
             "itemtype": "method",
             "name": "deepCopy",
@@ -2812,7 +2816,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 599,
+            "line": 605,
             "description": "Produce a recursion-safe JSON string.\n\nThis method recurses the specified object to a maximum specified depth\n(default 4).\n\nIt also indents sub-objects for debugging output.  The indent level can be\nspecified, or set to 0 for no indentation.\n\nThis is mostly useful in debugging when the standard JSON.stringify\nreturns an error.",
             "itemtype": "method",
             "name": "stringify",
@@ -2846,7 +2850,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 627,
+            "line": 633,
             "description": "Expose the stat logger class",
             "access": "protected",
             "tagname": "",
@@ -2864,7 +2868,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 645,
+            "line": 651,
             "description": "Expose the logger class",
             "access": "protected",
             "tagname": "",
@@ -2882,7 +2886,7 @@
         },
         {
             "file": "lib/Monitor.js",
-            "line": 663,
+            "line": 669,
             "description": "Constructor for a list of Monitor objects\n\n    var myList = new Monitor.List(initialElements);",
             "static": 1,
             "itemtype": "method",
@@ -3585,7 +3589,7 @@
         },
         {
             "file": "lib/Server.js",
-            "line": 138,
+            "line": 154,
             "description": "Bind incoming socket events to the server\n\nThis method binds to the socket events and attaches the socket.io\nserver.  It is called when the connection starts listening.",
             "access": "protected",
             "tagname": "",
@@ -3603,7 +3607,7 @@
         },
         {
             "file": "lib/Server.js",
-            "line": 188,
+            "line": 204,
             "description": "Stop processing inbound monitor traffic\n\nThis method stops accepting new inbound monitor connections, and closes\nall existing monitor connections associated with the server.",
             "itemtype": "method",
             "name": "stop",
@@ -3619,7 +3623,7 @@
         },
         {
             "file": "lib/Server.js",
-            "line": 197,
+            "line": 213,
             "description": "The server has stopped\n\nThis event is fired after the server has stopped accepting inbound\nconnections, and has closed all existing connections and released\nassociated resources.",
             "itemtype": "event",
             "name": "stop",
@@ -3628,7 +3632,7 @@
         },
         {
             "file": "lib/Server.js",
-            "line": 229,
+            "line": 245,
             "description": "Constructor for a list of Server objects\n\n    var myList = new Server.List(initialElements);",
             "static": 1,
             "itemtype": "method",

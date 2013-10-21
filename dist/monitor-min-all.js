@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.8 - 2013-09-15 */
+/* monitor-min - v0.5.10 - 2013-10-20 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -7203,6 +7203,11 @@ if (typeof define === "function" && define.amd) {
   *     var server = new Monitor.Server();
   *     server.start();
   *
+  * It can be chained like this:
+  *
+  *     var Monitor = require('monitor-min').start(),
+  *         log = Monitor.getLogger('my-app');
+  *
   * For more fine-tuned starting, see the <a href="Server.html">Server</a> api.
   *
   * @static
@@ -7210,6 +7215,7 @@ if (typeof define === "function" && define.amd) {
   * @param options {Object} - Server.start() options.  OPTIONAL
   *     @param options.port {Integer} - Port to attempt listening on if server isn't specified.  Default: 42000
   * @param callback {Function(error)} - Called when the server is accepting connections.
+  * @return monitor {Monitor} - Returns the static Monitor class (for chaining)
   */
   Monitor.start = function(options, callback) {
     log.info('start', options);
@@ -7221,7 +7227,7 @@ if (typeof define === "function" && define.amd) {
     } else {
       callback();
     }
-
+    return Monitor;
   };
 
   /**
@@ -7427,7 +7433,7 @@ if (typeof define === "function" && define.amd) {
     portsToScan: 20,
     allowExternalConnections: false,
     consoleLogListener: {
-      pattern: "{warn,error,fatal}.*"
+      pattern: "{trace,warn,error,fatal}.*"
     }
   };
   if (commonJS) {
@@ -8916,7 +8922,18 @@ if (typeof define === "function" && define.amd) {
 
         // Try next port if a server is listening on this port
         server.on('error', function(err) {
-          if (!t.get('port')) {t.start({port:port + 1, attempt:attempt + 1}, callback);}
+          if (err.code === 'EADDRINUSE') {
+            // Error if the requested port is in use
+            if (t.get('port')) {
+              log.error('portInUse',{host:host, port:port});
+              return callback({err:'portInUse'});
+            }
+            // Try the next port
+            log.info('portInUse',{host:host, port:port});
+            return t.start({port:port + 1, attempt:attempt + 1}, callback);
+          }
+          // Unknown error
+          callback(err);
         });
 
         // Allow connections from INADDR_ANY or LOCALHOST only
@@ -8933,7 +8950,12 @@ if (typeof define === "function" && define.amd) {
           // Record the server & port, and bind incoming events
           t.set({server: server, port: port});
           t.bindEvents(callback);
-          log.info('listening', {NODE_APP_INSTANCE: process.env.NODE_APP_INSTANCE});
+          log.info('listening', {
+            appName: Config.MonitorMin.appName,
+            NODE_APP_INSTANCE: process.env.NODE_APP_INSTANCE,
+            listeningOn: host,
+            port: port
+          });
         });
       }
     },
@@ -9749,7 +9771,7 @@ if (typeof define === "function" && define.amd) {
           t.runningProbesByKey[probeKey] = probeImpl;
           t.runningProbesById[probeImpl.id] = probeImpl;
         } catch (e) {
-          var error = {msg: 'Error instantiating probe ' + probeClass, error: e};
+          var error = {msg: 'Error instantiating probe ' + probeClass, error: e.message};
           log.error('connect', error);
           return whenDone(error);
         }
