@@ -1,7 +1,8 @@
-0.5.11 / 2013-10-15
+0.5.11 / 
 ===================
 
   * Added TRACE to default console logging output
+  * Better server listen error handling and debug output
 
 0.5.10 / 2013-10-15
 ===================
