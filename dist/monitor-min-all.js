@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.11 - 2013-10-20 */
+/* monitor-min - v0.5.11 - 2013-10-22 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -8207,7 +8207,7 @@ if (typeof define === "function" && define.amd) {
         controlFn.call(t, params, whenDone);
       } catch (e) {
         errMsg = 'Error calling control: ' + t.probeClass + ':' + name;
-        whenDone({msg:errMsg, err: e});
+        whenDone({msg:errMsg, err: e.toString()});
       }
     },
 

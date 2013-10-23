@@ -1,4 +1,4 @@
-/* monitor-min - v0.5.11 - 2013-10-20 */
+/* monitor-min - v0.5.11 - 2013-10-22 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -1462,7 +1462,7 @@
         controlFn.call(t, params, whenDone);
       } catch (e) {
         errMsg = 'Error calling control: ' + t.probeClass + ':' + name;
-        whenDone({msg:errMsg, err: e});
+        whenDone({msg:errMsg, err: e.toString()});
       }
     },
 

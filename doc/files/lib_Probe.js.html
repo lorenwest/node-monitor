@@ -289,7 +289,7 @@
         controlFn.call(t, params, whenDone);
       } catch (e) {
         errMsg = &#x27;Error calling control: &#x27; + t.probeClass + &#x27;:&#x27; + name;
-        whenDone({msg:errMsg, err: e});
+        whenDone({msg:errMsg, err: e.toString()});
       }
     },
 

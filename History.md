@@ -1,8 +1,9 @@
-0.5.11 / 
+0.5.11 / 2013-10-22
 ===================
 
   * Added TRACE to default console logging output
   * Better server listen error handling and debug output
+  * Better error message on probe failure
 
 0.5.10 / 2013-10-15
 ===================
