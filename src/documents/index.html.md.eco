@@ -21,12 +21,9 @@ title: Node Monitor
 $ npm start monitor</pre>
 </p>
 
-<p class="message">
+<p class="message clearfix">
   Then start building dashboards by adding pre-built components, or writing custom components for your application or NPM module.
 </p>
-
-
-<p class="message clearfix"></p>
 
 <!-- Bottom row of columns -->
 <div class="row">
