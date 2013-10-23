@@ -12,16 +12,10 @@ title: Node Monitor
 
   <p class="message">
     <img style="float:right; margin-left: 20px; height: 200px; border-radius:4px" src="<%- @getUrl('/img/dashboard.png') %>">
-    Node-Monitor is currently being prepared for release.
+    Node Monitor is a Node.js webapp for monitoring and controlling Node.js application servers.
   </p>
 
-  <p class="message">
-    Check back soon for more complete documentation.
-  </p>
-
-  <p class="message clearfix">
-    What would you monitor?
-  </p>
+  <p class="message clearfix"></p>
 
 <!-- Bottom row of columns -->
 <div class="row">
