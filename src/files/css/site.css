@@ -22,10 +22,10 @@ h1, h2 {
 }
 
 p.message {
-  margin: 1em 0;
+  margin: 1em 40px 0 0;
   font-size: 1.2em;
   font-weight: 300;
-  color: #777;
+  x-color: #777;
 }
 
 .navbar-inner .container {
