@@ -1,3 +1,8 @@
+0.5.12 / 2013-10-23
+===================
+
+  * Updated config dependency to not freak out if the config directory is absent
+
 0.5.11 / 2013-10-22
 ===================
 
