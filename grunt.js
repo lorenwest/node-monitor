@@ -1,7 +1,7 @@
 // grunt.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For all details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 
 var exec = require('child_process').exec;
 
@@ -108,7 +108,7 @@ module.exports = function(grunt) {
     child = exec(cmd, function (error, stdout, stderr) {
       console.log(stderr);
       console.log(stdout);
-      cmd = 'cp -R doc/* ../lorenwest.github.com/monitor';
+      cmd = 'cp -R doc/* ../lorenwest.github.com/node-monitor';
       console.log(cmd);
       child = exec(cmd, function (error, stdout, stderr) {
         console.log(stderr);

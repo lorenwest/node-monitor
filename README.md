@@ -3,7 +3,7 @@ NodeJS Monitoring
 
 Remote monitoring and control for your node.js app
 
-[![Build Status](https://secure.travis-ci.org/lorenwest/monitor.png?branch=master)](https://travis-ci.org/lorenwest/monitor)
+[![Build Status](https://secure.travis-ci.org/lorenwest/node-monitor.png?branch=master)](https://travis-ci.org/lorenwest/node-monitor)
 
 Introduction
 ------------
@@ -20,7 +20,7 @@ Think of it as a supercharged [JMX](http://www.google.com/search?q=jmx&btnI) for
 * **Configuration control** - Inspect and tune your [app configurations](https://github.com/lorenwest/node-config) while running
 * **Powerful** - Enterprise grade for multi-node deployments
 * **Lightweight** - Trim enough to run in a [Raspberry Pi](http://www.raspberrypi.org/faqs) or [BeagleBoard](http://beagleboard.org)
-* **Hackable** - For specialized monitoring, and a [plugin directory](https://github.com/lorenwest/monitor/wiki)
+* **Hackable** - For specialized monitoring, and a [plugin directory](https://github.com/lorenwest/node-monitor/wiki)
 
 Quick Start
 -----------
@@ -85,8 +85,8 @@ monitoring client, or build a visual control center with the
 More Information
 ----------------
 
-* [Monitor Documentation](http://lorenwest.github.io/monitor)
-* [Monitor Dashboard](https://github.com/lorenwest/node-monitor)
+* [Monitor Documentation](http://lorenwest.github.io/node-monitor)
+* [Monitor Dashboard](https://github.com/lorenwest/monitor-dashboard)
 * [Node Config](https://github.com/lorenwest/node-config)
 
 License
@@ -94,6 +94,6 @@ License
 
 May be freely distributed under the MIT license
 
-See [LICENSE](https://github.com/lorenwest/monitor/blob/master/LICENSE) file.
+See [LICENSE](https://github.com/lorenwest/node-monitor/blob/master/LICENSE) file.
 
 Copyright (c) 2010-2013 Loren West
