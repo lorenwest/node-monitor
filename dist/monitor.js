@@ -1,9 +1,9 @@
-/* monitor - v0.5.12 - 2013-10-31 */
+/* monitor - v0.6.0 - 2013-10-31 */
 
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -717,7 +717,7 @@
 // Stat.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -1054,7 +1054,7 @@
 // Log.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -1309,7 +1309,7 @@
 // Probe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -1508,7 +1508,7 @@
 // Connection.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -2065,7 +2065,7 @@
 // Server.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -2323,7 +2323,7 @@
 // Router.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -3597,7 +3597,7 @@
 // PollingProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -3688,7 +3688,7 @@
 // StreamProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -3811,7 +3811,7 @@
 // InspectProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 
 /* This class is evil.  You probably shouldn't use it.  Or drink.  Or drink while using it. */
 /*jslint evil: true */
@@ -3974,7 +3974,7 @@
 // StatProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root) {
 
   // Module loading - this runs server-side only
@@ -4042,7 +4042,7 @@
 // LogProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root) {
 
   // Module loading - this runs server-side only

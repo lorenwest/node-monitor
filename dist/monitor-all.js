@@ -1,4 +1,4 @@
-/* monitor - v0.5.12 - 2013-10-31 */
+/* monitor - v0.6.0 - 2013-10-31 */
 
 //     Underscore.js 1.4.4
 //     http://underscorejs.org
@@ -6748,7 +6748,7 @@ if (typeof define === "function" && define.amd) {
 // Monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -7462,7 +7462,7 @@ if (typeof define === "function" && define.amd) {
 // Stat.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -7799,7 +7799,7 @@ if (typeof define === "function" && define.amd) {
 // Log.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -8054,7 +8054,7 @@ if (typeof define === "function" && define.amd) {
 // Probe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -8253,7 +8253,7 @@ if (typeof define === "function" && define.amd) {
 // Connection.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -8810,7 +8810,7 @@ if (typeof define === "function" && define.amd) {
 // Server.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -9068,7 +9068,7 @@ if (typeof define === "function" && define.amd) {
 // Router.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -10342,7 +10342,7 @@ if (typeof define === "function" && define.amd) {
 // PollingProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -10433,7 +10433,7 @@ if (typeof define === "function" && define.amd) {
 // StreamProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root){
 
   // Module loading
@@ -10556,7 +10556,7 @@ if (typeof define === "function" && define.amd) {
 // InspectProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 
 /* This class is evil.  You probably shouldn't use it.  Or drink.  Or drink while using it. */
 /*jslint evil: true */
@@ -10719,7 +10719,7 @@ if (typeof define === "function" && define.amd) {
 // StatProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root) {
 
   // Module loading - this runs server-side only
@@ -10787,7 +10787,7 @@ if (typeof define === "function" && define.amd) {
 // LogProbe.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor
+// http://lorenwest.github.com/node-monitor
 (function(root) {
 
   // Module loading - this runs server-side only
