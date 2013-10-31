@@ -35,7 +35,7 @@
     }
 
     var connectTo = Monitor.Config.Monitor.allowExternalConnections ? OS.hostname() : 'localhost';
-    console.log('Headless monitor service started on host: ' + connectTo);
+    console.log('Monitor service started on host: ' + connectTo);
 
     // Output security concerns
     if (!Monitor.Config.Monitor.allowExternalConnections) {
