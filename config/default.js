@@ -1,10 +1,10 @@
 // Default configurations.
 module.exports = {
-  MonitorMin: {
+  Monitor: {
 
     // This is the running applicaiton name.  It should be overridden
     // in applications that embed the monitor package.
-    appName: 'MonitorMin',
+    appName: 'Monitor',
 
     // The base port to use for monitor connections.  If this is changed,
     // it must be changed on all processes in the monitor network as it

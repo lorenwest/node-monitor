@@ -3,12 +3,12 @@ NodeJS Monitoring
 
 Remote monitoring and control for your node.js app
 
-[![Build Status](https://secure.travis-ci.org/lorenwest/monitor-min.png?branch=master)](https://travis-ci.org/lorenwest/monitor-min)
+[![Build Status](https://secure.travis-ci.org/lorenwest/monitor.png?branch=master)](https://travis-ci.org/lorenwest/monitor)
 
 Introduction
 ------------
 
-This is the minimum component necessary for remote monitoring and control of your NodeJS app.
+This is the core library for remote monitoring and control of your NodeJS app.
 
 Think of it as a supercharged [JMX](http://www.google.com/search?q=jmx&btnI) for NodeJS:
 
@@ -20,20 +20,20 @@ Think of it as a supercharged [JMX](http://www.google.com/search?q=jmx&btnI) for
 * **Configuration control** - Inspect and tune your [app configurations](https://github.com/lorenwest/node-config) while running
 * **Powerful** - Enterprise grade for multi-node deployments
 * **Lightweight** - Trim enough to run in a [Raspberry Pi](http://www.raspberrypi.org/faqs) or [BeagleBoard](http://beagleboard.org)
-* **Hackable** - For specialized monitoring, and a [plugin directory](https://github.com/lorenwest/monitor-min/wiki)
+* **Hackable** - For specialized monitoring, and a [plugin directory](https://github.com/lorenwest/monitor/wiki)
 
 Quick Start
 -----------
 
 **Install using npm**
 
-    $ npm install monitor-min
+    $ npm install monitor
 
 **Run standalone**
 
 Play with the built-in server before embedding into your app:
 
-    $ npm start monitor-min
+    $ npm start monitor
 
 Remotely Connect
 ----------------
@@ -47,7 +47,7 @@ With the above server running in another window...
 **Create a test.js**
 
     // Get a monitor to the Process probe
-    var Monitor = require('monitor-min');
+    var Monitor = require('monitor');
     var processMonitor = new Monitor({server:'localhost', probeClass: 'Process'});
     processMonitor.connect(function(error) {
 
@@ -76,7 +76,7 @@ Embedding Into Your App
 
 Place the following line into your app server bootstrap:
 
-    require('monitor-min').start();
+    require('monitor').start();
 
 Now start your app server and run the same test.js, design your own
 monitoring client, or build a visual control center with the
@@ -85,7 +85,7 @@ monitoring client, or build a visual control center with the
 More Information
 ----------------
 
-* [Monitor-Min Documentation](http://lorenwest.github.com/monitor-min)
+* [Monitor Documentation](http://lorenwest.github.io/monitor)
 * [Monitor Dashboard](https://github.com/lorenwest/node-monitor)
 * [Node Config](https://github.com/lorenwest/node-config)
 
@@ -94,6 +94,6 @@ License
 
 May be freely distributed under the MIT license
 
-See [LICENSE](https://github.com/lorenwest/monitor-min/blob/master/LICENSE) file.
+See [LICENSE](https://github.com/lorenwest/monitor/blob/master/LICENSE) file.
 
 Copyright (c) 2010-2013 Loren West

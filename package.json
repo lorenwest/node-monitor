@@ -1,5 +1,5 @@
 {
-  "name": "monitor-min",
+  "name": "monitor",
   "description": "Runtime monitoring for node.js applications",
   "version": "0.5.12",
   "main": "./lib/index.js",
@@ -8,15 +8,15 @@
     "email": "open_source@lorenwest.com",
     "url": "https://github.com/lorenwest"
   },
-  "homepage": "http://lorenwest.github.com/monitor-min/",
+  "homepage": "http://lorenwest.github.com/monitor/",
   "repository": {
     "type": "git",
-    "url": "git://github.com/lorenwest/monitor-min.git"
+    "url": "git://github.com/lorenwest/monitor.git"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/lorenwest/monitor-min/blob/master/LICENSE"
+      "url": "https://github.com/lorenwest/monitor/blob/master/LICENSE"
     }
   ],
   "dependencies": {

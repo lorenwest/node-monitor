@@ -1,7 +1,7 @@
 // grunt.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For all details and documentation:
-// http://lorenwest.github.com/monitor-min
+// http://lorenwest.github.com/monitor
 
 var exec = require('child_process').exec;
 
@@ -62,22 +62,22 @@ module.exports = function(grunt) {
     concat: {
       lib: {
         src: ['<banner>', '<config:monitor.lib>'],
-        dest: './dist/monitor-min.js'
+        dest: './dist/monitor.js'
       },
       all: {
         src: ['<banner>', '<config:monitor.ext>', '<config:monitor.lib>'],
-        dest: './dist/monitor-min-all.js'
+        dest: './dist/monitor-all.js'
       }
     },
     min: {
       lib: {
-        src: ['<banner>', './dist/monitor-min.js'],
-        dest: './dist/monitor-min.min.js'
+        src: ['<banner>', './dist/monitor.js'],
+        dest: './dist/monitor.min.js'
 
       },
       all: {
-        src: ['<banner>', './dist/monitor-min-all.js'],
-        dest: './dist/monitor-min-all.min.js'
+        src: ['<banner>', './dist/monitor-all.js'],
+        dest: './dist/monitor-all.min.js'
       }
     },
     jshint: {
@@ -108,7 +108,7 @@ module.exports = function(grunt) {
     child = exec(cmd, function (error, stdout, stderr) {
       console.log(stderr);
       console.log(stdout);
-      cmd = 'cp -R doc/* ../lorenwest.github.com/monitor-min';
+      cmd = 'cp -R doc/* ../lorenwest.github.com/monitor';
       console.log(cmd);
       child = exec(cmd, function (error, stdout, stderr) {
         console.log(stderr);

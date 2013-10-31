@@ -1,9 +1,9 @@
 {
-  "name": "monitor-min",
-  "description": "Monitor Min",
+  "name": "monitor",
+  "description": "Monitor",
   "version": "0.0.0",
   "year": "2013",
-  "url": "http://lorenwest.github.com/monitor-min",
+  "url": "http://lorenwest.github.com/monitor",
   "logo": "",
   "themedir": "./config/doc",
   "options": {

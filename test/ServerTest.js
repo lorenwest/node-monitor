@@ -1,7 +1,7 @@
 // ServerTest.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor-min
+// http://lorenwest.github.com/monitor
 (function(root){
 
   // Dependencies
@@ -57,7 +57,7 @@
       var server1 = new Monitor.Server(), port1, port2;
       server1.on('start', function() {
         port1 = server1.get('port');
-        test.ok(port1 >= Monitor.Config.MonitorMin.serviceBasePort, 'The server started in the correct port range');
+        test.ok(port1 >= Monitor.Config.Monitor.serviceBasePort, 'The server started in the correct port range');
         var server2 = new Monitor.Server();
         server2.on('start', function() {
           port2 = server2.get('port');

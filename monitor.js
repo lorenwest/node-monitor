@@ -1,7 +1,7 @@
 // monitor.js (c) 2010-2013 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
-// http://lorenwest.github.com/monitor-min
+// http://lorenwest.github.com/monitor
 (function(root){
 
   // Load dependencies
@@ -19,10 +19,10 @@
 
   console.log("");
   console.log("                        __________");
-  console.log("_______ ___________________(_)_  /______________      _______ ______(_)______ ");
-  console.log("__  __ `__ \\  __ \\_  __ \\_  /_  __/  __ \\_  ___/________  __ `__ \\_  /__  __ \\");
-  console.log("_  / / / / / /_/ /  / / /  / / /_ / /_/ /  /   _/_____/  / / / / /  / _  / / /");
-  console.log("/_/ /_/ /_/\\____//_/ /_//_/  \\__/ \\____//_/           /_/ /_/ /_//_/  /_/ /_/ ");
+  console.log("_______ ___________________(_)_  /______________ ");
+  console.log("__  __ `__ \\  __ \\_  __ \\_  /_  __/  __ \\_  ___/");
+  console.log("_  / / / / / /_/ /  / / /  / / /_ / /_/ /  /");
+  console.log("/_/ /_/ /_/\\____//_/ /_//_/  \\__/ \\____//_/");
   console.log("");
 
   // Boot the monitor server.
@@ -30,15 +30,15 @@
   var server = new Monitor.Server();
   server.start(function(error) {
     if (error) {
-      log.error('monitor-min.start', error);
+      log.error('monitor.start', error);
       return;
     }
 
-    var connectTo = Monitor.Config.MonitorMin.allowExternalConnections ? OS.hostname() : 'localhost';
+    var connectTo = Monitor.Config.Monitor.allowExternalConnections ? OS.hostname() : 'localhost';
     console.log('Headless monitor service started on host: ' + connectTo);
 
     // Output security concerns
-    if (!Monitor.Config.MonitorMin.allowExternalConnections) {
+    if (!Monitor.Config.Monitor.allowExternalConnections) {
       console.log("");
       console.log("External connections disabled.");
       console.log("See " + process.cwd() + "/config/external.js for more information.");
@@ -56,8 +56,8 @@
     }
 
     // Don't allow the process to continue in an unknown state.
-    log.fatal('moniotor-min.uncaught', 'Uncaught Exception: ' + err.message);
-    log.fatal('moniotor-min.uncaught', err.stack);
+    log.fatal('moniotor.uncaught', 'Uncaught Exception: ' + err.message);
+    log.fatal('moniotor.uncaught', err.stack);
     server.stop(function(){
       process.exit(1);
     });

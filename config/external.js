@@ -4,7 +4,7 @@
 // It should be used only after assuring the network firewall prevents
 // untrusted connections on the service port range (usually 42000+).
 module.exports = {
-  MonitorMin: {
+  Monitor: {
     allowExternalConnections: true
   }
 }
