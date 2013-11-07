@@ -1,14 +1,27 @@
 {
-  "name": "node-monitor-pages",
-  "version": "0.1.0",
+  "name": "monitor",
+  "description": "Documentation pages for node-monitor",
+  "version": "0.6.0",
   "engines": {
-    "node": "0.8.x",
+    "node": "0.10.x",
     "npm": "1.1.x"
   },
+  "author": {
+    "name": "Loren West",
+    "email": "open_source@lorenwest.com",
+    "url": "https://github.com/lorenwest"
+  },
+  "homepage": "http://lorenwest.github.com/node-monitor/",
   "repository": {
     "type" : "git",
     "url" : "http://github.com/lorenwest/node-monitor.git"
   },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/lorenwest/node-monitor/blob/master/LICENSE"
+    }
+  ],
   "dependencies": {
     "docpad": "6.x",
     "docpad-plugin-coffeescript": "2.x",
@@ -25,5 +38,9 @@
   "devDependencies": {
     "docpad-plugin-livereload": "2.x"
   },
-  "main": "node_modules/docpad/bin/docpad-server"
+  "main": "node_modules/docpad/bin/docpad-server",
+  "scripts": {
+    "test": "true",
+    "start": "./docpad.sh run"
+  }
 }
