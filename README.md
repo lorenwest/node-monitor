@@ -1,7 +1,7 @@
 Node Monitor Site
 =================
 
-This contains the gh-pages branch of the node-monitor repository.
+This contains the node-monitor-pages branch of the node-monitor repository.
 It's best to place this into a new directory, as it has a completely
 different directory structure from the node monitor source.
 
@@ -16,3 +16,6 @@ To Publish
 ----------
 
     ./docpad.sh deploy-ghpages
+
+This generates the correct static site for github pages, and publishes
+the output directory to the gh-pages branch.
