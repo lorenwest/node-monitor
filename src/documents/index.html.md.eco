@@ -12,17 +12,28 @@ title: Node Monitor
 
 <p class="message">
   <img style="float:right; margin-left: 20px; height: 200px; border-radius:4px" src="<%- @getUrl('/img/dashboard.png') %>">
-  Node Monitor is a Node.js webapp for monitoring and controlling Node.js application servers.
+  Node Monitor is an open source component you add to your Node.js app, and a dashboard for visualizing and controlling
+  your app servers at runtime.
 </p>
 
 <p class="message">
-  Installation and running is a breeze with Node.js version 0.8 or above
-  <pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install monitor
-$ npm start monitor</pre>
+  To add monitoring, install node monitor onto your app servers:
 </p>
+<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install -g monitor</pre>
+<p class="message">
+  Then add it to your application startup, and restart your app:
+</p>
+<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">var Monitor = include('monitor').start();</pre>
+<p class="message">
+  To monitor your app servers, install the dashboard (onto localhost for now):
+</p>
+<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install -g monitor-dashboard
+$ npm start monitor-dashboard</pre>
 
 <p class="message clearfix">
-  Then start building dashboards by adding pre-built components, or writing custom components for your application or NPM module.
+  Now navigate to <a href="http://localhost:4200/">http://localhost:4200/</a> in your browser.
+  The [Getting Started](<%- @getUrl('/pages/getting-started.html') %>) page has more information
+  about building dashboards using the built-in components.
 </p>
 
 <!-- Bottom row of columns -->
@@ -30,8 +41,8 @@ $ npm start monitor</pre>
   <div class="span4">
     <h2>Dashboards</h2>
     <p>
-      Build as many dashboards and control panels as you like.
-      Node Monitor is a web site where each page is a different dashboard.
+      The Dashboard app lets you assemble components into pages
+      in your web browser, where each page is a different dashboard.
     </p>
     <p>
       <a class="btn" href="<%- @getUrl('/pages/overview/dashboards.html') %>">View details &raquo;</a>
@@ -40,15 +51,15 @@ $ npm start monitor</pre>
   <div class="span4">
     <h2>Tours</h2>
     <p>
-      Build a tour to automatically cycle through<br>
-      your favorite Node Monitor dashboards.<br><br>
+      Automatically cycle through
+      your dashboards on a full screen monitor.<br><br>
     <p><a class="btn" href="<%- @getUrl('/pages/overview/tours.html') %>">View details &raquo;</a></p>
  </div>
   <div class="span4">
     <h2>Apps</h2>
     <p>
-      Use Node Monitor in your apps, distribute Node Monitor with your apps,
-      or write Node Monitor add-ons for your NPM modules.
+      Build monitoring into your apps and Node.js modules, and distribute
+      your monitors with NPM.
     </p>
     <p><a class="btn" href="<%- @getUrl('/pages/overview/apps.html') %>">View details &raquo;</a></p>
   </div>

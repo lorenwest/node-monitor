@@ -69,7 +69,7 @@
     </div> <!-- /container -->
 
     <!-- Footer spans entire bottom section -->
-    <footer class="navbar navbar-inverse navbar-fixed-bottom">
+    <footer class="navbar navbar-inverse navbar-bottom">
       <div class="navbar-inner container">
         <ul class="nav footer-refs pull-left">
           <li><a href="https://github.com/lorenwest/node-monitor/blob/master/LICENSE">Copyright &copy;2010-2013</a></li>

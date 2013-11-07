@@ -5,14 +5,14 @@ title: Page Tours
 
 # Page Tours
 
-<img style="float:left; margin-right: 20px;" src="<%- @getUrl('/img/tour.png') %>">
+<img style="float:left; margin-right: 20px; height:78px" src="<%- @getUrl('/img/tour.png') %>">
 
-Tours are located in the left sidebar.  They represent a grouping of
-pages on your monitor site.
+Tours are located in the bottom section of the left sidebar.
+They represent a grouping of pages on your node monitor site.
 
 When a tour is selected from the sidebar, the first page of the tour is loaded and
 a tour control is displayed at the bottom of the screen.  The tour runs until it is
-stopped from the control.
+paused or stopped from the control.
 
 Most tours are configured to automatically cycle through the pages at a specified interval.
 
@@ -30,7 +30,5 @@ a Tour Settings option appears in the heading.
 Clicking that icon opens the Tour Settings panel (shown at the right) where you can add new tours,
 manage tour pages, and remove tours.
 
-Your changes are saved by pressing the Save button.
-
-
+Changes made to the tour aren't saved until the Save button is pressed.
 <div class="clearfix"></div>

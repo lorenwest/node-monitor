@@ -5,46 +5,60 @@ title: Monitor Apps
 
 # Monitor Apps
 
-<img style="float:right; margin: 10px 20px 20px 40px; border-radius: 6px;" src="<%- @getUrl('/img/app.png') %>">
+<img style="float:right; margin: -36px 20px -20px 40px; height:100px; border-radius: 6px;" src="<%- @getUrl('/img/app.png') %>">
 
-Monitor apps extend node-monitor with new capabilities.  They can be written to
-run locally in a node.js application, or packaged for installation by npm into any
-node.js application.
+Monitor apps extend node-monitor, adding customized monitors and dashboard views for your application.
+Monitor apps can be included in your own Node.js application, or packaged separately
+for installation by npm.
 
+<a class="clearfix"></a>
 ### Probes
 
-Data probes are server-side components installed into (or close to) the systems being monitored.
-Built as Backbone models extended from a common parent, probes define the data structure exposed
-to a monitor, and any remote control functionality.
+Data probes are installed into (or close to) the systems being monitored.
+Similar in concept to [JMX beans](http://www.google.com/search?q=jmx&btnI) in the Java
+world, probes are simply JavaScript data models describing the system being monitored.
 
-Probes require the [monitor-min](https://github.com/lorenwest/monitor-min) module - a core set of functionality available
-to all probes.
+Built as Backbone.js data models, probes are easy to write.  Just add data elements when
+initialized, and set them as they change. Probes are activated only while being monitored,
+and changes are forwarded to monitors in real time using socket.io push.
 
-The [building data probes](<%- @getUrl('/pages/developers/probes.html') %>) page has information about developing probes for your
-application or node.js module.
-
-
+<a class="clearfix"></a>
 ### Views
 
-Views are client-side components written to visualize probe data.
-They can provide alternate views of existing probes, or offer custom views of
-probes delivered in the app.
+<img style="float:right; margin: -36px 20px 0 40px; height: 280px; border-radius:6px; border:4px solid #888;" src="<%- @getUrl('/img/new_component.png') %>">
+Views are client-side components placed into the dashboard to visualize probes.
 
 When installed, views appear in the New Component screen, and can be added to
-any dashboard.  They come with a standard settings screen that can be
+any dashboard.  They come with a standard settings screen that is often
 extended to offer fine grained configuration.
 
 Views can also pass user input on to probes having remote control
 functionality, turning your dashboards into control panels.
 
-The [building monitor views](<%- @getUrl('/pages/developers/views.html') %>) page has information about writing visualizations
-for your node.js application or module.
-
-
+Built as Backbone.js view objects, creating custom views is straight forward
+with many exaples to copy from.
+<a class="clearfix"></a>
 ### Pages & Tours
 
-Applications can contain monitor pages for standard dashboards, or documentation
-for the probes and views contained in the app.
+<img style="float:left; margin-right: 20px; margin-bottom: 10px; height: 190px; border-radius:6px" src="<%- @getUrl('/img/sidebar.png') %>">
+Monitor apps can also contain pre-built dashboards (pages) and tours.
 
-Applications may also contain tours to guide you through these pages.
+Pages delivered with your application are shown in the sidebar under the "App Pages" menu, and tours delivered with your application are shown in the "App Tours" menu.
 
+<a class="clearfix"></a>
+### Packaging your Application
+
+Node Monitor apps are packaged and delivered using the standard package.json file and NPM.
+
+If you are building a monitor for an existing application (say, 'myapp'), the convention for
+naming your monitor app is 'myapp-monitor'.
+
+If your monitor app has probes they must be loaded by the host application,
+usually by requesting the host application to require('myapp-monitor') in their
+application startup.
+
+Views included in your monitor app are automatically discovered by the dashboard.
+The monitor app must be in the Node.js require path of the dashboard, and your
+package.json file must have a dependency on monitor-dashboard for it to be discovered.
+
+<a class="clearfix"></a>

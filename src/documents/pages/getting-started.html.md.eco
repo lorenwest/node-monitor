@@ -9,32 +9,17 @@ title: Getting Started
 
 <img style="float:left; margin-right: 10px; height: 100px; width: 150px; border-radius:8px" src="<%- @getUrl('/img/gauge.png') %>">
 
-Node Monitor is a [Node.JS](http://nodejs.org) webapp for monitoring
-and controlling Node.JS application servers.  It hosts components assembled onto [dashboards](<%- @getUrl('/pages/overview/dashboards.html') %>)
+Node Monitor is an open source [Node.js](http://nodejs.org) webapp for Node.js applications.
+It hosts components assembled onto [dashboards](<%- @getUrl('/pages/overview/dashboards.html') %>)
 you create for visualizing and controlling your systems in real time.
 
 It has built-in components for monitoring process information, application logs
-events, business stats, and objects running within a Node.JS process.  A REPL
+events, business stats, and objects running within a Node.js process.  A REPL
 console lets you log in and inspect your app servers from your desktop.
 
 Designed for extentsion, Node Monitor allows you to write specialized data probes
 and visualizations to suit your needs. Module developers can write add-ons for
-monitoring and controlling your Node.JS modules.
-
-Let's get started by playing with it on your local workstation.
-
-## Installing Node Monitor
-
-With [Node.JS installed](http://nodejs.org/install) on your workstation,
-enter the following:
-
-    $ npm install monitor
-    $ npm start monitor
-
-This installs Node Monitor and starts it on the default port 4200.
-
-Now point your browser to
-<a href="http://localhost:4200">localhost:4200</a>
+monitoring and controlling your modules.
 
 ## Dashboards
 
@@ -69,9 +54,9 @@ For more on tours, head over to the [tour overview](<%- @getUrl('/pages/overview
 
 ## Apps
 
-<img style="float:right; margin: 0 20px 60px 20px; border-radius: 10px;" src="<%- @getUrl('/img/app.png') %>">
+<img style="float:right; margin: -36px 20px 60px 20px; height:100px; border-radius: 10px;" src="<%- @getUrl('/img/app.png') %>">
 
-Node monitor can be extended to monitor anything accessable from a running Node.JS process.
+Node monitor can be extended to monitor anything accessable from a running Node.js process.
 
 Are you the publisher of an [npm.org](http://npm.org) module?
 Head over to the [app overview](<%- @getUrl('/pages/overview/apps.html') %>) page for
