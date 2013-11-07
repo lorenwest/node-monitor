@@ -23,7 +23,7 @@ title: Node Monitor
 <p class="message">
   Then add it to your application startup, and restart your app:
 </p>
-<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">var Monitor = include('monitor').start();</pre>
+<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">var Monitor = require('monitor').start();</pre>
 <p class="message">
   To monitor your app servers, install the dashboard (onto localhost for now):
 </p>
