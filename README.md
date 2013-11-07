@@ -4,7 +4,7 @@ Node.js Monitoring
 [![Build Status](https://secure.travis-ci.org/lorenwest/node-monitor.png?branch=master)](https://travis-ci.org/lorenwest/node-monitor)
 
 Node Monitor is an open source component you add to your Node.js app, 
-and a dashboard for visualizing and controlling your app servers at runtime.
+and a [dashboard app](https://github.com/lorenwest/monitor-dashboard) for visualizing and controlling your app servers at runtime.
 
 [![Dashboard](http://lorenwest.github.io/node-monitor/img/dashboard.png)](http://lorenwest.github.io/node-monitor)
 
