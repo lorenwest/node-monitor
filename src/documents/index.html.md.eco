@@ -11,7 +11,7 @@ title: Node Monitor
 </div>
 
 <p class="message">
-  <img style="float:right; margin-left: 20px; height: 200px; border-radius:4px" src="<%- @getUrl('/img/dashboard.png') %>">
+  <img style="float:right; margin: 0 -40px 0 20px; height: 230px; border-radius:4px" src="<%- @getUrl('/img/dashboard.png') %>">
   Node Monitor is an open source component you add to your Node.js app, and a dashboard for visualizing and controlling
   your app servers at runtime.
 </p>
