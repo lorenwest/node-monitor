@@ -36,6 +36,11 @@ $ npm start monitor-dashboard</pre>
   about building dashboards using the built-in components.
 </p>
 
+<p class="message">
+  And if you like what you see, send some &hearts; to the project team...
+</p>
+<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm star monitor monitor-dashboard</pre>
+
 <!-- Bottom row of columns -->
 <div class="row">
   <div class="span4">
