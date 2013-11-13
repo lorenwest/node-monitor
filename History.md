@@ -1,3 +1,9 @@
+0.6.2 / 2013-11-12
+===================
+
+  * Better console log formatting
+  * Exported global.Monitor for multi-module loading
+
 0.6.1 / 2013-11-07
 ===================
 
