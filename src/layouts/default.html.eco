@@ -72,12 +72,12 @@
     <footer class="navbar navbar-inverse navbar-bottom">
       <div class="navbar-inner container">
         <ul class="nav footer-refs pull-left">
-          <li><a href="https://github.com/lorenwest/node-monitor/blob/master/LICENSE">Copyright &copy;2010-2013</a></li>
-          <li><a href="https://github.com/lorenwest/node-monitor/blob/master/LICENSE">May be freely used and distributed under the MIT licence</a></li>
+          <li><a href="https://github.com/lorenwest/monitor-dashboard">Copyright &copy;2010-2013</a></li>
+          <li><a href="https://github.com/lorenwest/monitor-dashboard/blob/master/LICENSE">May be freely used and distributed under the MIT licence</a></li>
 	</ul>
         <ul class="nav footer-refs pull-right">
-          <li><a class="nm-pvm-questions" href="https://github.com/lorenwest/node-monitor/wiki/FAQ"><i class="icon-question-sign"></i> Questions? </a></li>
-          <li><a class="nm-pvm-comments" href="https://twitter.com/intent/tweet?source=webclient&text=Hey%20%23nodemonitor%20community%2C%20" target="_blank"><i class="icon-bullhorn"></i> Comments <i class="icon-twitter"></i></a></li>
+          <li><a class="nm-pvm-questions" href="https://github.com/lorenwest/monitor-dashboard/issues"><i class="icon-question-sign"></i> Questions? </a></li>
+          <li><a class="nm-pvm-comments" href="https://twitter.com/intent/tweet?source=webclient&text=%23NodeMonitor%20%23NodeJS" target="_blank"><i class="icon-bullhorn"></i> Comments <i class="icon-twitter"></i></a></li>
         </ul>
       </div>
     </footer>
