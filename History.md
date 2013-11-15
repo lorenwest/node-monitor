@@ -1,3 +1,8 @@
+0.6.3 / 2013-11-14
+===================
+
+  * Silence error logging that were common-case vs. errors
+
 0.6.2 / 2013-11-12
 ===================
 
