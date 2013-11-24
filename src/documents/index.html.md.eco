@@ -19,7 +19,7 @@ title: Node Monitor
 <p class="message">
   To add monitoring, install node monitor onto your app servers:
 </p>
-<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install -g monitor</pre>
+<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install monitor</pre>
 <p class="message">
   Then add it to your application startup, and restart your app:
 </p>
@@ -27,7 +27,7 @@ title: Node Monitor
 <p class="message">
   To monitor your app servers, install the dashboard (onto localhost for now):
 </p>
-<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install -g monitor-dashboard
+<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install monitor-dashboard
 $ npm start monitor-dashboard</pre>
 
 <p class="message clearfix">
@@ -37,7 +37,7 @@ $ npm start monitor-dashboard</pre>
 </p>
 
 <p class="message">
-  And if you like what you see, send some &hearts; to the project team...
+  If you like what you see, send some &hearts; to the project team...
 </p>
 <pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm star monitor monitor-dashboard</pre>
 
@@ -64,7 +64,7 @@ $ npm start monitor-dashboard</pre>
     <h2>Apps</h2>
     <p>
       Build monitoring into your apps and Node.js modules, and distribute
-      your monitors with NPM.
+      your monitors with npm.
     </p>
     <p><a class="btn" href="<%- @getUrl('/pages/overview/apps.html') %>">View details &raquo;</a></p>
   </div>
