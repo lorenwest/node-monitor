@@ -1,0 +1,98 @@
+/* Site level CSS */
+html {
+}
+body {
+  padding-top: 70px;
+  background-color: white;
+  background-image: -moz-radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
+  background-image: -webkit-radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
+  background-image: -o-radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
+  background-image: -ms-radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
+  background-image: radial-gradient(50% 30%, cover, rgba(0, 0, 0, .01), rgba(256, 256, 256, .01) 300%);
+}
+
+h1, h2, h3, h4, h5, legend, caption {
+  font-weight: 300;
+}
+h1, h2 {
+  margin: 20px 0 10px 0;
+}
+.hero-unit {
+  padding: 1px 10px 20px 30px;
+}
+
+p.message {
+  margin: 1em 40px 0 0;
+  font-size: 1.2em;
+  font-weight: 300;
+  x-color: #777;
+}
+
+.navbar-inner .container {
+}
+
+.navbar .brand {
+  padding: 0 0 0 20px;
+  font-size: 28px;
+  color: rgba(200, 183, 155, 1);
+  text-shadow: #C8B79B 2px 2px 5px;
+}
+.navbar .brand:hover {
+  color: rgba(200, 183, 155, 1);
+}
+.logo {
+  margin: 0px 10px 4px 0;
+  height: 40px;
+  width: 90px;
+}
+.navbar-fixed-top .navbar-inner {
+  min-height: 44px;
+  padding-top: 6px;
+}
+
+.navbar .nav > li > a {
+  color: rgba(200, 183, 155, .9);
+  font-size: 16px;
+}
+
+.navbar .nav > li:first-child > a {
+  padding-left:0;
+}
+
+.navbar-inverse,
+.navbar-inverse .navbar-inner {
+  background-color: black;
+  border-color: black;
+  background-image: none;
+}
+
+#content {
+  margin-bottom: 80px;
+}
+
+footer.navbar .nav > li > a {
+  font-size: 14px;
+}
+
+footer {
+  height: 60px;
+}
+
+footer.navbar .navbar-inner {
+  border-radius: 0;
+}
+footer.navbar,
+footer.navbar .nav {
+  margin-bottom:0;
+}
+footer.navbar-inverse .nav li a {
+  margin-top: 10px;
+}
+.footer-refs,
+.footer-refs a {
+  color: white;
+}
+
+footer .icon-twitter {
+  font-size: 12px;
+}
