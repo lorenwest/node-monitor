@@ -17,15 +17,11 @@ title: Node Monitor
 </p>
 
 <p class="message">
-  To add monitoring, install node monitor onto your app servers:
-</p>
-<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install monitor</pre>
-<p class="message">
-  Then add it to your application startup, and restart your app:
+  To add monitoring to your app servers, place the following in your initialization:
 </p>
 <pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">var Monitor = require('monitor').start();</pre>
 <p class="message">
-  To monitor your app servers, install the dashboard (onto localhost for now):
+  To install and run the dashboard:
 </p>
 <pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install monitor-dashboard
 $ npm start monitor-dashboard</pre>
