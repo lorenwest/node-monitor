@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Node.js Monitor by lorenwest</title>
+    <title>Node Monitor by lorenwest</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -15,8 +15,8 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Node.js Monitor</h1>
-        <p>Lightweight Node.js monitoring</p>
+        <h1>Node Monitor</h1>
+        <p>Node.js application monitoring</p>
 
         <p class="view"><a href="https://github.com/lorenwest/node-monitor">View the Project on GitHub <small>lorenwest/node-monitor</small></a></p>
 
@@ -133,7 +133,7 @@ processMonitor.on('change', function() {
 // Now connect the monitor
 processMonitor.connect(function(error) {
   if (error) {
-    console.error('Error connecting with the process probe: ', error);
+    console.error('Error connecting with process probe: ', error);
     process.exit(1);
   }
 });
