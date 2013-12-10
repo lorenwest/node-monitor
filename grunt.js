@@ -108,7 +108,7 @@ module.exports = function(grunt) {
     child = exec(cmd, function (error, stdout, stderr) {
       console.log(stderr);
       console.log(stdout);
-      cmd = 'cp -R doc/* ../lorenwest.github.com/node-monitor';
+      cmd = 'cp -R doc/* ../node-monitor-pages/doc; rm -rf doc';
       console.log(cmd);
       child = exec(cmd, function (error, stdout, stderr) {
         console.log(stderr);

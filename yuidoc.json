@@ -1,6 +1,6 @@
 {
   "name": "monitor",
-  "description": "Monitor",
+  "description": "Node Monitor",
   "version": "0.0.0",
   "year": "2013",
   "url": "http://lorenwest.github.com/node-monitor",
@@ -12,8 +12,7 @@
     "linkNatives": "true",
     "attributesEmit": "true",
     "paths": [
-      "./lib",
-      "./test"
+      "./lib"
     ],
     "outdir": "./doc"
   }
