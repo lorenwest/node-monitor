@@ -29,35 +29,154 @@
       </header>
       <section>
         <h1>
-<a name="nodejs-monitoring" class="anchor" href="#nodejs-monitoring"><span class="octicon octicon-link"></span></a>Node.js Monitoring</h1>
+<a name="monitor-your-nodejs-application" class="anchor" href="#monitor-your-nodejs-application"><span class="octicon octicon-link"></span></a>Monitor your Node.js application</h1>
 
 <p><a href="https://travis-ci.org/lorenwest/node-monitor"><img src="https://secure.travis-ci.org/lorenwest/node-monitor.png?branch=master" alt="Build Status"></a></p>
 
-<p>Node Monitor is an open source component you add to your Node.js app, 
-and a <a href="https://github.com/lorenwest/monitor-dashboard">dashboard app</a> for visualizing and controlling your app servers at runtime.</p>
+<h2>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h2>
 
-<p><a href="http://lorenwest.github.io/node-monitor"><img src="http://lorenwest.github.io/node-monitor/img/dashboard.png" alt="Dashboard"></a></p>
+<p>Node-monitor is an npm module that lets you monitor your running Node.js app servers.</p>
 
 <h2>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a name="project-guidelines" class="anchor" href="#project-guidelines"><span class="octicon octicon-link"></span></a>Project Guidelines</h2>
+
+<ul>
+<li>
+<em>Simple</em> - Get started quickly</li>
+<li>
+<em>Powerful</em> - For multi-node enterprise deployment</li>
+<li>
+<em>Lightweight</em> - Inactive until used, small footprint during use </li>
+<li>
+<em>Flexible</em> - For custom application monitoring</li>
+<li>
+<em>Stable</em> - Well tested foundation for module developers</li>
+</ul><h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<p>Install monitor in your package.json, or run the following from your app server directory</p>
 
 <pre><code>$ npm install monitor
 </code></pre>
 
-<h2>
-<a name="online-documentation" class="anchor" href="#online-documentation"><span class="octicon octicon-link"></span></a>Online Documentation</h2>
+<p>Then place the following line in your application bootstrap, and restart your server</p>
 
-<ul>
-<li>
-<a href="http://lorenwest.github.io/node-monitor">Node Monitor</a> - Monitor documentation</li>
-</ul><h2>
+<pre><code>var Monitor = require('monitor').start();
+</code></pre>
+
+<h2>
+<a name="monitoring-your-app-with-a-repl-console" class="anchor" href="#monitoring-your-app-with-a-repl-console"><span class="octicon octicon-link"></span></a>Monitoring your app with a REPL console</h2>
+
+<p>Ad-hoc monitoring can be done from a REPL console.  </p>
+
+<p>Start up the REPL, and get the Monitor class.  Feel free to copy/paste these lines into your console:</p>
+
+<pre><code>$ node
+&gt; var Monitor = require('monitor');
+</code></pre>
+
+<p>Now connect a monitor to a probe on your app server.  There are a handful of built-in probes, and you can build custom probes for your application or npm module.  </p>
+
+<p>For this example, we'll monitor the <em>Process</em> probe:</p>
+
+<pre><code>&gt; var processMonitor = new Monitor({probeClass:'Process'});
+&gt; processMonitor.connect();
+</code></pre>
+
+<p>The monitor is a <a href="http://backbonejs.org/">Backbone.js</a> data model so it updates in real time, and you can get all fields with toJSON():</p>
+
+<pre><code>&gt; processMonitor.get('freemem');
+86368256
+&gt; processMonitor.get('freemem');
+80044032
+&gt; processMonitor.toJSON();
+...
+</code></pre>
+
+<p>As the monitor changes, it emits change events:</p>
+
+<pre><code>&gt; processMonitor.on('change', function() {
+... console.log(processMonitor.get('freemem'));
+... });
+</code></pre>
+
+<h2>
+<a name="monitoring-your-app-with-a-custom-script" class="anchor" href="#monitoring-your-app-with-a-custom-script"><span class="octicon octicon-link"></span></a>Monitoring your app with a custom script</h2>
+
+<p>Using Node.js as a scripting language, you can write custom monitors that do anything Node.js can do.  Here's an example that prints to the console when free memory falls below a threshold.</p>
+
+<p>Save this file to low-memory-warn.js, and run <strong>node low-memory-warn</strong></p>
+
+<pre><code>// Low memory warning monitor
+var Monitor = require('monitor');
+var LOW_MEMORY_THRESHOLD = 100000000;
+
+// Set the probe to push changes every 10 seconds
+var options = {
+  hostName: 'localhost',
+  probeClass: 'Process',
+  initParams: {
+    pollInterval: 10000
+  }
+}
+var processMonitor = new Monitor(options);
+
+// Attach the change listener
+processMonitor.on('change', function() {
+  var freemem = processMonitor.get('freemem');
+  if (freemem &lt; LOW_MEMORY_THRESHOLD) {
+    console.log('Low memory warning: ' + freemem);
+  }
+});
+
+// Now connect the monitor
+processMonitor.connect(function(error) {
+  if (error) {
+    console.error('Error connecting with the process probe: ', error);
+    process.exit(1);
+  }
+});
+</code></pre>
+
+<h2>
+<a name="monitoring-your-app-in-a-browser" class="anchor" href="#monitoring-your-app-in-a-browser"><span class="octicon octicon-link"></span></a>Monitoring your app in a browser</h2>
+
+<p>The above script runs just as well within an html <code>&lt;script&gt;</code> tag as on the server.  For example, change the <code>var Monitor = require('monitor');</code> line to something like this:</p>
+
+<pre><code>&lt;script src="/path/to/monitor/dist/monitor-all.min.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>The browser distribution included in node-monitor exports a single variable <code>Monitor</code> to the global namespace, and it can be used just like the <code>Monitor</code> variable in <code>var Monitor = require('monitor')</code>.</p>
+
+<p>Your browser will probably have to be pointing to localhost or behind your firewall in order to connect with the app server on the configured monitor port.  See <em>Security Concerns</em> below.</p>
+
+<h2>
+<a name="monitoring-your-app-in-a-dashboard" class="anchor" href="#monitoring-your-app-in-a-dashboard"><span class="octicon octicon-link"></span></a>Monitoring your app in a dashboard</h2>
+
+<p>The <a href="https://github.com/lorenwest/monitor-dashboard">monitor-dashboard</a> project lets you visualize your monitors in a dashboard.</p>
+
+<pre><code>$ npm install monitor-dashboard
+$ npm run monitor-dashboard
+</code></pre>
+
+<p>The dashboard project is outside the scope of this project.  More information is available on the project <a href="http://lorenwest.github.io/monitor-dashboard">documentation pages</a>.</p>
+
+<h2>
+<a name="security-concerns" class="anchor" href="#security-concerns"><span class="octicon octicon-link"></span></a>Security Concerns</h2>
+
+<p>Exposing the internals of your app server is a high security risk.  By default, the server listens on port 42000 and will connect with localhost clients only.</p>
+
+<p>In order to monitor across machines, the default configuration must be changed to listen beyond localhost.  Before doing this, it is recommended to understand the risks and have external measures in place to prevent unauthorized access.</p>
+
+<p>See notes in the <code>config/external.js</code> file for more information.</p>
+
+<h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
-<p>May be freely distributed under the MIT license</p>
-
-<p>See <a href="https://github.com/lorenwest/node-monitor/blob/master/LICENSE">LICENSE</a> file.</p>
-
-<p>Copyright (c) 2010-2013 Loren West</p>
+<p>May be freely distributed under the MIT license<br>
+See <a href="https://github.com/lorenwest/node-monitor/blob/master/LICENSE">LICENSE</a> file.<br>
+Copyright (c) 2010-2013 Loren West<br></p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/lorenwest">lorenwest</a></p>
