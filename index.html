@@ -1,149 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Node Monitor by lorenwest</title>
 
-    <!-- Meta -->
-    <meta charset="utf-8" />
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="description" content="Remote Monitoring and Control Panels for Node.js" />
-    <meta name="keywords" content="nodejs, node.js, monitor, node-monitor, remote control, monitoring, control, realtime, dashboard, control panel" />
-    <meta name="author" content="Loren West" />
-    <link rel="icon" href="http://lorenwest.github.io/node-monitor/favicon.ico" type="image/x-icon">
-    <title>Node Monitor</title>
-
-    <!-- Shims: IE6-8 support of HTML5 elements -->
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
-        <script async src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <!-- Styles -->
-    <link  rel="stylesheet" href="http://lorenwest.github.io/node-monitor/css/bootstrap.css" /><link  rel="stylesheet" href="http://lorenwest.github.io/node-monitor/css/font-awesome.css" /><link  rel="stylesheet" href="http://lorenwest.github.io/node-monitor/css/site.css" />
   </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Node Monitor</h1>
+        <p>Lightweight Node.js monitoring</p>
 
-  <body data-title="Node Monitor">
+        <p class="view"><a href="https://github.com/lorenwest/node-monitor">View the Project on GitHub <small>lorenwest/node-monitor</small></a></p>
 
-    <!-- Navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="http://lorenwest.github.io/node-monitor/index.html">
-            <img src="http://lorenwest.github.io/node-monitor/img/monitor.jpg" class="logo"></img>
-	    Node Monitor
-	  </a>
-          <div class="nav-collapse collapse">
-            <ul class="nav pull-right">
-              <li><a href="http://lorenwest.github.io/node-monitor/pages/getting-started.html">Getting Started</a></li>
-              <li class="dropdown">
-                <a href="" class="dropdown-toggle" data-toggle="dropdown">Overview <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="http://lorenwest.github.io/node-monitor/pages/overview/dashboards.html">Dashboards</a></li>
-                  <li><a href="http://lorenwest.github.io/node-monitor/pages/overview/tours.html">Tours</a></li>
-                  <li><a href="http://lorenwest.github.io/node-monitor/pages/overview/apps.html">Apps</a></li>
-                </ul>
-              </li>
-	      <!--
-              <li class="dropdown">
-                <a href="" class="dropdown-toggle" data-toggle="dropdown">Developers <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="http://lorenwest.github.io/node-monitor/pages/developers/probes.html">Building Data Probes</a></li>
-                  <li><a href="http://lorenwest.github.io/node-monitor/pages/developers/views.html">Building Monitor Views</a></li>
-                  <li class="divider"></li>
-                  <li><a href="http://lorenwest.github.io/node-monitor/pages/developers/packaging.html">Packaging Your App</a></li>
-		</ul>
-	      </li>
-              <li><a href="http://lorenwest.github.io/node-monitor/blog/index.html">Blog</a></li>
-	      -->
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
 
-    <div class="container">
-      <section id="content" class="content">
-        <div class="hero-unit">
-  <h1>
-     Node Monitor<br>
-     Remote Monitoring &amp; Control
-  </h1>
-</div>
-
-<p class="message">
-  <img style="float:right; margin: 0 -40px 0 20px; height: 230px; border-radius:4px" src="http://lorenwest.github.io/node-monitor/img/dashboard.png">
-  Node Monitor is an open source component you add to your Node.js app, and a dashboard for visualizing and controlling
-  your app servers at runtime.
-</p>
-
-<p class="message">
-  To add monitoring to your app servers, place the following in your initialization:
-</p>
-<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">var Monitor = require(&#39;monitor&#39;).start();</pre>
-<p class="message">
-  To install and run the dashboard:
-</p>
-<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm install monitor-dashboard
-$ npm start monitor-dashboard</pre>
-
-<p class="message clearfix">
-  Now navigate to <a href="http://localhost:4200/"><a href="http://localhost:4200/">http://localhost:4200/</a></a> in your browser.
-  The <a href="http://lorenwest.github.io/node-monitor/pages/getting-started.html">Getting Started</a> page has more information
-  about building dashboards using the built-in components.
-</p>
-
-<p><p class="message">
-  If you like what you see, send some &hearts; to the project team...
-</p></p>
-<pre style="margin: 20px 0 10px 40px; width:50%; padding: 20px;">$ npm star monitor monitor-dashboard</pre>
-
-<p><!-- Bottom row of columns --></p>
-<div class="row">
-  <div class="span4">
-    <h2>Dashboards</h2>
-    <p>
-      The Dashboard app lets you assemble components into pages
-      in your web browser, where each page is a different dashboard.
-    </p>
-    <p>
-      <a class="btn" href="http://lorenwest.github.io/node-monitor/pages/overview/dashboards.html">View details &raquo;</a>
-    </p>
-  </div>
-  <div class="span4">
-    <h2>Tours</h2>
-    <p>
-      Automatically cycle through
-      your dashboards on a full screen monitor.<br><br>
-    <p><a class="btn" href="http://lorenwest.github.io/node-monitor/pages/overview/tours.html">View details &raquo;</a></p>
- </div>
-  <div class="span4">
-    <h2>Apps</h2>
-    <p>
-      Build monitoring into your apps and Node.js modules, and distribute
-      your monitors with npm.
-    </p>
-    <p><a class="btn" href="http://lorenwest.github.io/node-monitor/pages/overview/apps.html">View details &raquo;</a></p>
-  </div>
-</div>
-      </section>
-    </div> <!-- /container -->
-
-    <!-- Footer spans entire bottom section -->
-    <footer class="navbar navbar-inverse navbar-bottom">
-      <div class="navbar-inner container">
-        <ul class="nav footer-refs pull-left">
-          <li><a href="https://github.com/lorenwest/monitor-dashboard">Copyright &copy;2010-2013</a></li>
-          <li><a href="https://github.com/lorenwest/monitor-dashboard/blob/master/LICENSE">May be freely used and distributed under the MIT licence</a></li>
-	</ul>
-        <ul class="nav footer-refs pull-right">
-          <li><a class="nm-pvm-questions" href="https://github.com/lorenwest/monitor-dashboard/issues"><i class="icon-question-sign"></i> Questions? </a></li>
-          <li><a class="nm-pvm-comments" href="https://twitter.com/intent/tweet?source=webclient&text=%23NodeMonitor%20%23NodeJS" target="_blank"><i class="icon-bullhorn"></i> Comments <i class="icon-twitter"></i></a></li>
+        <ul>
+          <li><a href="https://github.com/lorenwest/node-monitor/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/lorenwest/node-monitor/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/lorenwest/node-monitor">View On <strong>GitHub</strong></a></li>
         </ul>
-      </div>
-    </footer>
+      </header>
+      <section>
+        <h3>
+<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
-    <!-- Scripts -->
-    <script defer="defer"  src="http://lorenwest.github.io/node-monitor/vendor/jquery.js"></script><script defer="defer"  src="http://lorenwest.github.io/node-monitor/vendor/log.js"></script><script defer="defer"  src="http://lorenwest.github.io/node-monitor/vendor/modernizr.js"></script><script defer="defer"  src="http://lorenwest.github.io/node-monitor/vendor/twitter-bootstrap/js/bootstrap.js"></script><script defer="defer"  src="http://lorenwest.github.io/node-monitor/js/underscore.js"></script><script defer="defer"  src="http://lorenwest.github.io/node-monitor/js/backbone.js"></script>
+<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+
+<pre><code>$ cd your_repo_root/repo_name
+$ git fetch origin
+$ git checkout gh-pages
+</code></pre>
+
+<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+
+<h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+
+<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+
+<h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+
+<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+
+<h3>
+<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+
+<h3>
+<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/lorenwest">lorenwest</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
   </body>
 </html>
