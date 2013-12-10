@@ -43,7 +43,7 @@ Now connect a monitor to a probe on your app server.  There are a handful of bui
 
 For this example, we'll monitor the *Process* probe:
 
-    > var processMonitor = new Monitor({probeClass:'Process', hostName:'localhost'});
+    > var processMonitor = new Monitor({probeClass:'Process'});
     > processMonitor.connect();
 
 The monitor is a [Backbone.js](http://backbonejs.org/) data model so it updates in real time, and you can get all fields with toJSON():
