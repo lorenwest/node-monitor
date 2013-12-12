@@ -112,12 +112,12 @@ Your browser will probably have to be pointing to localhost or behind your firew
 Monitoring your app in a dashboard
 ---------------------------
 
-The [monitor-dashboard](https://github.com/lorenwest/monitor-dashboard) project lets you visualize your monitors in a dashboard.
+![Monitor-Dashboard](http://lorenwest.github.io/monitor-dashboard/img/icons/AppViewer.png) The monitor-dashboard project lets you visualize your monitors in a dashboard.
 
     $ npm install monitor-dashboard
     $ npm run monitor-dashboard
 
-The dashboard project is outside the scope of this project.  More information is available on the project [documentation pages](http://lorenwest.github.io/monitor-dashboard).
+The dashboard project is outside the scope of this project.
 
 Security Concerns
 -----------------
@@ -127,6 +127,12 @@ Exposing the internals of your app server is a high security risk.  By default, 
 In order to monitor across machines, the default configuration must be changed to listen beyond localhost.  Before doing this, it is recommended to understand the risks and have external measures in place to prevent unauthorized access.
 
 See notes in the ```config/external.js``` file for more information.
+
+Links
+-------
+
+* [API Docs](http://lorenwest.github.com/node-monitor/doc/index.html) - Node monitor JavaScript documentation.
+* [Monitor Dashboard](http://lorenwest.github.com/monitor-dashboard) - Dashboards for the node monitor project.
 
 License
 -------
