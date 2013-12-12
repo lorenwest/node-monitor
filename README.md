@@ -109,10 +109,11 @@ The browser distribution included in node-monitor exports a single variable ```M
 
 Your browser will probably have to be pointing to localhost or behind your firewall in order to connect with the app server on the configured monitor port.  See *Security Concerns* below.
 
-Monitoring your app in a dashboard
+Monitoring your app in a dashboard 
 ---------------------------
+![Monitor-Dashboard](http://lorenwest.github.io/monitor-dashboard/img/cpu-gauge.png)
 
-![Monitor-Dashboard](http://lorenwest.github.io/monitor-dashboard/img/icons/AppViewer.png) The monitor-dashboard project lets you visualize your monitors in a dashboard.
+The monitor-dashboard project lets you visualize your monitors in a dashboard.
 
     $ npm install monitor-dashboard
     $ npm run monitor-dashboard
