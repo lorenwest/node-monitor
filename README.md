@@ -118,8 +118,6 @@ The monitor-dashboard project lets you visualize your monitors in a dashboard.
     $ npm install monitor-dashboard
     $ npm run monitor-dashboard
 
-The dashboard project is outside the scope of this project.
-
 Security Concerns
 -----------------
 
