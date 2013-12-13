@@ -130,8 +130,9 @@ See notes in the ```config/external.js``` file for more information.
 Links
 -------
 
-* [API Docs](http://lorenwest.github.com/node-monitor/doc/index.html) - Node monitor JavaScript documentation.
-* [Monitor Dashboard](http://lorenwest.github.com/monitor-dashboard) - Dashboards for the node monitor project.
+* [API Docs](http://lorenwest.github.io/node-monitor/doc/index.html) - Node monitor JavaScript documentation.
+* [Monitor Dashboard](https://github.com/lorenwest/monitor-dashboard) - Dashboards for the node monitor project.
+* [Dashboard Components](https://github.com/lorenwest/core-monitor) - Core components for the Dashboard project.
 
 License
 -------
