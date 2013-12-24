@@ -116,7 +116,7 @@ Monitoring your app in a dashboard
 The monitor-dashboard project lets you visualize your monitors in a dashboard.
 
     $ npm install monitor-dashboard
-    $ npm run monitor-dashboard
+    $ npm start monitor-dashboard
 
 Security Concerns
 -----------------
