@@ -138,6 +138,6 @@ License
 -------
 
 May be freely distributed under the MIT license<br>
-See the [LICENSE](https://github.com/lorenwest/node-monitor/blob/master/LICENSE) file.<br>
+See the [LICENSE](https://github.com/lorenwest/node-monitor/blob/master/LICENSE) file for more info.<br>
 Copyright (c) 2010-2013 Loren West<br>
 
