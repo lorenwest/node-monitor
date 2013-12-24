@@ -2,7 +2,7 @@
     "project": {
         "name": "monitor",
         "description": "Node Monitor",
-        "version": "0.6.3",
+        "version": "0.6.4",
         "year": "2013",
         "url": "http://lorenwest.github.com/node-monitor",
         "logo": "",
