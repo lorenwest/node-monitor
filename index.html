@@ -133,7 +133,7 @@ processMonitor.on('change', function() {
 // Now connect the monitor
 processMonitor.connect(function(error) {
   if (error) {
-    console.error('Error connecting with process probe: ', error);
+    console.error('Error connecting with the process probe: ', error);
     process.exit(1);
   }
 });
@@ -152,15 +152,15 @@ processMonitor.connect(function(error) {
 <p>Your browser will probably have to be pointing to localhost or behind your firewall in order to connect with the app server on the configured monitor port.  See <em>Security Concerns</em> below.</p>
 
 <h2>
-<a name="monitoring-your-app-in-a-dashboard" class="anchor" href="#monitoring-your-app-in-a-dashboard"><span class="octicon octicon-link"></span></a>Monitoring your app in a dashboard</h2>
+<a name="monitoring-your-app-in-a-dashboard-" class="anchor" href="#monitoring-your-app-in-a-dashboard-"><span class="octicon octicon-link"></span></a>Monitoring your app in a dashboard </h2>
 
-<p>The <a href="https://github.com/lorenwest/monitor-dashboard">monitor-dashboard</a> project lets you visualize your monitors in a dashboard.</p>
+<p><img src="http://lorenwest.github.io/monitor-dashboard/img/cpu-gauge.png" alt="Monitor-Dashboard"></p>
+
+<p>The monitor-dashboard project lets you visualize your monitors in a dashboard.</p>
 
 <pre><code>$ npm install monitor-dashboard
-$ npm run monitor-dashboard
+$ npm start monitor-dashboard
 </code></pre>
-
-<p>The dashboard project is outside the scope of this project.  More information is available on the project <a href="http://lorenwest.github.io/monitor-dashboard">documentation pages</a>.</p>
 
 <h2>
 <a name="security-concerns" class="anchor" href="#security-concerns"><span class="octicon octicon-link"></span></a>Security Concerns</h2>
@@ -172,6 +172,16 @@ $ npm run monitor-dashboard
 <p>See notes in the <code>config/external.js</code> file for more information.</p>
 
 <h2>
+<a name="links" class="anchor" href="#links"><span class="octicon octicon-link"></span></a>Links</h2>
+
+<ul>
+<li>
+<a href="http://lorenwest.github.io/node-monitor/doc/index.html">API Docs</a> - Node monitor JavaScript documentation.</li>
+<li>
+<a href="https://github.com/lorenwest/monitor-dashboard">Monitor Dashboard</a> - Dashboards for the node monitor project.</li>
+<li>
+<a href="https://github.com/lorenwest/core-monitor">Dashboard Components</a> - Core components for the Dashboard project.</li>
+</ul><h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>May be freely distributed under the MIT license<br>
