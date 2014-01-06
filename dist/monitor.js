@@ -1,6 +1,6 @@
-/* monitor - v0.6.1 - 2013-11-07 */
+/* monitor - v0.6.5 - 2014-01-06 */
 
-// Monitor.js (c) 2010-2013 Loren West and other contributors
+// Monitor.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -142,10 +142,7 @@
         // Initial data setting into the model was done silently
         // in order for the connect event to fire before the first
         // change event.  Fire the connect / change in the proper order.
-        if (error) {
-          log.error('connect', {initParams: t.get('initParams'), error: error});
-        }
-        else {
+        if (!error) {
 
           // An unfortunate side effect is any change listeners registered during
           // connect will get triggered with the same values as during connect.
@@ -714,7 +711,7 @@
 }(this));
 
 /*jslint browser: true */
-// Stat.js (c) 2010-2013 Loren West and other contributors
+// Stat.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -1051,7 +1048,7 @@
 }(this));
 
 /*jslint browser: true */
-// Log.js (c) 2010-2013 Loren West and other contributors
+// Log.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -1275,20 +1272,39 @@
   * @param name {String} The log entry name
   * @param args {any...} All original, starting with the short name
   */
-  Log.console = function(type, module, name, args) {
+  Log.console = function(type, module, name) {
 
     // Build the string to log, in log4js format
-    var nowStr = JSON.stringify(new Date()).substr(1,22),
-        allArgs = _.toArray(arguments),
-        logStr = nowStr + ' [' + type + '] ' + module + '.' + name + ' ';
-    allArgs.splice(0,3);
-    try {
-      logStr += JSON.stringify(allArgs);
-    } catch(e) {
-      logStr += Monitor.stringify(allArgs);
+    var nowStr = (new Date()).toJSON(),
+        args = _.toArray(arguments),
+        logStr = '[' + nowStr + '] [' + type.toUpperCase() + '] ' + module;
+
+    // Remove the type, module, name leaving the args to the log
+    args.splice(0,3);
+
+    // If no args, then they didn't provide a name
+    if (args.length === 0) {
+      args = [name];
+    }
+    else {
+      // Add the log entry name
+      logStr += '.' + name;
     }
 
-    // Log or error
+    // If the output is simple, just print it.  Otherwise JSON.stringify it.
+    logStr += ' - ';
+    if (args.length === 1 && typeof args[0] === 'string') {
+      logStr += args[0];
+    }
+    else {
+      try {
+        logStr += JSON.stringify(args);
+      } catch(e) {
+        logStr += Monitor.stringify(args);
+      }
+    }
+
+    // Send to the console - Log or error
     if (type === 'error' || type === 'fatal') {
       console.error(logStr);
     }
@@ -1306,7 +1322,7 @@
 
 }(this));
 
-// Probe.js (c) 2010-2013 Loren West and other contributors
+// Probe.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -1505,7 +1521,7 @@
 
 }(this));
 
-// Connection.js (c) 2010-2013 Loren West and other contributors
+// Connection.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -2062,7 +2078,7 @@
 
 }(this));
 
-// Server.js (c) 2010-2013 Loren West and other contributors
+// Server.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -2320,7 +2336,7 @@
 
 }(this));
 
-// Router.js (c) 2010-2013 Loren West and other contributors
+// Router.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -2991,7 +3007,6 @@
                 probeImpl.release();
               } catch (e){}
             }
-            log.error('connectInternal', {error: error, probeKey: probeKey});
             return callback(error);
           }
 
@@ -3027,7 +3042,6 @@
           t.runningProbesById[probeImpl.id] = probeImpl;
         } catch (e) {
           var error = {msg: 'Error instantiating probe ' + probeClass, error: e.message};
-          log.error('connect', error);
           return whenDone(error);
         }
 
@@ -3101,7 +3115,6 @@
           if (error) {
             errStr = "probe:connect returned an error for probeClass '" + monitorJSON.probeClass +
               "' on " + Monitor.toServerString(monitorJSON);
-            log.error('connectExternal', errStr, error);
             return callback({err: error, msg: errStr});
           }
           probeId = probeJSON.id;
@@ -3153,9 +3166,6 @@
         delete connection.remoteProbeIdsByKey[proxy.probeKey];
         connection.removeEvent('probe:change:' + probeId);
         return connection.emit('probe:disconnect', {probeId:probeId}, function(error){
-          if (error) {
-            log.error('disconnectExternal', 'Probe disconnect error from host : ' + connection.get('hostName'), error);
-          }
           return callback(error);
         });
       }
@@ -3166,7 +3176,7 @@
 
 }(this));
 
-// Sync.js (c) 2010-2013 Loren West and other contributors
+// Sync.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -3174,7 +3184,7 @@
 
   // Module loading - this runs server-side only
   var Monitor = root.Monitor || require('./Monitor'),
-      log = Monitor.getLogger('Sync'),
+      logger = Monitor.getLogger('Sync'),
       Backbone = Monitor.Backbone,
       _ = Monitor._;
 
@@ -3251,7 +3261,7 @@
     // Get a Sync object and bind it to the sync function
     var syncObj = new Sync(className, options);
     return function(method, model, options) {
-      log.info('sync', {className: className, method:method, model:model.toJSON(), options:options});
+      logger.info('sync', {className: className, method:method, model:model.toJSON(), options:options});
       return syncObj._sync(method, model, options);
     };
   };
@@ -3270,8 +3280,8 @@
   * on the server.
   *
   * Communication is <a href="Probe.html">Probe</a> based, leveraging the built-in
-  * connection, routing, and socket-io functionality.  The <a href="FileSync.html">FileSync</a>
-  * probe is provided for file-based model persistence, and others can be written to
+  * connection, routing, and socket-io functionality.  The <a href="FileSyncProbe.html">FileSyncProbe</a>
+  * is provided for file-based model persistence, and others can be written to
   * implement alternate persistence mechanisms.
   *
   * @private
@@ -3279,7 +3289,7 @@
   */
   var Sync = function(className, options) {
     var t = this;
-    log.info('syncInit', className, options);
+    logger.info('syncInit', className, options);
     t.className = className;
     t.options = options || {};
   };
@@ -3297,11 +3307,13 @@
   * @param [options] {Object} Success and error callbacks, and additional options to
   *   pass on to the sync implementation.
   *     @param [options.liveSync] - Turn on the live update functionality
+  *     @param [options.silenceErrors] - Silence the logging of errors (they're expected)
   *     @param [options.success] - The method to call on method success
   *     @param [options.error] - The method to call on method error
   */
   Sync.prototype._sync = function(method, model, options) {
     var t = this;
+    options = options || {};
 
     // Cannot liveSync with a collection (too many issues)
     if (options.liveSync && model instanceof Backbone.Collection) {
@@ -3312,7 +3324,7 @@
     if (!model.has('id')) {
       if (method === METHOD_CREATE) {
         model.set({id: Monitor.generateUniqueId()}, {silent: true});
-        log.info('_sync.generateUniqueId', t.className, model.toJSON(), options);
+        logger.info('_sync.generateUniqueId', t.className, model.toJSON(), options);
       } else {
         return options.error(null, 'ID element must be set.');
       }
@@ -3333,10 +3345,12 @@
     // Create a function to run once complete
     var onComplete = function(error, params) {
       if (error) {
-        log.error('_sync.onComplete', t.className, error);
+        if (!options.silenceErrors) {
+          logger.error('_sync.onComplete', t.className, error);
+        }
         options.error(null, error);
       } else {
-        log.info('_sync.onComplete', t.className, model.get('id'));
+        logger.info('_sync.onComplete', t.className, model.get('id'));
         options.success(params);
       }
     };
@@ -3354,9 +3368,9 @@
       // Connect an instance level syncMonitor to the model if liveSync
       // is specified, otherwise create a class level syncMonitor
       if (options.liveSync) {
-        t._connectInstanceMonitor(method, model, onComplete);
+        t._connectInstanceMonitor(method, model, options, onComplete);
       } else {
-        t._connectClassMonitor(method, model, onComplete);
+        t._connectClassMonitor(method, model, options, onComplete);
       }
     }
 
@@ -3377,19 +3391,24 @@
   * @method _connectClassMonitor
   * @param method {String} The requested CRUD method
   * @param model {Backbone.Model} The data model to perform the operation on
+  * @param [options] {Object} Options
+  *     @param [options.silenceErrors] - Silence the logging of errors (they're expected)
   * @param callback {function(error, params)} - Called when connected
   *     @param callback.error {Mixed} - Set if it couldn't connect
   *     @param callback.params {Object} - Updated data model parameters
   */
-  Sync.prototype._connectClassMonitor = function(method, model, callback) {
+  Sync.prototype._connectClassMonitor = function(method, model, options, callback) {
     var t = this;
 
     // Connect a syncMonitor for the class
-    log.info('connectClassMonitor', t.className, method, model.toJSON());
+    logger.info('connectClassMonitor', t.className, method, model.toJSON());
     var monitorParams = t._getMonitorParams(null);
     var syncMonitor = new Monitor(monitorParams);
     syncMonitor.connect(function(error){
       if (error) {
+        if (!options.silenceErrors) {
+          logger.error('connectClassMonitor', error);
+        }
         return callback(error);
       }
 
@@ -3420,7 +3439,7 @@
   *     @param callback.error {Mixed} - Set if it couldn't connect
   *     @param callback.params {Object} - Updated data model parameters
   */
-  Sync.prototype._connectInstanceMonitor = function(method, model, callback) {
+  Sync.prototype._connectInstanceMonitor = function(method, model, options, callback) {
     var t = this, syncMonitor, modelId = model.get('id');
 
     // Called when done connecting
@@ -3433,7 +3452,7 @@
 
       // Called to disconnect the listeners
       var disconnectListeners = function() {
-        log.info('disconnectLiveSync', t.className, model.toJSON());
+        logger.info('disconnectLiveSync', t.className, model.toJSON());
         model.off('change', modelListener);
         model.syncMonitor.off('change', monitorListener);
         model.syncMonitor.disconnect();
@@ -3446,19 +3465,19 @@
 
         // Don't persist unless the model is different
         if (_.isEqual(JSON.parse(JSON.stringify(model)), JSON.parse(JSON.stringify(model.syncMonitor.get('model'))))) {
-          log.info('modelListener.noChanges', t.className, model.toJSON());
+          logger.info('modelListener.noChanges', t.className, model.toJSON());
           return;
         }
 
         // Disconnect listeners if the ID changes
         if (model.get('id') !== modelId) {
-          log.info('modelListener.alteredId', t.className, model.toJSON());
+          logger.info('modelListener.alteredId', t.className, model.toJSON());
           return disconnectListeners();
         }
 
         // Persist changes to the server (unless the changes originated from there)
         if (!options.isSyncChanging) {
-          log.info('modelListener.saving', t.className, model.toJSON());
+          logger.info('modelListener.saving', t.className, model.toJSON());
           model.save();
         }
       };
@@ -3469,25 +3488,25 @@
         // Don't update unless the model is different
         var newModel = model.syncMonitor.get('model');
         if (_.isEqual(JSON.parse(JSON.stringify(model)), JSON.parse(JSON.stringify(newModel)))) {
-          log.info('monitorListener.noChanges', t.className, newModel);
+          logger.info('monitorListener.noChanges', t.className, newModel);
           return;
         }
 
         // Disconnect if the model was deleted or the ID isn't the same
         var isDeleted = (_.size(newModel) === 0);
         if (isDeleted || newModel.id !== modelId)  {
-          log.info('modelListener.deleted', t.className, newModel);
+          logger.info('modelListener.deleted', t.className, newModel);
           disconnectListeners();
         }
 
         // Forward changes to the model (including server-side delete)
         var newOpts = {isSyncChanging:true};
         if (isDeleted) {
-          log.info('modelListener.deleting', t.className, newModel);
+          logger.info('modelListener.deleting', t.className, newModel);
           model.clear(newOpts);
         } else {
           // Make sure the model is set to exactly the new contents (vs. override)
-          log.info('modelListener.setting', t.className, newModel);
+          logger.info('modelListener.setting', t.className, newModel);
           model.clear({silent:true});
           model.set(newModel, newOpts);
         }
@@ -3498,7 +3517,7 @@
       model.syncMonitor.on('change', monitorListener);
 
       // Send back the initial data model
-      log.info('connectInstanceMonitor.done', t.className, model.toJSON());
+      logger.info('connectInstanceMonitor.done', t.className, model.toJSON());
       callback(null, model.syncMonitor.get('model'));
     };
 
@@ -3507,8 +3526,9 @@
     syncMonitor = new Monitor(monitorParams);
     syncMonitor.connect(function(error){
       if (error) {
-        log.error('connectInstanceMonitor.monitorConnect', error);
-        syncMonitor.disconnect();
+        if (!options.silenceErrors) {
+          logger.error('connectInstanceMonitor.monitorConnect', error);
+        }
         return whenDone(error);
       }
 
@@ -3524,7 +3544,7 @@
 
       // Forward the initial control
       var opts = t._getOpts(method, model);
-      log.error('connectInstanceMonitor.forwarding', method, t.className, model.toJSON());
+      logger.info('connectInstanceMonitor.forwarding', method, t.className, model.toJSON());
       syncMonitor.control(method, opts, whenDone);
     });
   };
@@ -3594,7 +3614,7 @@
 
 }(this));
 
-// PollingProbe.js (c) 2010-2013 Loren West and other contributors
+// PollingProbe.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -3685,7 +3705,7 @@
 
 }(this));
 
-// StreamProbe.js (c) 2010-2013 Loren West and other contributors
+// StreamProbe.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -3808,7 +3828,7 @@
 
 }(this));
 
-// InspectProbe.js (c) 2010-2013 Loren West and other contributors
+// InspectProbe.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -3971,7 +3991,7 @@
 
 }(this));
 
-// StatProbe.js (c) 2010-2013 Loren West and other contributors
+// StatProbe.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
@@ -4039,7 +4059,7 @@
 
 }(this));
 
-// LogProbe.js (c) 2010-2013 Loren West and other contributors
+// LogProbe.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/node-monitor
