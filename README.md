@@ -6,7 +6,11 @@ Monitor your Node.js application
 Introduction
 ------------
 
-Node-monitor is an npm module that lets you monitor your running Node.js app servers.
+Node-monitor is a library for remote monitoring and control of your Node.js app servers.
+
+Like JMX in the Java world, node-monitor comes with a handful of general monitors, and allows you to create custom monitors for your application.
+
+These monitors can be scripted using JavaScript, or placed onto a dashboard.
 
 Project Guidelines
 ------------------
@@ -14,20 +18,20 @@ Project Guidelines
 * *Simple* - Get started quickly
 * *Powerful* - For multi-node enterprise deployment
 * *Lightweight* - Inactive until used, small footprint during use 
-* *Flexible* - For custom application monitoring
+* *Flexible* - Easy to write custom monitors for your app
 * *Stable* - Well tested foundation for module developers
 
 
 Getting Started
 ---------------
 
-Install monitor in your package.json, or run the following from your app server directory
+Run the following from your app server directory
 
     $ npm install monitor
 
 Then place the following line in your application bootstrap, and restart your server
 
-    var Monitor = require('monitor').start();
+    require('monitor').start();
 
 Monitoring your app with a REPL console
 ---------------------------------------
