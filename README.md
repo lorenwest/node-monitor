@@ -113,7 +113,7 @@ Monitoring your app in a dashboard
 ---------------------------
 ![Monitor-Dashboard](http://lorenwest.github.io/monitor-dashboard/img/cpu-gauge.png)
 
-The monitor-dashboard project lets you visualize your monitors in a dashboard.
+The [monitor-dashboard](https://github.com/lorenwest/monitor-dashboard) application lets you visualize your monitors in a dashboard.
 
     $ npm install monitor-dashboard
     $ npm start monitor-dashboard
