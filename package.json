@@ -9,6 +9,7 @@
     "url": "https://github.com/lorenwest"
   },
   "homepage": "http://lorenwest.github.com/node-monitor/",
+  "keywords": ["monitor", "node-monitor", "remote control", "realtime", "probe", "JMX"],
   "repository": {
     "type": "git",
     "url": "git://github.com/lorenwest/node-monitor.git"
