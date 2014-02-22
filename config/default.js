@@ -25,6 +25,13 @@ module.exports = {
     // See the external.js file in this directory for more information.
     allowExternalConnections: false,
 
+    // Monitors configured here are started directly upon loading.
+    // This is an array of objects, each passed as the first parameter
+    // to a new Monitor instance.
+    autoStart: [
+      // {name: 'ProbeName', probeClass: 'ProbeClass', initParams:{specialized:'initParams'}}
+    ],
+
     // Configure the built-in console log output
     consoleLogListener: {
       pattern: "{trace,warn,error,fatal}.*"

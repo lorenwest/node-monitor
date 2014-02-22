@@ -1,3 +1,11 @@
+0.6.6 / 2014-02-23
+===================
+
+  * Named monitor instances
+  * Auto-start monitors
+  * Added tests for server start/stop
+  * Made the example a little less confusing
+
 0.6.5 / 2014-01-06
 ===================
 

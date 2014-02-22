@@ -38,6 +38,7 @@ Start up the REPL, and get the Monitor class.  Feel free to copy/paste these lin
 
     $ node
     > var Monitor = require('monitor');
+    undefined
 
 Now connect a monitor to a probe on your app server.  There are a handful of built-in probes, and you can build custom probes for your application or npm module.  
 

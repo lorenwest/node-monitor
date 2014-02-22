@@ -9,6 +9,10 @@
   * @class MonitorTest
   */
 
+  // This should be run before other tests to set up configurations
+  process.env.NODE_ENV='test';
+  var config = require('config');
+
   // Dependencies
   var Monitor = require('../lib/index'),
       Backbone = Monitor.Backbone,
@@ -17,6 +21,7 @@
         // Monitor attributes
         id: '24-2',
         name: 'Test monitor',
+        probeName: 'NoName',
         probeClass: 'NoClass',
         initParams: {a:1},
         hostName: 'some-host.com',
@@ -109,6 +114,127 @@
     Router: function(test) {
       test.ok(Monitor.getRouter() instanceof Monitor.Router, "The default router is available");
       test.done();
+    }
+
+  };
+
+  /**
+  * ## Tests for starting up the monitor server
+  * @method Server
+  */
+  module.exports['Server'] = {
+
+    /**
+    * Tests that the server starts when requested
+    *
+    * @method Server-Start
+    */
+    Start: function(test) {
+      Monitor.start(function(error) {
+        test.equal(error, null, 'No errors on server start');
+        var processMonitor = new Monitor({probeClass:'Process', hostName:'localhost'});
+        processMonitor.connect(function(error) {
+          test.equal(error, null, 'No errors on connect');
+          var probeId = processMonitor.get('probeId');
+          test.ok(probeId, "The probeId is set");
+          test.ok(probeId && probeId.length === 36, "The probeId is a uuid");
+          test.done();
+        });
+      });
+    },
+
+    /**
+    * Tests that the server stops when requested
+    *
+    * @method Server-Stop
+    */
+    Stop: function(test) {
+      Monitor.stop(function(error) {
+        test.equal(error, null, 'No errors on server stop');
+        test.done();
+      });
+    },
+
+    /**
+    * Tests that the server can restart after being stopped
+    *
+    * @method Server-Restart
+    */
+    Restart: function(test) {
+      Monitor.start(function(error) {
+        test.equal(error, null, 'No errors on server restart');
+        Monitor.stop(function(error) {
+          test.equal(error, null, 'No errors on server re-stop');
+          test.done();
+        });
+      });
+    }
+
+  };
+
+  /**
+  * ## Tests for auto-start and named monitors
+  * @method AutoStart
+  */
+  module.exports['AutoStart'] = {
+
+    /**
+    * Tests that an auto-start monitor is started on load
+    *
+    * @method AutoStart-Starts
+    */
+    Starts: function(test) {
+      var runningProbesByKey = Monitor.getRouter().runningProbesByKey;
+      var autoStartedProbe = null;
+      for (var key in runningProbesByKey) {
+        var probeInstance = runningProbesByKey[key];
+        // 2345 is the signature polling interval for the test probe
+        if (probeInstance.get('pollInterval') === 2345) {
+          autoStartedProbe = probeInstance;
+        }
+      }
+      test.ok(autoStartedProbe, 'The auto started test probe is running');
+      test.done();
+    },
+
+    /**
+    * Tests that a local probe can be connected to by name.
+    *
+    * @method AutoStart-ConnectLocalByName
+    */
+    ConnectLocalByName: function(test) {
+      var testMonitor = new Monitor({probeName:'ProcessTest'});
+      testMonitor.connect(function(error) {
+        if (error) {
+          console.error('ConnectLocalByName', error);
+        }
+        test.equal(error, null, 'No errors on monitor connect');
+        test.equal(testMonitor.get('pollInterval'), 2345, 'The named monitor got the correct probe instance');
+        test.done();
+      });
+    },
+
+    /**
+    * Tests that a remote probe can be connected to by name.
+    *
+    * @method AutoStart-ConnectRemoteByName
+    */
+    ConnectRemoteByName: function(test) {
+      Monitor.start(function(error) {
+        test.equal(error, null, 'No errors on server restart');
+        var testMonitor = new Monitor({probeName:'ProcessTest', hostName:'localhost'});
+        testMonitor.connect(function(error) {
+          if (error) {
+            console.error('ConnectRemoteByName', error);
+          }
+          test.equal(error, null, 'No errors on monitor connect');
+          test.equal(testMonitor.get('pollInterval'), 2345, 'The named monitor got the correct probe instance');
+          Monitor.stop(function(error) {
+            test.equal(error, null, 'No errors on server re-stop');
+            test.done();
+          });
+        });
+      });
     }
 
   };
