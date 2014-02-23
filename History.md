@@ -1,3 +1,8 @@
+0.6.7 / 2014-02-22
+===================
+
+  * Disable monitor connection until all auto-start monitors are all connected
+
 0.6.6 / 2014-02-21
 ===================
 
