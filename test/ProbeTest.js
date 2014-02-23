@@ -4,6 +4,10 @@
 // http://lorenwest.github.com/node-monitor
 (function(root){
 
+  // This should be run before other tests to set up configurations
+  process.env.NODE_ENV='test';
+  var config = require('config');
+
   // Dependencies
   var Monitor = require('../lib/index'),
       Probe = Monitor.Probe, PollingProbe = Monitor.PollingProbe,
