@@ -1,4 +1,4 @@
-/* monitor - v0.6.5 - 2014-01-06 */
+/* monitor - v0.6.9 - 2014-02-24 */
 
 // Monitor.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -11,6 +11,7 @@
       Backbone = commonJS ? require('backbone') : root.Backbone,
       _ = commonJS ? require('underscore')._ : root._,
       log = null, stat = null,
+      autoStartedMonitors = [],
       Cron = commonJS ? require('cron') : null;
 
   // Constants
@@ -71,8 +72,11 @@
   * @extends Backbone.Model
   * @constructor
   * @param model - Initial data model.  Can be a JS object or another Model.
-  *     @param [model.id] {String} The monitor object id.  Set externally.
-  *     @param model.probeClass {String} Class name of the probe this is (or will be) monitoring.
+  *     @param [model.id] {String} An optional ID to assign to the monitor
+  *     @param [model.name] {String} An optional name to assign to the monitor
+  *     @param [model.probeClass] {String} Class name of the probe this is (or will be) monitoring.
+  *     @param [model.probeName] {String} External name given to the probe.  If specified, the probe
+  *       started by this monitor can be identified by other monitors with this name.
   *     @param [model.initParams] {Object} Initialization parameters passed to the probe during instantiation.
   *     @param [model.hostName] {String} Hostname the probe is (or will) run on.
   *       If not set, the Router will connect with the first host capable of running this probe.
@@ -85,6 +89,9 @@
   *       server or network.  If this variable is not set prior to running the
   *       app, node-monitor will assign a unique ID among other running apps on the host.
   *     @param model.probeId {String} ID of the probe this is monitoring (once connected). READONLY
+  *     @param model.writableAttributes {Array of String} Most probe attributes are readonly.
+  *       If a probe allows set() to be called on an attribute, that attribute name is specified
+  *       in this array (once connected).  READONLY
   *     @param model.PROBE_PARAMS... {(defined by the probe)} ... all other <strong>```model```</strong> parameters are READONLY parameters of the connected probe
   */
   /**
@@ -106,13 +113,16 @@
   var Monitor = Backbone.Model.extend({
 
     defaults: {
-      id:  '',
+      id: '',
       name: '',
+      probeName: '',
       probeClass: '',
       initParams: {},
       hostName: '',
       appName: '',
-      appInstance: ''
+      appInstance: '',
+      probeId: '',
+      writableAttributes: []
     },
     initialize: function(params, options) {
       log.info('init', params);
@@ -134,6 +144,11 @@
     connect: function(callback) {
       var t = this, startTime = Date.now();
       Monitor.getRouter().connectMonitor(t, function(error) {
+
+        // Monitor changes to writable attributes
+        if (!error) {
+          t.on('change', t.onChange, t);
+        }
 
         // Give the caller first crack at knowing we're connected,
         // followed by anyone registered for the connect event.
@@ -220,10 +235,41 @@
         else {
           t.trigger('disconnect', reason);
 
+          // De-register change listener
+          t.off('change', t.onChange, t);
+
           log.info('disconnected', {reason: reason, probeId: probeId});
           stat.time('disconnect', Date.now() - startTime);
         }
       });
+    },
+
+    /**
+    * Forward changes on to the probe, when connected.
+    *
+    * This is called whenever a change trigger is fired.  It forwards any
+    * changes of writable attributes onto the probe using control('set').
+    */
+    onChange: function() {
+      var t = this,
+          writableAttributes = t.get('writableAttributes'),
+          writableChanges = {};
+
+      // Add any writable changes
+      for (var attrName in t.attributes) {
+        if (writableAttributes.indexOf(attrName) >= 0 && t.attributes[attrName] !== t._previousAttributes[attrName]) {
+          writableChanges[attrName] = t.attributes[attrName];
+        }
+      }
+
+      // Pass any writable changes on to control.set()
+      if (Monitor._.size(writableChanges)) {
+        t.control('set', writableChanges, function(error) {
+          if (error) {
+            log.error('probeSet', 'Problem setting writable value', writableChanges, t.toMonitorJSON());
+          }
+        });
+      }
     },
 
     /**
@@ -679,6 +725,7 @@
 
   // Monitor configurations.  If running in a commonJS environment, load the
   // configs from the config package.  Otherwise just use the defaults.
+  // See config/default.js for more information on these configurations.
   var defaultConfig = {
     appName: 'unknown',
     serviceBasePort: 42000,
@@ -686,7 +733,8 @@
     allowExternalConnections: false,
     consoleLogListener: {
       pattern: "{trace,warn,error,fatal}.*"
-    }
+    },
+    autoStart: []
   };
   if (commonJS) {
     Monitor.Config = require('config');
@@ -706,6 +754,23 @@
     module.exports = Monitor;
   } else {
     root.Monitor = Monitor;
+  }
+
+  // Auto-start monitors after loading
+  var autoStart = Monitor.Config.Monitor.autoStart;
+  if (autoStart.length) {
+    setTimeout(function(){
+      var router = Monitor.getRouter();
+      autoStart.forEach(function(params) {
+        var autoStarted = new Monitor(params);
+        router.connectMonitor(autoStarted, function(error) {
+          if (error) {
+            log.error('autoStart', 'Error auto-starting probe', params, error);
+          }
+          autoStartedMonitors.push(autoStarted);
+        });
+      });
+    },0);
   }
 
 }(this));
@@ -1483,6 +1548,36 @@
     },
 
     /**
+    * Remotely set a probe attribute.
+    *
+    * This allows setting probe attributes that are listed in writableAttributes.
+    * It can be overwritten in derived Probe classes for greater control.
+    *
+    * @method set_control
+    * @param attrs {Object} Name/Value attributes to set.  All must be writable.
+    * @param callback {Function(error)} Called when the attributes are set or error
+    */
+    set_control: function(attrs, callback) {
+      var t = this,
+          writableAttributes = t.get('writableAttributes') || [];
+
+      // Validate the attributes are writable
+      for (var attrName in attrs) {
+        if (writableAttributes.indexOf(attrName) < 0) {
+          return callback({code:'NOT_WRITABLE', msg: 'Attribute not writable: ' + attrName});
+        }
+      }
+
+      // Set the data
+      var error = null;
+      if (!t.set(attrs)) {
+        error = {code:'VALIDATION_ERROR', msg:'Data set failed validation'};
+        log.warn('set_control', error);
+      }
+      return callback(error);
+    },
+
+    /**
     * Respond to a ping control sent from a monitor
     *
     * @method ping_control
@@ -1886,6 +1981,7 @@
 
         // Function to run upon connection (internal or external)
         var onConnect = function(error, probe) {
+
           if (error) {
             log.error(t.logId + 'probeConnect', error, logCtxt);
             return callback(error);
@@ -2579,13 +2675,14 @@
       var t = this,
           monitorJSON = monitor.toMonitorJSON(),
           probeJSON = null,
+          probeName = monitorJSON.probeName,
           probeClass = monitorJSON.probeClass,
           startTime = Date.now(),
           monitorStr = probeClass + '.' + monitor.toServerString().replace(/:/g, '.');
 
       // Class name must be set
-      if (!probeClass) {
-        var errStr = 'probeClass must be set';
+      if (!probeClass && !probeName) {
+        var errStr = 'monitor name or probeClass must be set';
         log.error('connectMonitor', errStr);
         return callback(errStr);
       }
@@ -2674,12 +2771,21 @@
     * @method buildProbeKey
     * @protected
     * @param probeJSON {Object} - An object containing:
+    *     @param probeJSON.probeName {String} - The client-defined probe name
+    *     -or-
     *     @param probeJSON.probeClass {String} - The probe class name (required)
     *     @param probeJSON.initParams {Object} - Probe initialization parameters (if any)
     * @return probeKey {String} - A string identifying the probe
     */
     buildProbeKey: function(probeJSON) {
-      var probeKey = probeJSON.probeClass, initParams = probeJSON.initParams;
+      var probeKey = probeJSON.probeClass,
+          initParams = probeJSON.initParams;
+
+      // Allow probes to be externally identified by name
+      if (probeJSON.probeName) {
+        return probeJSON.probeName;
+      }
+
       if (initParams) {
         _.keys(initParams).sort().forEach(function(key){
           probeKey += ':' + key + '=' + initParams[key];
@@ -2712,7 +2818,10 @@
     * <ul>
     */
     determineConnection: function(monitorJSON, makeNewConnections, callback) {
-      var t = this, connection = null, probeClass = monitorJSON.probeClass,
+      var t = this,
+          connection = null,
+          probeName = monitorJSON.probeName,
+          probeClass = monitorJSON.probeClass,
           errStr = '',
           hostName = monitorJSON.hostName,
           appName = monitorJSON.appName,
@@ -2759,7 +2868,7 @@
         if (connection && !connection.connected) {
           connection.on('connect', onConnect);
           connection.on('error', onError);
-          return connection.connect(callback);
+          return connection.connect();
         }
 
         // Verified connection
@@ -2774,8 +2883,22 @@
       if (thisHost && thisApp && thisInstance) {
 
         // Connect internally if the probe is available
-        if (Probe.classes[probeClass] != null) {
+        if (t.runningProbesByKey[probeName] || Probe.classes[probeClass] != null) {
           return callback(null, null);
+        }
+
+        // Give named auto-start probes time to start up
+        var autoStarts = Monitor.Config.Monitor.autoStart;
+        if (probeName && !probeClass && autoStarts.length) {
+          var autoStart = Monitor._.find(autoStarts, function(probeDef) {
+            return probeDef.probeName === probeName;
+          });
+          if (autoStart) {
+            setTimeout(function() {
+              t.determineConnection(monitorJSON, makeNewConnections, callback);
+            },10);
+            return;
+          }
         }
 
         // No probe with that name in this process.
@@ -3035,7 +3158,10 @@
 
           // Instantiate a new probe
           probeImpl = new ProbeClass(paramCopy, initOptions);
-          probeImpl.set({id: Monitor.generateUniqueId()});
+          probeImpl.set({
+            id: Monitor.generateUniqueId(),
+            writableAttributes: ProbeClass.prototype.writableAttributes || []
+          });
           probeImpl.refCount = 0;
           probeImpl.probeKey = probeKey;
           t.runningProbesByKey[probeKey] = probeImpl;
@@ -3879,6 +4005,7 @@
 
     // These are required for Probes
     probeClass: 'Inspect',
+    writableAttributes: ['value'],
 
     initialize: function(initParams){
       var t = this;
@@ -3917,6 +4044,34 @@
       } else {
         PollingProbe.prototype.initialize.apply(t, arguments);
       }
+    },
+
+    /**
+    * Remotely set the inspected variable's value
+    *
+    * @method set_control
+    * @param attrs {Object} Name/Value attributes to set.  All must be writable.
+    * @param callback {Function(error)} Called when the attributes are set or error
+    */
+    set_control: function(attrs, callback) {
+      var t = this;
+
+      // Value is the only thing to set
+      if (typeof attrs.value === 'undefined') {
+        return callback({code:'NO_VALUE'});
+      }
+
+      // Set the model elements.  These cause change events to fire
+      if (t.isModel) {
+        t.value.set(attrs.value);
+      }
+      else {
+        // Set the variable directly
+        var jsonValue = JSON.stringify(attrs.value);
+        t._evaluate(t.key + ' = ' + jsonValue);
+        t.set('value', attrs.value);
+      }
+      return callback();
     },
 
     // Stop watching for change events or polling

@@ -26,11 +26,12 @@
         initParams: {a:1},
         hostName: 'some-host.com',
         appName: 'test',
-        appInstance: 2
+        appInstance: 2,
+        probeId: Monitor.generateUniqueId(),
+        writableAttributes: []
       },
       testProbeAttrs = {
-        // Non-monitor attributes
-        probeId: Monitor.generateUniqueId(),
+        // Probe specific attributes
         probeAttr1: 'attr1 value',
         probeAttr2: 2,
         probeAttr3: {hello: 'world'}
@@ -114,6 +115,54 @@
     Router: function(test) {
       test.ok(Monitor.getRouter() instanceof Monitor.Router, "The default router is available");
       test.done();
+    }
+
+  };
+
+  /**
+  * Tests for writable attributes
+  * @method Writable
+  */
+  module.exports['Writable'] = {
+
+    /**
+    * Tests that a probe with known writable attributes can be written
+    * @method CanWrite
+    */
+    CanWrite: function(test) {
+      // Create a global test variable to set via the inspector probe
+      global.testVar = 'initialValue';
+      var inspector = new Monitor({probeName: 'gertrude', probeClass:'Inspect', initParams:{key:'testVar'}});
+      inspector.connect(function(error) {
+        test.equal(error, null, 'No errors on Inspect probe connect');
+        test.equal(inspector.get('value'), 'initialValue', 'Inspector connected to the test variable');
+        inspector.set('value', 'newValue');
+        test.equal(global.testVar, 'newValue', 'You can set the probe value using monitor.set()');
+        inspector.disconnect(function(){
+          test.done();
+        });
+      });
+    },
+
+    /**
+    * Tests that calling set_control directly gets the error results
+    *
+    * @method SetControl
+    */
+    SetControl: function(test) {
+      // Create a global test variable to set via the inspector probe
+      global.testVar = 'initialValue';
+      var inspector = new Monitor({probeName: 'alfred', probeClass:'Inspect', initParams:{key:'testVar'}});
+      inspector.connect(function(error) {
+        test.equal(error, null, 'No errors on Inspect probe connect');
+        test.equal(inspector.get('value'), 'initialValue', 'Inspector connected to the test variable');
+        inspector.control('set', {value: 'newValue'}, function(error) {
+          test.equal(global.testVar, 'newValue', 'You can set the probe value using monitor.set()');
+          inspector.disconnect(function(){
+            test.done();
+          });
+        });
+      });
     }
 
   };

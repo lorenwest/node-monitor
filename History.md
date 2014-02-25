@@ -1,3 +1,19 @@
+0.6.9 / 2014-0
+===================
+
+  * Writable probe attributes
+  * Added the recipe mechanism
+    * Config.Monitor.Recipe:{
+        recipeName: {
+          monitors: {
+            name: {probe inits}
+          }
+          triggers: ['monitorVar.attribute', 'monitorVar.attribute']
+          script: "JavaScript to run"
+        }   
+    * Log runs, log changes
+        
+
 0.6.8 / 2014-02-22
 ===================
 
