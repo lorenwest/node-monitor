@@ -237,8 +237,8 @@
       var autoStartedProbe = null;
       for (var key in runningProbesByKey) {
         var probeInstance = runningProbesByKey[key];
-        // 2345 is the signature polling interval for the test probe
-        if (probeInstance.get('pollInterval') === 2345) {
+        // 1234 is the signature polling interval for the test probe
+        if (probeInstance.get('pollInterval') === 1234) {
           autoStartedProbe = probeInstance;
         }
       }
@@ -254,11 +254,9 @@
     ConnectLocalByName: function(test) {
       var testMonitor = new Monitor({probeName:'ProcessTest'});
       testMonitor.connect(function(error) {
-        if (error) {
-          console.error('ConnectLocalByName', error);
-        }
+        test.equal(error, null, 'No errors on processTest connect');
         test.equal(error, null, 'No errors on monitor connect');
-        test.equal(testMonitor.get('pollInterval'), 2345, 'The named monitor got the correct probe instance');
+        test.equal(testMonitor.get('pollInterval'), 1234, 'The named monitor got the correct probe instance');
         test.done();
       });
     },
@@ -273,11 +271,8 @@
         test.equal(error, null, 'No errors on server restart');
         var testMonitor = new Monitor({probeName:'ProcessTest', hostName:'localhost'});
         testMonitor.connect(function(error) {
-          if (error) {
-            console.error('ConnectRemoteByName', error);
-          }
           test.equal(error, null, 'No errors on monitor connect');
-          test.equal(testMonitor.get('pollInterval'), 2345, 'The named monitor got the correct probe instance');
+          test.equal(testMonitor.get('pollInterval'), 1234, 'The named monitor got the correct probe instance');
           Monitor.stop(function(error) {
             test.equal(error, null, 'No errors on server re-stop');
             test.done();

@@ -1,18 +1,11 @@
 0.6.9 / 2014-0
 ===================
 
-  * Writable probe attributes
-  * Added the recipe mechanism
-    * Config.Monitor.Recipe:{
-        recipeName: {
-          monitors: {
-            name: {probe inits}
-          }
-          triggers: ['monitorVar.attribute', 'monitorVar.attribute']
-          script: "JavaScript to run"
-        }   
-    * Log runs, log changes
-        
+  * Introduced writable probe attributes via monitor.set()
+  * Introduced the Recipe probe for monitor automation
+  * Introduced the DataModel probe for state management
+  * Better Inspect probe evaluation error logging
+  * Tests for the above
 
 0.6.8 / 2014-02-22
 ===================
@@ -22,7 +15,7 @@
 0.6.7 / 2014-02-22
 ===================
 
-  * Disable monitor connection until all auto-start monitors are all connected
+  * Disable monitor connection until all auto-start monitors are connected
 
 0.6.6 / 2014-02-21
 ===================

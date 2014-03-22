@@ -17,6 +17,8 @@ var MODULE_DEF = {
     "lib/Server.js",
     "lib/Router.js",
     "lib/Sync.js",
+    "lib/probes/DataModelProbe.js",
+    "lib/probes/RecipeProbe.js",
     "lib/probes/PollingProbe.js",
     "lib/probes/StreamProbe.js",
     "lib/probes/InspectProbe.js",

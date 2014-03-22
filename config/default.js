@@ -25,12 +25,19 @@ module.exports = {
     // See the external.js file in this directory for more information.
     allowExternalConnections: false,
 
-    // Monitors configured here are started directly upon loading.
-    // This is an array of objects, each passed as the first parameter
-    // to a new Monitor instance.
-    autoStart: [
-      // {name: 'ProbeName', probeClass: 'ProbeClass', initParams:{specialized:'initParams'}}
-    ],
+    // Monitors to start on load.
+    // This is a map of objects, each passed as the first parameter
+    // to a new Monitor instance. The autoStart monitors are named so
+    // additional autoStart monitors can be added in subsequent config files.
+    autoStart: {
+      // monitorName: {probeName: '...', probeClass: '...', initParams:{...}}
+    },
+
+    // Named list of recipe definitions to load when Monitor loads.
+    // See Recipe.js for the structure and behavior of a recipe.
+    recipes: {
+      // recipeName: {recipeDefinition}
+    },
 
     // Configure the built-in console log output
     consoleLogListener: {
