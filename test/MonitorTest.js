@@ -137,10 +137,12 @@
         test.equal(error, null, 'No errors on Inspect probe connect');
         test.equal(inspector.get('value'), 'initialValue', 'Inspector connected to the test variable');
         inspector.set('value', 'newValue');
-        test.equal(global.testVar, 'newValue', 'You can set the probe value using monitor.set()');
-        inspector.disconnect(function(){
-          test.done();
-        });
+        setTimeout(function(){
+          test.equal(global.testVar, 'newValue', 'You can set the probe value using monitor.set()');
+          inspector.disconnect(function(){
+            test.done();
+          });
+        },0);
       });
     },
 

@@ -18,6 +18,8 @@
   var Monitor = require('../lib/index'),
       RecipeProbe = Monitor.RecipeProbe,
       Backbone = Monitor.Backbone,
+      recipeMonitor = null,
+      dataModelMonitor = null,
       _ = Monitor._,
       NL = '\n';
 
@@ -44,7 +46,7 @@
   };
 
   /**
-  * Tests for a hand coded recipe
+  * Tests for a hand coded recipe stored in config/test.js
   * @method HandCoded
   */
   module.exports['HandCoded'] = {
@@ -54,15 +56,34 @@
     * @method HandCoded-Initialize
     */
     Initialize: function(test) {
-      test.done();
+      // Give the RecipeTest probe a chance to load
+      setTimeout(function(){
+        recipeMonitor = new Monitor({probeName:'RecipeTest'});
+        recipeMonitor.connect(function(error) {
+          test.ok(!error, 'No error on recipe connect');
+          test.ok(recipeMonitor.get('started'), 'Recipe is started on init');
+
+          // Get a monitor to the underlying data model the recipe manipulates
+          dataModelMonitor = new Monitor({probeName:'DataModelTest'});
+          dataModelMonitor.connect(function(error1) {
+            test.ok(!error1, 'No error on data model connect');
+            test.equal(dataModelMonitor.get('attr1'), 'attrValue1', 'Connected to the correct data model');
+            test.done();
+          });
+        });
+      }, 0);
     },
 
     /**
-    * Test recipe testing
-    * @method HandCoded-Test
+    * Test recipe stopping
+    * @method HandCoded-Stop
     */
-    Test: function(test) {
-      test.done();
+    Stop: function(test) {
+      recipeMonitor.control('stop', function(error) {
+        test.ok(!error, 'No error on stop');
+        test.ok(!recipeMonitor.get('started'), 'Recipe is stopped on stop');
+        test.done();
+      });
     },
 
     /**
@@ -70,32 +91,37 @@
     * @method HandCoded-Start
     */
     Start: function(test) {
-      test.done();
-    },
-
-
-    /**
-    * Tests that the monitors in the recipe get instantiated
-    * @method HandCoded-Monitors
-    */
-    Monitors: function(test) {
-      test.done();
+      recipeMonitor.control('start', function(error) {
+        test.ok(!error, 'No error on start');
+        test.ok(recipeMonitor.get('started'), 'Recipe is started on start');
+        test.done();
+      });
     },
 
     /**
-    * Tests that the triggers fire
-    * @method HandCoded-Triggers
-    */
-    Triggers: function(test) {
-      test.done();
-    },
-
-    /**
-    * Tests that the script is run
+    * Tests that the script is run on change
     * @method HandCoded-ScriptRun
     */
     ScriptRun: function(test) {
-      test.done();
+
+      // The test recipe is fired on change, and the script simply copies
+      // the value of attr1 into attr2.
+      var newValue = 'scriptRunTest';
+
+      // Look for attr2 changing from the test
+      dataModelMonitor.on('change', function() {
+
+        // This is triggered twice - once on attr1 change, once on attr2 change.
+        // Only perform the test on new attr2 value
+        var attr2 = dataModelMonitor.get('attr2');
+        if (attr2 === newValue) {
+          test.equals(attr2, newValue, 'The script was run');
+          test.done();
+        }
+      });
+
+      // Set attr1 to the new value.  This should trigger the recipe.
+      dataModelMonitor.set('attr1', newValue);
     },
 
     /**
@@ -115,26 +141,10 @@
     },
 
     /**
-    * Tests that the monitor attributes set in the script are set
-    * @method HandCoded-SetAttributes
-    */
-    SetAttributes: function(test) {
-      test.done();
-    },
-
-    /**
-    * Tests that the monitor control function is called
+    * Tests that the monitor control function can be called
     * @method HandCoded-Control
     */
     Control: function(test) {
-      test.done();
-    },
-
-    /**
-    * Tests that the recipe stops
-    * @method HandCoded-Stop
-    */
-    Stop: function(test) {
       test.done();
     }
 
