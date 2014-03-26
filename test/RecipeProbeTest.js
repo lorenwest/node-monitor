@@ -20,6 +20,7 @@
       Backbone = Monitor.Backbone,
       recipeMonitor = null,
       dataModelMonitor = null,
+      derivedRecipeMonitor = null,
       _ = Monitor._,
       NL = '\n';
 
@@ -122,46 +123,49 @@
 
       // Set attr1 to the new value.  This should trigger the recipe.
       dataModelMonitor.set('attr1', newValue);
-    },
-
-    /**
-    * Tests that the script is run in a sandbox
-    * @method HandCoded-Sandbox
-    */
-    Sandbox: function(test) {
-      test.done();
-    },
-
-    /**
-    * Tests that the script state (this) is persisted between runs
-    * @method HandCoded-PersistentContext
-    */
-    PersistentContext: function(test) {
-      test.done();
-    },
-
-    /**
-    * Tests that the monitor control function can be called
-    * @method HandCoded-Control
-    */
-    Control: function(test) {
-      test.done();
     }
 
   };
 
   /**
   * Tests that recipe autoStart works as advertised
-  * @method AutoRun
+  * @method Derived
   */
-  module.exports['AutoRun'] = {
+  module.exports['Derived'] = {
 
     /**
-    * Tests that an autoStart recipe starts automatically
-    * @method AutoRun-IsRunning
+    * Construct a derived recipe
+    * @method Derived-Construct
     */
-    IsRunning: function(test) {
-      test.done();
+    Construct: function(test) {
+
+      // Build the class
+      var DerivedRecipe = RecipeProbe.extend({
+        probeClass: 'DerivedRecipe',
+        initialize: function(){
+          var t = this;
+          t.autoStart = false;
+          t.monitors = {
+            dataModel: {probeName: 'DataModelTest'}
+          };
+          RecipeProbe.prototype.initialize.apply(t, arguments);
+        },
+        run: function(context){
+          var t = this;
+          // Set derivedAttr2 to the value of derivedAttr1
+          context.dataModel.set('derivedAttr2', context.dataModel.get('derivedAttr1'));
+        }
+      });
+
+      // Get a monitor to the class
+      var derivedRecipeMonitor = new Monitor({probeClass:'DerivedRecipe'});
+      derivedRecipeMonitor.connect(function(error){
+        test.ok(!error, 'No error on derived recipe connect');
+        test.equal(dataModelMonitor.get('derivedAttr1'), 'derivedValue1', 'Data model is set for testing');
+        test.isNull(dataModelMonitor.get('derivedAttr2'), 'Derived test not run yet');
+        test.done();
+      })
+
     },
 
     /**

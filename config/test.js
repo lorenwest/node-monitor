@@ -7,7 +7,11 @@ module.exports = {
         probeName: 'ProcessTest', probeClass: 'Process', initParams:{pollInterval: 1234}
       },
       testModel: {
-        probeName: 'DataModelTest', probeClass: 'DataModel', initParams:{testParam1:'testValue1', attr1:'attrValue1'}
+        probeName: 'DataModelTest', probeClass: 'DataModel', initParams:{
+          testParam1:'testValue1',
+          attr1:'attrValue1',
+          derivedAttr1: 'derivedAttrValue1'
+        }
       },
       testRecipe: {
         probeName: 'RecipeTest', probeClass: 'Recipe', initParams:{
