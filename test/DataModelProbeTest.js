@@ -64,7 +64,7 @@
       // change from the probe).
       var onChange = function() {
         test.equal(dataModelMonitor.get('testParam1'), 'testValue2', 'The change event was triggered correctly');
-      }
+      };
 
       // Done with the test in 10 ms (should have only gotten one onChange event triggered)
       setTimeout(function(){
@@ -88,11 +88,11 @@
       var onChange1 = function() {
         test.equal(dataModelMonitor.get('testParam1'), 'testValue3', 'The change event was triggered correctly');
         dataModelMonitor1.off('change:testParam1', onChange1);
-      }
+      };
       var onChange2 = function() {
         test.equal(dataModelMonitor.get('testParam1'), 'testValue3', 'The change event was triggered correctly');
         dataModelMonitor2.off('change:testParam1', onChange2);
-      }
+      };
 
       dataModelMonitor1 = new Monitor({probeName:'DataModelTest'});
       dataModelMonitor2 = new Monitor({probeName:'DataModelTest'});

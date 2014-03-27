@@ -110,18 +110,20 @@
       var newValue = 'scriptRunTest';
 
       // Look for attr2 changing from the test
-      dataModelMonitor.on('change', function() {
+      var changeFn = function() {
 
         // This is triggered twice - once on attr1 change, once on attr2 change.
         // Only perform the test on new attr2 value
         var attr2 = dataModelMonitor.get('attr2');
         if (attr2 === newValue) {
+          dataModelMonitor.off('change', changeFn);
           test.equals(attr2, newValue, 'The script was run');
           test.done();
         }
-      });
+      };
 
       // Set attr1 to the new value.  This should trigger the recipe.
+      dataModelMonitor.on('change', changeFn);
       dataModelMonitor.set('attr1', newValue);
     }
 
@@ -144,10 +146,12 @@
         probeClass: 'DerivedRecipe',
         initialize: function(){
           var t = this;
-          t.autoStart = false;
-          t.monitors = {
-            dataModel: {probeName: 'DataModelTest'}
-          };
+          t.set({
+            autoStart: false,
+            monitors: {
+              dataModel: {probeName: 'DataModelTest'}
+            }
+          });
           RecipeProbe.prototype.initialize.apply(t, arguments);
         },
         run: function(context){
@@ -158,22 +162,38 @@
       });
 
       // Get a monitor to the class
-      var derivedRecipeMonitor = new Monitor({probeClass:'DerivedRecipe'});
+      derivedRecipeMonitor = new Monitor({probeClass:'DerivedRecipe'});
       derivedRecipeMonitor.connect(function(error){
         test.ok(!error, 'No error on derived recipe connect');
-        test.equal(dataModelMonitor.get('derivedAttr1'), 'derivedValue1', 'Data model is set for testing');
-        test.isNull(dataModelMonitor.get('derivedAttr2'), 'Derived test not run yet');
+        test.equal(dataModelMonitor.get('derivedAttr1'), 'derivedAttrValue1', 'Data model is set for testing');
+        test.equal(dataModelMonitor.get('derivedAttr2'), null, 'Derived test not run yet');
         test.done();
-      })
-
+      });
     },
 
     /**
     * Tests that a non-autoStart recipe does not start automatically
-    * @method AutoRun-IsRunning
+    * @method Derived-IsNotRunning
     */
     IsNotRunning: function(test) {
-      test.done();
+      setTimeout(function(){
+        test.equal(derivedRecipeMonitor.get('started'), false, 'Test has not started');
+        test.equal(dataModelMonitor.get('derivedAttr2'), null, 'Still has not run');
+        test.done();
+      }, 10);
+    },
+
+    /**
+    * Tests that the recipe can start
+    * @method AutoRun-CanStart
+    */
+    CanStart: function(test) {
+      derivedRecipeMonitor.control('start', function(error) {
+        test.ok(!error, 'No error on start');
+        test.ok(derivedRecipeMonitor.get('started'), 'Recipe is started on start');
+        test.equal(dataModelMonitor.get('derivedAttr2'), null, 'First run still not performed');
+        test.done();
+      });
     }
 
 

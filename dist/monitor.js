@@ -1,4 +1,4 @@
-/* monitor - v0.6.9 - 2014-02-24 */
+/* monitor - v0.6.9 - 2014-03-26 */
 
 // Monitor.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
@@ -89,9 +89,9 @@
   *       server or network.  If this variable is not set prior to running the
   *       app, node-monitor will assign a unique ID among other running apps on the host.
   *     @param model.probeId {String} ID of the probe this is monitoring (once connected). READONLY
-  *     @param model.writableAttributes {Array of String} Most probe attributes are readonly.
+  *     @param model.writableAttributes {'*' or Array of String} Most probe attributes are readonly.
   *       If a probe allows set() to be called on an attribute, that attribute name is specified
-  *       in this array (once connected).  READONLY
+  *       in this array (once connected).  A value of '*' signifies all attributes as writable.  READONLY
   *     @param model.PROBE_PARAMS... {(defined by the probe)} ... all other <strong>```model```</strong> parameters are READONLY parameters of the connected probe
   */
   /**
@@ -146,7 +146,7 @@
       Monitor.getRouter().connectMonitor(t, function(error) {
 
         // Monitor changes to writable attributes
-        if (!error) {
+        if (!error && t.get('writableAttributes').length > 0) {
           t.on('change', t.onChange, t);
         }
 
@@ -227,6 +227,10 @@
           startTime = Date.now(),
           probeId = t.get('probeId');
 
+      // Stop forwarding changes to the probe
+      t.off('change', t.onChange, t);
+
+      // Disconnect from the router
       Monitor.getRouter().disconnectMonitor(t, reason, function(error, reason) {
         if (callback) {callback(error);}
         if (error) {
@@ -234,10 +238,6 @@
         }
         else {
           t.trigger('disconnect', reason);
-
-          // De-register change listener
-          t.off('change', t.onChange, t);
-
           log.info('disconnected', {reason: reason, probeId: probeId});
           stat.time('disconnect', Date.now() - startTime);
         }
@@ -256,8 +256,11 @@
           writableChanges = {};
 
       // Add any writable changes
-      for (var attrName in t.attributes) {
-        if (writableAttributes.indexOf(attrName) >= 0 && t.attributes[attrName] !== t._previousAttributes[attrName]) {
+      var probeAttrs = t.toProbeJSON();
+      delete probeAttrs.id;
+      for (var attrName in probeAttrs) {
+        var isWritable = writableAttributes === '*' || writableAttributes.indexOf(attrName) >= 0;
+        if (isWritable && !(_.isEqual(t.attributes[attrName], t._probeValues[attrName]))) {
           writableChanges[attrName] = t.attributes[attrName];
         }
       }
@@ -517,6 +520,7 @@
   */
   Monitor.start = function(options, callback) {
     log.info('start', options);
+    callback = callback || function(){};
 
     // Get a default monitor
     if (!Monitor.defaultServer) {
@@ -537,6 +541,7 @@
   */
   Monitor.stop = function(callback) {
     log.info('stop');
+    callback = callback || function(){};
     if (Monitor.defaultServer) {
       Monitor.defaultServer.stop(callback);
       delete Monitor.defaultServer;
@@ -758,14 +763,13 @@
 
   // Auto-start monitors after loading
   var autoStart = Monitor.Config.Monitor.autoStart;
-  if (autoStart.length) {
+  if (Monitor._.size(autoStart)) {
     setTimeout(function(){
-      var router = Monitor.getRouter();
-      autoStart.forEach(function(params) {
-        var autoStarted = new Monitor(params);
-        router.connectMonitor(autoStarted, function(error) {
+      Monitor._.each(autoStart, function(model) {
+        var autoStarted = new Monitor(model);
+        autoStarted.connect(function(error) {
           if (error) {
-            log.error('autoStart', 'Error auto-starting probe', params, error);
+            log.error('autoStart', 'Error auto-starting monitor', model, error);
           }
           autoStartedMonitors.push(autoStarted);
         });
@@ -1530,7 +1534,7 @@
 
       var whenDone = function(error) {
         if (error) {
-          log.error(logId, error);
+          log.error(logId + '.whenDone', error);
           return callback(error);
         }
         var duration = Date.now() - startTime;
@@ -1539,12 +1543,16 @@
         callback.apply(null, arguments);
       };
 
-      try {
-        controlFn.call(t, params, whenDone);
-      } catch (e) {
-        errMsg = 'Error calling control: ' + t.probeClass + ':' + name;
-        whenDone({msg:errMsg, err: e.toString()});
-      }
+      // Run the control on next tick.  This provides a consistent callback
+      // chain for local and remote probes.
+      setTimeout(function(){
+        try {
+          controlFn.call(t, params, whenDone);
+        } catch (e) {
+          errMsg = 'Error calling control: ' + t.probeClass + ':' + name;
+          whenDone({msg:errMsg, err: e.toString()});
+        }
+      }, 0);
     },
 
     /**
@@ -1562,9 +1570,11 @@
           writableAttributes = t.get('writableAttributes') || [];
 
       // Validate the attributes are writable
-      for (var attrName in attrs) {
-        if (writableAttributes.indexOf(attrName) < 0) {
-          return callback({code:'NOT_WRITABLE', msg: 'Attribute not writable: ' + attrName});
+      if (writableAttributes !== '*') {
+        for (var attrName in attrs) {
+          if (writableAttributes.indexOf(attrName) < 0) {
+            return callback({code:'NOT_WRITABLE', msg: 'Attribute not writable: ' + attrName});
+          }
         }
       }
 
@@ -2682,7 +2692,7 @@
 
       // Class name must be set
       if (!probeClass && !probeName) {
-        var errStr = 'monitor name or probeClass must be set';
+        var errStr = 'probeName or probeClass must be set';
         log.error('connectMonitor', errStr);
         return callback(errStr);
       }
@@ -2698,6 +2708,9 @@
           probeJSON.probeId = probeJSON.id; delete probeJSON.id;
           monitor.probe = probe;
 
+          // Keep the last known probe state for effective updating
+          monitor._probeValues = _.clone(probeJSON);
+
           // Perform the initial set silently.  This assures the initial
           // probe contents are available on the connect event,
           // but doesn't fire a change event before connect.
@@ -2705,8 +2718,12 @@
 
           // Watch the probe for changes.
           monitor.probeChange = function(){
-            monitor.set(probe.changedAttributes());
-            log.info('probeChange', {probeId: probeJSON.probeId, changed: probe.changedAttributes()});
+            var changed = probe.changedAttributes();
+            if (changed) {
+              monitor._probeValues = _.clone(probe.toJSON());
+              monitor.set(probe.changedAttributes());
+              log.info('probeChange', {probeId: probeJSON.probeId, changed: probe.changedAttributes()});
+            }
           };
           probe.on('change', monitor.probeChange);
 
@@ -2752,8 +2769,8 @@
           return callback(error);
         }
         probe.off('change', monitor.probeChange);
-        monitor.probe = monitor.probeChange = null;
         monitor.set({probeId:null});
+        monitor.probe = monitor.probeChange = null;
         return callback(null, reason);
       };
 
@@ -3108,6 +3125,7 @@
       // Build a key for this probe from the probeClass and initParams
       var t = this,
           probeKey = t.buildProbeKey(monitorJSON),
+          probeName = monitorJSON.probeName,
           probeClass = monitorJSON.probeClass,
           initParams = monitorJSON.initParams,
           probeImpl = null;
@@ -3155,6 +3173,11 @@
           // is bad if the init params came in from defaults of another object,
           // because those defaults will get mutated.
           var paramCopy = Monitor.deepCopy(initParams);
+
+          // Extend the probe name into the probe if known
+          if (probeName) {
+            paramCopy.probeName = probeName;
+          }
 
           // Instantiate a new probe
           probeImpl = new ProbeClass(paramCopy, initOptions);
@@ -3740,6 +3763,331 @@
 
 }(this));
 
+// DataModelProbe.js (c) 2010-2014 Loren West and other contributors
+// May be freely distributed under the MIT license.
+// For further details and documentation:
+// http://lorenwest.github.com/node-monitor
+
+(function(root){
+
+  // Module loading - this runs server-side only
+  var Monitor = root.Monitor || require('../Monitor');
+
+  /**
+  * Probe representation of a simple data model
+  *
+  * This probe allows remote creation, manipulation, and change moitoring for
+  * arbitrary data. It is useful for monitor applications needing to maintain
+  * a small amount of state on the system being monitored.
+  *
+  * @class DataModelProbe
+  * @extends Probe
+  * @constructor
+  * @param [initParams] - Initialization parameters.  An object containing the
+  *   initial state of the data model.  All properties become data model
+  *   elements, readable and writable by all monitors connected to the probe.
+  */
+  var DataModelProbe = Monitor.DataModelProbe = Monitor.Probe.extend({
+
+    // These are required for Probes
+    probeClass: 'DataModel',
+    writableAttributes: '*'
+
+  });
+
+}(this));
+
+// RecipeProbe.js (c) 2010-2014 Loren West and other contributors
+// May be freely distributed under the MIT license.
+// For further details and documentation:
+// http://lorenwest.github.com/node-monitor
+
+/* This class is evil.  You probably shouldn't use it. Or drink. Or drink while using it. */
+/*jslint evil: true */
+
+(function(root){
+
+  // Module loading - this runs server-side only
+  var Monitor = root.Monitor || require('../Monitor'),
+      logger = Monitor.getLogger('RecipeProbe'),
+      vm = Monitor.commonJS ? require('vm') : null,
+      _ = Monitor._,
+      Probe = Monitor.Probe;
+
+  /**
+  * Monitor automation probe
+  *
+  * The Recipe probe monitors other probes and runs instructions when the
+  * probes change, and controls other probes based on these instructions.
+  *
+  * It contains a list of monitors to instantiate, and a script to run when the
+  * monitor ```change``` event is fired.
+  *
+  * When the script fires, the monitors are available to the script by name.
+  * The script can ```get()``` monitor values, ```set()``` writable monitor
+  * values, and control the monitor using the ```control()`` method.
+  *
+  * The ```this``` variable is consistent between script runs, so state can be
+  * maintained by setting attributes in ```this```.
+  *
+  * @class RecipeProbe
+  * @extends Probe
+  * @constructor
+  * @param monitors {Object} - Named list of monitors to instantiate
+  *   Key: monitor variable name, Value: Monitor model parameters
+  * @param script {String} - JavaScript script to run.
+  *   The script has access to ```console```, ```logger```, and all defined
+  *   monitors by name.
+  * @param [recipeName] {String} - Recipe name for logging
+  * @param [autoStart=false] {boolean} - Call the start control on instantiation?
+  * @param [started] {boolean} - Is the recipe started and currently active?
+  */
+  var RecipeProbe = Monitor.RecipeProbe = Probe.extend({
+
+    probeClass: 'Recipe',
+    writableAttributes: [],
+    defaults: {
+      recipeName: '',
+      monitors: {},
+      script: '',
+      autoStart: false,
+      started: false
+    },
+
+    initialize: function(attributes, options){
+      var t = this;
+
+      // Precondition test
+      if (_.size(t.get('monitors')) === 0) {
+        logger.error('initialize', 'No monitors defined in the recipe');
+        return;
+      }
+
+      // This is a list of monitors (vs. monitor definitions)
+      t.monitors = {};
+
+      // Auto start, calling the callback when started
+      if (t.get('autoStart')) {
+        options.asyncInit = true;
+        t.start_control({}, options.callback);
+      }
+    },
+
+    release: function() {
+      var t = this,
+          args = arguments;
+      t.stop_control({}, function(){
+        Probe.prototype.release.apply(t, args);
+      });
+    },
+
+    /**
+    * Start the recipe
+    *
+    * This connects to each monitor and watches for change events
+    *
+    * @method start_control
+    */
+    start_control: function(params, callback) {
+      var t = this,
+          connectError = false,
+          monitors = t.get('monitors');
+
+      if (t.get('started')) {
+        var err = {code:'RUNNING', msg:'Cannot start - the recipe is already running.'};
+        logger.warn(err);
+        return callback(err);
+      }
+
+      // Called when a monitor has connected
+      var onConnect = function(error) {
+        if (connectError) {return;}
+        if (error) {
+          var err = {code:'CONNECT_ERROR', err: error};
+          connectError = true;
+          logger.error('start', err);
+          return callback(err);
+        }
+        for (var name1 in t.monitors) {
+          if (!t.monitors[name1].isConnected()) {
+            return;
+          }
+        }
+        t.set({started:true});
+        t.connectListeners(true);
+        callback();
+      };
+
+      // Connect all monitors
+      for (var name2 in monitors) {
+        t.monitors[name2] = new Monitor(monitors[name2]);
+        t.monitors[name2].connect(onConnect);
+      }
+
+    },
+
+    /**
+    * Stop the recipe
+    *
+    * This disconnects each monitor
+    *
+    * @method stop_control
+    */
+    stop_control: function(params, callback) {
+      var t = this,
+          disconnectError = false;
+
+      if (!t.get('started')) {
+        var err = {code:'NOT_RUNNING', msg:'The recipe is already stopped.'};
+        logger.warn('precondition', err);
+        return callback(err);
+      }
+
+      // Called when a monitor has disconnected
+      var onDisconnect = function(error) {
+        if (disconnectError) {return;}
+        if (error) {
+          var err = {code:'DISONNECT_ERROR', err: error};
+          disconnectError = true;
+          logger.error('onDisconnect', err);
+          return callback(err);
+        }
+        for (var name1 in t.monitors) {
+          if (t.monitors[name1].isConnected()) {
+            return;
+          }
+        }
+        t.set({started:false});
+        t.compiledScript = null;
+        callback();
+      };
+
+      // Disconnect all monitors
+      t.connectListeners(false);
+      t.context = null;
+      for (var name2 in t.monitors) {
+        t.monitors[name2].disconnect(onDisconnect);
+      }
+    },
+
+    /**
+    * Connect the change listeners
+    *
+    * @private
+    * @method connectListeners
+    */
+    connectListeners: function(connect) {
+      var t = this;
+      for (var monitorName in t.monitors) {
+        t.monitors[monitorName][connect ? 'on' : 'off']('change', t.onChange, t);
+      }
+    },
+
+    /**
+    * Called when a change is detected
+    *
+    * @private
+    * @method onChange
+    */
+    onChange: function() {
+      var t = this;
+      t.run_control({}, function(error){
+        if (error) {
+          logger.error('onChange', error);
+        }
+      });
+    },
+
+    /**
+    * Run the recipe script
+    *
+    * This manually runs a started recipe.  The callback is called immediately
+    * after executing the script.
+    *
+    * @method run_control
+    */
+    run_control: function(params, callback) {
+      var t = this,
+          error = null;
+      if (!t.get('started')) {
+        error = {code:'NOT_RUNNING', msg:'Cannot run - recipe not started.'};
+        logger.warn(error);
+        return callback(error);
+      }
+
+      // Name the probe
+      t.name = t.get('probeName') || t.get('id');
+
+      // Build a context to pass onto the script.  The context contains
+      // a console, a logger, and each monitor by name.
+      if (!t.context) {
+        t.context = vm ? vm.createContext({}) : {};
+        t.context.console = console;
+        t.context.logger = Monitor.getLogger('Recipe.run.' + t.name);
+        for (var monitorName in t.monitors) {
+          t.context[monitorName] = t.monitors[monitorName];
+        }
+      }
+
+      // Run the script
+      try {
+        t.run(t.context);
+      } catch(e) {
+        error = "Error running script: " + e.toString();
+        logger.error('run_control', error);
+      }
+      callback(error);
+    },
+
+    /**
+    * Execute the recipe.  This is a private method that can be overridden
+    * in derived recipe classes that contain the recipe.
+    *
+    * @private
+    * @method run
+    */
+    run: function(context) {
+      var t = this,
+          script = t.get('script');
+
+      // Run in a VM or exec (if running in a browser)
+      if (vm) {
+        // Compile the script on first run.  This throws an exception if
+        // the script has a problem compiling.
+        if (!t.compiledScript) {
+          t.compiledScript = vm.createScript(script);
+        }
+
+        // Execute the compiled script
+        t.compiledScript.runInContext(context, t.name);
+      }
+      else {
+        // Bring all context variables local, then execute the script
+        eval(t.bringLocal(context));
+        eval(script);
+      }
+    },
+
+    /**
+    * Generate a script that brings context members into local scope
+    *
+    * @private
+    * @method bringLocal
+    */
+    bringLocal: function(context) {
+      var varName,
+          localVars = [];
+      for (varName in context) {
+        localVars.push('var ' + varName + ' = context.' + varName + ';');
+      }
+      return localVars.join('\n');
+    }
+
+  });
+
+
+}(this));
+
 // PollingProbe.js (c) 2010-2014 Loren West and other contributors
 // May be freely distributed under the MIT license.
 // For further details and documentation:
@@ -3967,6 +4315,7 @@
   // Module loading - this runs server-side only
   var Monitor = root.Monitor || require('../Monitor'),
       _ = Monitor._,
+      logger = Monitor.getLogger('InspectProbe'),
       Backbone = Monitor.Backbone,
       PollingProbe = Monitor.PollingProbe;
 
@@ -4121,7 +4470,9 @@
       try {
         value = eval(expression);
       } catch (e) {
-        throw new Error('Unable to evaluate: ' + expression);
+        var err = 'Unable to evaluate expression: "' + expression + '"';
+        logger.error('evaluate', err);
+        throw new Error(err);
       }
 
       // Return the value

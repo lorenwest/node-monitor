@@ -29,8 +29,9 @@ module.exports = {
 
     // Squelch log output so error tests aren't chatty
     consoleLogListener: {
-      pattern: "{debug,warn,error,fatal}.*",
-      x_pattern: ""
+      pattern_save1: "{debug,warn,error,fatal}.*",
+      pattern_save2: "*",
+      pattern: ""
     }
   }
 }
