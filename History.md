@@ -1,9 +1,9 @@
-0.6.9 / 2014-0
+0.6.9 / 2014-03-26
 ===================
 
   * Introduced writable probe attributes via monitor.set()
   * Introduced the Recipe probe for monitor automation
-  * Introduced the DataModel probe for state management
+  * Introduced the DataModel probe for remote state management
   * Better Inspect probe evaluation error logging
   * Tests for the above
 
