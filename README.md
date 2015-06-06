@@ -126,7 +126,7 @@ The [monitor-dashboard](https://github.com/lorenwest/monitor-dashboard) applicat
 Security Concerns
 -----------------
 
-Exposing the internals of your app server is a high security risk.  By default, the server listens on port 42000 and will connect with localhost clients only.
+Exposing the internals of your app server is a high security risk.  By default, the server listens on port 4200 and will connect with localhost clients only.
 
 In order to monitor across machines, the default configuration must be changed to listen beyond localhost.  Before doing this, it is recommended to understand the risks and have external measures in place to prevent unauthorized access.
 
